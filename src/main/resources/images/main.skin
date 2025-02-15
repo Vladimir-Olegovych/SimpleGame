@@ -1,0 +1,41 @@
+{
+  Color: {
+    default: {
+      hex: #FFFFFFFF
+    }
+  },
+  BitmapFont: {
+    large: {
+      file: fonts/bold.fnt,
+      scaledSize: 28
+    }
+    medium: {
+      file: fonts/bold.fnt,
+      scaledSize: 16
+    }
+    small: {
+      file: fonts/bold.fnt,
+      scaledSize: 10
+    }
+  }
+  TextButtonStyle: {
+    default: {
+      font: large,
+      fontColor: default
+    }
+  }
+  ImageButtonStyle: {
+    play: {
+      up: btn_play,
+    }
+    default: {
+      up: btn_play
+    }
+  }
+  LabelStyle: {
+    default: {
+      font: large,
+      fontColor: default
+    }
+  }
+}
