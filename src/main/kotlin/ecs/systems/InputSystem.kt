@@ -3,55 +3,52 @@ package ecs.systems
 import com.artemis.BaseSystem
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
-import ecs.actions.MoveVelocity
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.Stage
 
 @All
 class InputSystem: BaseSystem(), InputProcessor {
 
-    @Wire private lateinit var moveVelocity: MoveVelocity
+    private val cameraVelocity = Vector2()
+    @Wire private lateinit var stage: Stage
 
-    override fun processSystem() {}
+
+    private fun setCameraVelocity(x: Float, y: Float){
+        cameraVelocity.x = x
+        cameraVelocity.y = y
+    }
+
+    override fun processSystem() {
+        stage.camera.position.x += cameraVelocity.x
+        stage.camera.position.y += cameraVelocity.y
+        stage.camera.update()
+    }
 
     override fun initialize() {}
 
     override fun keyDown(keycode: Int): Boolean {
-        val velocity = moveVelocity.getVelocity()
         when (keycode) {
-            Input.Keys.W -> moveVelocity.setVelocity(velocity.x, SPEED)
-            Input.Keys.A -> moveVelocity.setVelocity(-SPEED, velocity.y)
-            Input.Keys.S -> moveVelocity.setVelocity(velocity.x, -SPEED)
-            Input.Keys.D -> moveVelocity.setVelocity(SPEED, velocity.y)
+            Input.Keys.W -> setCameraVelocity(cameraVelocity.x, SPEED)
+            Input.Keys.A -> setCameraVelocity(-SPEED, cameraVelocity.y)
+            Input.Keys.S -> setCameraVelocity(cameraVelocity.x, -SPEED)
+            Input.Keys.D -> setCameraVelocity(SPEED, cameraVelocity.y)
         }
         return false
     }
 
     override fun keyUp(keycode: Int): Boolean {
-        val velocity = moveVelocity.getVelocity()
         when (keycode) {
-            Input.Keys.W -> moveVelocity.setVelocity(velocity.x, 0F)
-            Input.Keys.A -> moveVelocity.setVelocity(0F, velocity.y)
-            Input.Keys.S -> moveVelocity.setVelocity(velocity.x, 0F)
-            Input.Keys.D -> moveVelocity.setVelocity(0F, velocity.y)
+            Input.Keys.W -> setCameraVelocity(cameraVelocity.x, 0F)
+            Input.Keys.A -> setCameraVelocity(0F, cameraVelocity.y)
+            Input.Keys.S -> setCameraVelocity(cameraVelocity.x, 0F)
+            Input.Keys.D -> setCameraVelocity(0F, cameraVelocity.y)
         }
         return false
     }
 
     override fun mouseMoved(x: Int, y: Int): Boolean {
-        val newX = when {
-            x <= EDGE_MARGIN -> -SPEED
-            x >= Gdx.graphics.width - EDGE_MARGIN -> SPEED
-            else -> 0F
-        }
-
-        val newY = when {
-            y <= EDGE_MARGIN -> SPEED
-            y >= Gdx.graphics.height - EDGE_MARGIN -> -SPEED
-            else -> 0F
-        }
-        moveVelocity.setVelocity(newX, newY)
         return false
     }
 

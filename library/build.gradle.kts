@@ -10,12 +10,11 @@ repositories {
 }
 
 dependencies {
-    api("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0")
-    api("io.insert-koin:koin-core:4.0.2")
-    api("com.esotericsoftware:kryonet:2.22.0-RC1")
+    api("com.badlogicgames.gdx:gdx-freetype:1.13.1")
+    api("com.badlogicgames.gdx:gdx:1.13.1")
+    api("net.onedaybeard.artemis:artemis-odb:2.3.0")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
 
-    testImplementation("io.insert-koin:koin-test:4.0.2")
     testImplementation(kotlin("test"))
 }
 

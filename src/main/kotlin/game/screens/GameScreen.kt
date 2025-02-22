@@ -6,16 +6,17 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
-import ecs.actions.MoveVelocity
-import ecs.systems.CameraSystem
 import ecs.systems.DrawSystem
 import ecs.systems.InputSystem
-import ecs.systems.UiSystem
+import ecs.systems.ZombieSystem
+import eventbus.Events
+import eventbus.GameEventBus
 import game.MainGame
-import tools.input.CycleInputProcessor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tools.artemis.world.ArtemisWorldBuilder
+import tools.eventbus.EventBus
+import tools.input.CycleInputProcessor
 import tools.screens.screen.ScreenContext
 
 class GameScreen(private val game: MainGame): ScreenContext(), KoinComponent {
@@ -24,6 +25,8 @@ class GameScreen(private val game: MainGame): ScreenContext(), KoinComponent {
     private val shapeRenderer by inject<ShapeRenderer>()
     private val spriteBatch by inject<SpriteBatch>()
     private val assetManager by inject<AssetManager>()
+    private val eventBus by inject<GameEventBus>()
+
     private var world: World? = null
 
 
@@ -37,10 +40,9 @@ class GameScreen(private val game: MainGame): ScreenContext(), KoinComponent {
         )
 
         val systems = arrayOf(
+            ZombieSystem(),
             DrawSystem(),
-            UiSystem { game.navHostController.navigate(MenuScreen::class.java) },
             inputSystem,
-            CameraSystem()
         )
 
         val objects = arrayOf(
@@ -48,7 +50,7 @@ class GameScreen(private val game: MainGame): ScreenContext(), KoinComponent {
             shapeRenderer,
             spriteBatch,
             assetManager,
-            MoveVelocity()
+            eventBus
         )
 
         cycleInputProcessor.setArrayOfProcessors(processors)
@@ -57,6 +59,14 @@ class GameScreen(private val game: MainGame): ScreenContext(), KoinComponent {
             .setRegisteredObjectsArray(objects)
             .setSystemArray(systems)
             .build()
+
+
+        eventBus.subscribe(Events.DISCONNECT, object : EventBus.SubscribeEvent {
+            override fun onEvent() {
+                game.navHostController.navigate(MenuScreen::class.java)
+                eventBus.unSubscribe(this)
+            }
+        })
 
         Gdx.input.inputProcessor = cycleInputProcessor
     }

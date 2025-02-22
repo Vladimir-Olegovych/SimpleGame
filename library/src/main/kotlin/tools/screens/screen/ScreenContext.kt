@@ -1,9 +1,16 @@
 package tools.screens.screen
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.utils.Disposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.asCoroutineDispatcher
+import java.util.concurrent.Executor
 
-abstract class ScreenContext: Disposable {
+abstract class ScreenContext: Disposable, Executor {
+
+    val lifecycleScope = CoroutineScope(this.asCoroutineDispatcher()  + SupervisorJob())
 
     abstract fun onAttached()
     abstract fun onDetached()
@@ -22,6 +29,10 @@ abstract class ScreenContext: Disposable {
         override fun resume() { onResume() }
         override fun hide() {}
         override fun dispose() {}
+    }
+
+    override fun execute(runnble: Runnable) {
+        Gdx.app.postRunnable { runnble.run() }
     }
 
     override fun dispose() {

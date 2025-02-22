@@ -1,5 +1,6 @@
 package game.screens
 
+import client.models.User
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
@@ -10,19 +11,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import eventbus.Events
+import eventbus.GameEventBus
 import game.MainGame
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import tools.eventbus.EventBus
 import tools.fillDraw
 import tools.screens.screen.ScreenContext
 import tools.setOnChange
 import tools.textures.SkinID
 
-class MenuScreen(private val game: MainGame): ScreenContext(), KoinComponent {
+class MenuScreen(private val game: MainGame): KoinComponent, ScreenContext() {
 
     private val stage by inject<Stage>()
     private val spriteBatch by inject<SpriteBatch>()
     private val manager by inject<AssetManager>()
+    private val eventBus by inject<GameEventBus>()
 
     private val skin = manager.get<Skin>(SkinID.MAIN.path)
 
@@ -36,8 +41,15 @@ class MenuScreen(private val game: MainGame): ScreenContext(), KoinComponent {
 
     init {
         Gdx.gl.glClearColor(255F/255F, 255F/255F, 255/255F, 1F)
+        eventBus.subscribe(Events.CONNECTED, object : EventBus.SubscribeEvent {
+            override fun onEvent() {
+                game.navHostController.navigate(GameScreen::class.java)
+                eventBus.unSubscribe(this)
+            }
+        })
+
         val play = ImageButton(skin, "play").setOnChange {
-            game.navHostController.navigate(GameScreen::class.java)
+            eventBus.connect("localhost", 5000, User("Boba1"))
         }
         menuTable.add(play).maxHeight(50F).maxWidth(180F).row()
         menuTable.add(Label("World of Fort Ships", skin))

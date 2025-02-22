@@ -5,6 +5,9 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import di.appModule
+import di.dataSourceModule
+import di.repositoryModule
+import eventbus.GameEventBus
 import game.screens.GameScreen
 import game.screens.MenuScreen
 import org.koin.core.component.KoinComponent
@@ -17,9 +20,12 @@ import tools.textures.Textures
 
 class MainGame: Game(), KoinComponent {
 
-    init { startKoin { modules(appModule) } }
+    init {
+        startKoin { modules(appModule, dataSourceModule, repositoryModule) }
+    }
 
     private val manager: AssetManager by inject()
+    private val eventBus: GameEventBus by inject()
     lateinit var navHostController: NavHostController<ScreenContext>
 
     override fun create() {
@@ -37,5 +43,10 @@ class MainGame: Game(), KoinComponent {
 
         navHostController.navigate(MenuScreen::class.java)
     }
+
+    override fun dispose() {
+        eventBus.clear()
+    }
+
 
 }

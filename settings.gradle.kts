@@ -4,3 +4,5 @@ plugins {
 rootProject.name = "Game"
 include("data")
 include("desktop")
+include("server")
+include("library")
