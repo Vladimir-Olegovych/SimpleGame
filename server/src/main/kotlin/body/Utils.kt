@@ -36,7 +36,7 @@ fun World.createCircleBullet(x: Float, y: Float, radius: Float = 0.5F, restituti
 
     return circle
 }
-fun World.createCircleEnemy(x: Float, y: Float, radius: Float = 0.5F, restitution: Float = 10f): Body {
+fun World.createCircleEnemy(x: Float, y: Float, radius: Float = 0.5F, restitution: Float = 0.5f): Body {
     val bDef =  BodyDef()
     bDef.type = BodyDef.BodyType.DynamicBody
     bDef.linearDamping = 1.5f

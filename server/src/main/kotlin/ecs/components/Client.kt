@@ -1,6 +1,7 @@
 package ecs.components
 
 import com.artemis.Component
+import com.badlogic.gdx.utils.IntMap
 import com.esotericsoftware.kryonet.Connection
 import org.example.tools.connection.models.EntityEvent
 import org.example.tools.connection.models.Event
@@ -11,6 +12,7 @@ class Client: Component() {
     private val events = ConcurrentLinkedQueue<Event>()
     private val entityEvents = ConcurrentLinkedQueue<EntityEvent>()
     var connection: Connection? = null
+    val connectionWallMap = IntMap<Int>()
 
     fun getQueue(): ConcurrentLinkedQueue<Event> = events
     fun getEntityQueue(): ConcurrentLinkedQueue<EntityEvent> = entityEvents

@@ -1,7 +1,8 @@
 package eventbus
 
 import kotlinx.coroutines.CoroutineScope
-import models.PhysicalObject
+import models.ServerWall
+import models.ServerZombie
 import org.example.tools.connection.ClientConnection
 import org.example.tools.connection.listeners.ClientConnectionListener
 import org.example.tools.connection.models.EntityEvent
@@ -39,7 +40,8 @@ class GameEventBus(
             registrations = arrayOf(
                 Event::class.java,
                 EntityEvent::class.java,
-                PhysicalObject::class.java,
+                ServerZombie::class.java,
+                ServerWall::class.java,
             )
         )
     }

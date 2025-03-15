@@ -5,27 +5,28 @@ import com.artemis.EntitySubscription
 import com.artemis.annotations.All
 import com.artemis.systems.IteratingSystem
 import ecs.components.Client
-import ecs.components.Physical
-import models.PhysicalObject
+import ecs.components.Zombie
+import models.ServerZombie
 import types.EventType
 
-@All(Physical::class)
-class ClientSystem: IteratingSystem() {
+@All(Zombie::class)
+class ZombieSystem: IteratingSystem() {
 
     @All(Client::class) private lateinit var clientIDs: EntitySubscription
     private lateinit var clients: ComponentMapper<Client>
-    private lateinit var physicals: ComponentMapper<Physical>
+    private lateinit var zombies: ComponentMapper<Zombie>
 
     override fun process(entityId: Int) {
-        val physical = physicals[entityId]
+        val zombie = zombies[entityId]
 
         for (i in 0 until clientIDs.entities.size()) {
             val client = clients[clientIDs.entities[i]]?: continue
-            val physicalObject = PhysicalObject(
-                x = physical.body?.position?.x?: 0F,
-                y = physical.body?.position?.y?: 0F
+            val serverZombie = ServerZombie(
+                radius = zombie.radius,
+                x = zombie.body?.position?.x?: 0F,
+                y = zombie.body?.position?.y?: 0F
             )
-            client.addEntityEvent(entityId, EventType.BODY_PHYSICAL, physicalObject)
+            client.addEntityEvent(entityId, EventType.BODY, serverZombie)
         }
     }
 }

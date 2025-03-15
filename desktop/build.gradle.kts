@@ -1,9 +1,17 @@
 plugins {
     kotlin("jvm")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
+tasks{
+    shadowJar {
+        manifest {
+            attributes["Main-Class"] = "org.example.MainKt"
+        }
+    }
+}
 
 repositories {
     mavenCentral()

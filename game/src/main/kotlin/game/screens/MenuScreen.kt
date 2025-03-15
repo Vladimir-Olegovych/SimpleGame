@@ -53,7 +53,7 @@ class MenuScreen(private val game: MainGame): KoinComponent, ScreenContext() {
         })
 
         val play = ImageButton(skin, "play").setOnChange {
-            eventBus.connect("localhost", 5000)
+            eventBus.connect("178.163.61.188", 5123)
         }
 
         menuTable.add(play).height(10F).width(30F).row()

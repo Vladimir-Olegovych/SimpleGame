@@ -4,7 +4,8 @@ import com.badlogic.gdx.utils.Disposable
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Listener
 import com.esotericsoftware.kryonet.Server
-import models.PhysicalObject
+import models.ServerWall
+import models.ServerZombie
 import org.example.tools.connection.models.EntityEvent
 import org.example.tools.connection.models.Event
 
@@ -30,8 +31,9 @@ class UserServer(private val userServerListener: UserServerListener): Disposable
         val kryo = server.kryo
         kryo.register(Event::class.java)
         kryo.register(EntityEvent::class.java)
-        kryo.register(PhysicalObject::class.java)
-        server.bind(5000)
+        kryo.register(ServerZombie::class.java)
+        kryo.register(ServerWall::class.java)
+        server.bind(5123)
         server.addListener(connectionListener)
         server.start()
     }

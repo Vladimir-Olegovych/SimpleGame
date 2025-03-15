@@ -3,15 +3,16 @@ package ecs.world
 import com.artemis.Aspect
 import com.esotericsoftware.kryonet.Connection
 import ecs.components.Client
-import ecs.systems.ClientSystem
+import ecs.systems.ZombieSystem
 import ecs.systems.EventSystem
 import ecs.systems.PhysicSystem
+import ecs.systems.WallSystem
 import server.UserServerListener
 import tools.artemis.world.ArtemisWorldBuilder
 
 class UltimateEcsWorld: UserServerListener {
     private val world = ArtemisWorldBuilder.Builder()
-    .setSystemArray(arrayOf(PhysicSystem(), ClientSystem(), EventSystem()))
+    .setSystemArray(arrayOf(PhysicSystem(), ZombieSystem(), WallSystem(), EventSystem()))
     .build()
 
     private val clientMapper = world.getMapper(Client::class.java)
