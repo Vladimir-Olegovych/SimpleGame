@@ -2,7 +2,7 @@ import ecs.world.UltimateEcsWorld
 import server.UserServer
 import tools.render.LifecycleUpdater
 
-class ServerGame: LifecycleUpdater() {
+class ServerGame: LifecycleUpdater(1F / 60F) {
 
     private val ultimateEcsWorld = UltimateEcsWorld()
     private val userServer = UserServer(ultimateEcsWorld)

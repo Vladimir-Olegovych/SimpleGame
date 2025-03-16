@@ -35,7 +35,7 @@ class DrawSystem: IteratingSystem() {
             renderer.projectionMatrix = stage.camera.combined
             renderer.begin(ShapeRenderer.ShapeType.Filled)
             renderer.color = shape.color
-            renderer.circle(body.x, body.y, shape.radius, 36)
+            renderer.circle(body.renderPosition.x, body.renderPosition.y, shape.radius, 36)
             renderer.end()
         }
 
@@ -45,7 +45,12 @@ class DrawSystem: IteratingSystem() {
             renderer.projectionMatrix = stage.camera.combined
             renderer.begin(ShapeRenderer.ShapeType.Filled)
             renderer.color = square.color
-            renderer.rect(body.x, body.y, square.halfWidth, square.halfHeight)
+            renderer.rect(
+                body.renderPosition.x - square.halfWidth,
+                body.renderPosition.y - square.halfHeight,
+                square.halfWidth * 2,
+                square.halfHeight * 2
+            )
             renderer.end()
         }
 

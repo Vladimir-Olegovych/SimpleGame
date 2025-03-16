@@ -17,7 +17,7 @@ class PhysicSystem: BaseSystem() {
     private val box2dWold = World(Vector2(0F, -98F), true)
 
     override fun initialize() {
-        for (i in 0 until 100) {
+        for (i in 0 until 1000) {
             val entityId = world.create()
             val zombie = zombies.create(entityId)
             zombie.radius = 1F
