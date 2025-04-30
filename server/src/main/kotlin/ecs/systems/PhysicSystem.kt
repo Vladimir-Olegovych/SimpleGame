@@ -20,7 +20,11 @@ class PhysicSystem: IteratingSystem() {
     private val box2dWold = World(Vector2(0F, 0F), false)
 
     override fun initialize() {
+        PlayerFeature.initialize(world)
+        ForceFeature.initialize(world)
+        SendFeature.initialize(world)
         WorldComponents.setBox2dWorld(box2dWold)
+
         for (i in 0 until 100) {
             val entityId = world.create()
             val entity = entityMapper.create(entityId)

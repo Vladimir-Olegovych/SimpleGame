@@ -1,7 +1,5 @@
 package ecs.components
 
-import com.artemis.Component
-
-class Player: Component() {
-    var serverId = -1
+class Player {
+    var entityId = -1
 }

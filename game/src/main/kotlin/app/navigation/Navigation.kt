@@ -1,6 +1,6 @@
 package app.navigation
 
 sealed class Navigation {
-    data class Main(val label: String): Navigation()
+    data object Main: Navigation()
     data object Game : Navigation()
 }

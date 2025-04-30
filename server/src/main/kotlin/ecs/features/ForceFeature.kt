@@ -26,8 +26,10 @@ object ForceFeature: Feature() {
         entityForces.put(entityId, force)
     }
 
+    override fun initialize() {}
+
     override fun process(entityId: Int) {
-        val entity = entityMapper[entityId]
+        val entity = entityMapper[entityId]?: return
         val entityForce = entityForces[entityId]?: run {
             val force = Vector2.Zero
             entityForces.put(entityId, force); force

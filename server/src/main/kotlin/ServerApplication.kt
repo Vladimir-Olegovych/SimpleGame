@@ -1,15 +1,14 @@
 package org.example
 
 import model.Event
-import org.example.constants.WorldComponents
 import org.example.ecs.features.ForceFeature
 import org.example.ecs.features.PlayerFeature
-import org.example.ecs.features.SendFeature
 import org.example.ecs.systems.ClientInputSystem
 import org.example.ecs.systems.PhysicSystem
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.render.LifecycleUpdater
 import tools.kyro.server.GameServer
+import utils.registerAllEvents
 
 class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
 
@@ -20,15 +19,13 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
     private val gameServer = GameServer<Event>(lifecycleScope)
 
     override fun create() {
-        val features = arrayOf(ForceFeature, PlayerFeature, SendFeature)
-        features.forEach { artemisWorld.inject(it) }
-
         gameServer.subscribe<Event>(
             onConnected = { listener, connection ->
                 PlayerFeature.createPlayer(connection)
             },
             onDisconnected = { listener, connection ->
                 PlayerFeature.removePlayer(connection)
+                connection.close()
             },
             onReceive = { listener, connection, data ->
                 when(data){
@@ -43,10 +40,7 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
         gameServer.start(
             port = port,
             custom = { kryo ->
-                kryo.register(Event::class.java)
-                kryo.register(Event.Entity::class.java)
-                kryo.register(Event.Player::class.java)
-                kryo.register(Event.PlayerVelocity::class.java)
+                kryo.registerAllEvents()
             }
         )
     }

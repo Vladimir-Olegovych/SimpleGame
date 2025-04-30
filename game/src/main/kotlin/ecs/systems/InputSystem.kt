@@ -19,7 +19,6 @@ class InputSystem: BaseSystem(), InputProcessor {
     }
 
     override fun processSystem() {
-        println(forceVector.toString())
         gameClient.sendTCP(Event.PlayerVelocity(forceVector.x, forceVector.y))
     }
 

@@ -1,25 +1,23 @@
 package ecs.systems
 
-import com.artemis.ComponentMapper
 import com.artemis.annotations.All
-import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.math.Vector2
 import ecs.components.Entity
-import ecs.components.Player
+import ecs.features.EntityDrawFeature
+import ecs.features.PlayerDrawFeature
+import ecs.features.PlayerFeature
 
 @All(Entity::class)
 class DrawSystem : IteratingSystem() {
-    @Wire private lateinit var renderer: ShapeRenderer
-    @Wire private lateinit var camera: OrthographicCamera
+    private val player = PlayerFeature.getPlayer()
 
-    private lateinit var entityMapper: ComponentMapper<Entity>
-    private lateinit var playerMapper: ComponentMapper<Player>
+    override fun initialize() {
+        PlayerFeature.initialize(world)
+        PlayerDrawFeature.initialize(world)
+        EntityDrawFeature.initialize(world)
+    }
 
     override fun begin() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
@@ -27,18 +25,10 @@ class DrawSystem : IteratingSystem() {
     }
 
     override fun process(entityId: Int) {
-        val player = playerMapper[entityId]
-        val entity = entityMapper[entityId]
-
-        if (player != null) {
-            camera.position.set(Vector2(entity.x, entity.y), 0F)
-            camera.update()
+        PlayerFeature.notify(entityId)
+        when(entityId) {
+            player.entityId -> PlayerDrawFeature.notify(entityId)
+            else -> EntityDrawFeature.notify(entityId)
         }
-
-        renderer.projectionMatrix = camera.combined
-        renderer.begin(ShapeRenderer.ShapeType.Filled)
-        renderer.color = if (player != null) Color.RED else Color.BLUE
-        renderer.circle(entity.x, entity.y, 1F, 36)
-        renderer.end()
     }
 }

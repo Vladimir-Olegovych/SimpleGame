@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.Viewport
 import ecs.components.Player
+import ecs.features.EntityInputFeature
 import ecs.systems.DrawSystem
 import ecs.systems.InputSystem
 import ecs.systems.ServerInputSystem
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 class GameFragment(
     private val navigation: Navigation.Game,
+    private val onDisconnected: () -> Unit
 ): Fragment() {
 
     @Inject lateinit var gameClient: GameClient<Event>
@@ -33,20 +35,27 @@ class GameFragment(
 
 
     override fun onCreate(game: Game) {
+        val features = arrayOf(EntityInputFeature)
         val inputSystem = InputSystem()
         val drawSystem = DrawSystem()
-        val serverInputSystem = ServerInputSystem()
+        val serverInputSystem = ServerInputSystem(
+            onDisconnected = {
+                onDisconnected.invoke()
+            }
+        )
 
         inputProcessor.addProcessor(inputSystem)
         artemisWorld = ArtemisWorldBuilder()
+            .addSystem(serverInputSystem)
             .addSystem(inputSystem)
             .addSystem(drawSystem)
-            .addSystem(serverInputSystem)
             .addObject(gameClient)
             .addObject(shapeRenderer)
             .addObject(camera)
             .addObject(Player())
             .build()
+
+        features.forEach { artemisWorld.inject(it) }
 
         Gdx.input.inputProcessor = inputProcessor
     }

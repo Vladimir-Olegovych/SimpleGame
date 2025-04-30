@@ -45,16 +45,23 @@ object PlayerFeature: Feature() {
     }
 
 
-    fun removePlayer(connection: Connection){
-        val entityId = players[connection]?: return
-        val entity = entityMapper[entityId]
+    fun removePlayer(connection: Connection) = tasks.add {
+        val playerId = players[connection] ?: return@add
+        val entity = entityMapper[playerId]
         entity.body?.let { WorldComponents.getBox2dWorld().destroyBody(it) }
+        entity.body = null
 
-        clientMapper.remove(entityId)
-        entityMapper.remove(entityId)
-        playerMapper.remove(entityId)
+        clientMapper.remove(playerId)
+        entityMapper.remove(playerId)
+        playerMapper.remove(playerId)
         players.remove(connection)
+
+        for (playerConnection in players.keys) {
+            playerConnection.sendTCP(Event.PlayerDisconnected(playerId))
+        }
     }
+
+    override fun initialize() {}
 
     override fun process(entityId: Int) {
         val player = playerMapper[entityId]?: return

@@ -23,6 +23,7 @@ import tools.graphics.screens.fragment.Fragment
 import tools.graphics.setOnClickListener
 import tools.graphics.textures.SkinID
 import tools.kyro.client.GameClient
+import utils.registerAllEvents
 import javax.inject.Inject
 
 class MainFragment(
@@ -60,16 +61,13 @@ class MainFragment(
                 address = "192.168.1.100",
                 port = 5000,
                 custom = { kryo ->
-                    kryo.register(Event::class.java)
-                    kryo.register(Event.Entity::class.java)
-                    kryo.register(Event.Player::class.java)
-                    kryo.register(Event.PlayerVelocity::class.java)
+                    kryo.registerAllEvents()
                 }
             )
         }
 
         menuTable.add(play).height(10F).width(30F).row()
-        menuTable.add(Label(navigation.label, skin))
+        menuTable.add(Label("World of Fort Ships", skin))
 
         stage.addActor(menuTable)
         Gdx.input.inputProcessor = stage

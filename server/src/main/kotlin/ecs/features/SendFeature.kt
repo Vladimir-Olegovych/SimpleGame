@@ -14,8 +14,12 @@ object SendFeature: Feature() {
     private lateinit var clientMapper: ComponentMapper<Client>
     private lateinit var entityMapper: ComponentMapper<Entity>
 
+    override fun initialize() {
+
+    }
+
     override fun process(entityId: Int) {
-        val entity = entityMapper[entityId]
+        val entity = entityMapper[entityId]?: return
 
         for (i in 0 until clientIDs.entities.size()) {
             val client = clientMapper[clientIDs.entities[i]]?: continue
@@ -29,7 +33,7 @@ object SendFeature: Feature() {
             val rangeY = (playerEntityPosition.y - 20)..(playerEntityPosition.y + 120)
 
             if (entityPosition.x !in rangeX || entityPosition.y !in rangeY) continue
-            
+
              */
             client.addEvent(Event.Entity(entityId, entityPosition.x, entityPosition.y))
         }

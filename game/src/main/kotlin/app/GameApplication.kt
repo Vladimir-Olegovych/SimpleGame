@@ -57,11 +57,14 @@ class GameApplication: Game() {
             }
             fragment<Navigation.Game> {
                 return@fragment GameFragment(
-                    navigation = it
+                    navigation = it,
+                    onDisconnected = {
+                        navigate(Navigation.Main)
+                    }
                 )
             }
 
-            navigate(Navigation.Main(label = "World of Fort Ships"))
+            navigate(Navigation.Main)
         }
     }
 
