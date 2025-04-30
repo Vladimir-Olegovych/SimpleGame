@@ -1,82 +1,61 @@
 package ecs.systems
 
 import com.artemis.BaseSystem
-import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.scenes.scene2d.Stage
+import model.Event
+import tools.kyro.client.GameClient
 
-@All
 class InputSystem: BaseSystem(), InputProcessor {
+    @Wire private lateinit var gameClient: GameClient<Event>
 
-    private val cameraVelocity = Vector2()
-    @Wire private lateinit var stage: Stage
+    private val forceVector = Vector2.Zero
 
-
-    private fun setCameraVelocity(x: Float, y: Float){
-        cameraVelocity.x = x
-        cameraVelocity.y = y
+    private fun setForceVector(x: Float? = null, y: Float? = null){
+        forceVector.x = x?: forceVector.x
+        forceVector.y = y?: forceVector.y
     }
 
     override fun processSystem() {
-        stage.camera.position.x += cameraVelocity.x
-        stage.camera.position.y += cameraVelocity.y
-        stage.camera.update()
+        println(forceVector.toString())
+        gameClient.sendTCP(Event.PlayerVelocity(forceVector.x, forceVector.y))
     }
-
-    override fun initialize() {}
 
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {
-            Input.Keys.W -> setCameraVelocity(cameraVelocity.x, SPEED)
-            Input.Keys.A -> setCameraVelocity(-SPEED, cameraVelocity.y)
-            Input.Keys.S -> setCameraVelocity(cameraVelocity.x, -SPEED)
-            Input.Keys.D -> setCameraVelocity(SPEED, cameraVelocity.y)
+            Input.Keys.W -> setForceVector(y = SPEED)
+            Input.Keys.A -> setForceVector(x = -SPEED)
+            Input.Keys.S -> setForceVector(y = -SPEED)
+            Input.Keys.D -> setForceVector(x = SPEED)
         }
         return false
     }
 
     override fun keyUp(keycode: Int): Boolean {
         when (keycode) {
-            Input.Keys.W -> setCameraVelocity(cameraVelocity.x, 0F)
-            Input.Keys.A -> setCameraVelocity(0F, cameraVelocity.y)
-            Input.Keys.S -> setCameraVelocity(cameraVelocity.x, 0F)
-            Input.Keys.D -> setCameraVelocity(0F, cameraVelocity.y)
+            Input.Keys.W, Input.Keys.S -> setForceVector(y = 0F)
+            Input.Keys.A, Input.Keys.D -> setForceVector(x = 0F)
         }
         return false
     }
 
-    override fun mouseMoved(x: Int, y: Int): Boolean {
-        return false
-    }
+    override fun keyTyped(p0: Char): Boolean = false
 
-    override fun keyTyped(p0: Char): Boolean {
-        return false
-    }
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
 
-    override fun touchDown(p0: Int, p1: Int, p2: Int, p3: Int): Boolean {
-        return false
-    }
+    override fun touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = false
 
-    override fun touchUp(p0: Int, p1: Int, p2: Int, p3: Int): Boolean {
-        return false
-    }
+    override fun touchCancelled(p0: Int, p1: Int, p2: Int, p3: Int): Boolean = false
 
-    override fun touchCancelled(p0: Int, p1: Int, p2: Int, p3: Int): Boolean {
-        return false
-    }
+    override fun touchDragged(p0: Int, p1: Int, p2: Int): Boolean = false
 
-    override fun touchDragged(p0: Int, p1: Int, p2: Int): Boolean {
-        return false
-    }
-
-    override fun scrolled(p0: Float, p1: Float): Boolean {
-        return false
-    }
+    override fun mouseMoved(screenX: Int, screenY: Int): Boolean = false
+    
+    override fun scrolled(p0: Float, p1: Float): Boolean = false
 
     companion object {
-        const val SPEED = 4F
+        const val SPEED = 1f
     }
 }

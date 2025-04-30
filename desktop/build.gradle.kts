@@ -8,7 +8,7 @@ version = "1.0-SNAPSHOT"
 tasks{
     shadowJar {
         manifest {
-            attributes["Main-Class"] = "org.example.MainKt"
+            attributes["Main-Class"] = "org.example.GameKt"
         }
     }
 }

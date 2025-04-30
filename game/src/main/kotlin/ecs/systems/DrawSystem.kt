@@ -5,55 +5,40 @@ import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.scenes.scene2d.Stage
-import ecs.components.Body
-import ecs.components.Shape
-import ecs.components.Square
+import com.badlogic.gdx.math.Vector2
+import ecs.components.Entity
+import ecs.components.Player
 
-@All(Body::class)
-class DrawSystem: IteratingSystem() {
-
-    private lateinit var shapes: ComponentMapper<Shape>
-    private lateinit var squares: ComponentMapper<Square>
-    private lateinit var bodies: ComponentMapper<Body>
-
-    @Wire private lateinit var stage: Stage
+@All(Entity::class)
+class DrawSystem : IteratingSystem() {
     @Wire private lateinit var renderer: ShapeRenderer
+    @Wire private lateinit var camera: OrthographicCamera
+
+    private lateinit var entityMapper: ComponentMapper<Entity>
+    private lateinit var playerMapper: ComponentMapper<Player>
 
     override fun begin() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        Gdx.gl.glClearColor(255F/255F, 255F/255F, 255/255F, 1F)
     }
 
     override fun process(entityId: Int) {
-        val body = bodies[entityId]
+        val player = playerMapper[entityId]
+        val entity = entityMapper[entityId]
 
-        val shape = shapes[entityId]
-        if (shape != null) {
-            //Shape
-            renderer.projectionMatrix = stage.camera.combined
-            renderer.begin(ShapeRenderer.ShapeType.Filled)
-            renderer.color = shape.color
-            renderer.circle(body.renderPosition.x, body.renderPosition.y, shape.radius, 36)
-            renderer.end()
+        if (player != null) {
+            camera.position.set(Vector2(entity.x, entity.y), 0F)
+            camera.update()
         }
 
-        val square = squares[entityId]
-        if (square != null) {
-            //Square
-            renderer.projectionMatrix = stage.camera.combined
-            renderer.begin(ShapeRenderer.ShapeType.Filled)
-            renderer.color = square.color
-            renderer.rect(
-                body.renderPosition.x - square.halfWidth,
-                body.renderPosition.y - square.halfHeight,
-                square.halfWidth * 2,
-                square.halfHeight * 2
-            )
-            renderer.end()
-        }
-
+        renderer.projectionMatrix = camera.combined
+        renderer.begin(ShapeRenderer.ShapeType.Filled)
+        renderer.color = if (player != null) Color.RED else Color.BLUE
+        renderer.circle(entity.x, entity.y, 1F, 36)
+        renderer.end()
     }
-
 }
