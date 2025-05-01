@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class Client: Component() {
     private val events = ConcurrentLinkedQueue<Event>()
     var connection: Connection? = null
+    var hasWalls = false
 
     fun getEvents(): Iterable<Event> = events.asIterable()
     fun clearEvents() { events.clear() }

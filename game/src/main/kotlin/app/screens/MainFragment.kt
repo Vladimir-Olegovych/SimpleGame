@@ -58,7 +58,7 @@ class MainFragment(
                 }
             )
             gameClient.start(
-                address = "192.168.1.100",
+                address = "127.0.0.1",
                 port = 5000,
                 custom = { kryo ->
                     kryo.registerAllEvents()

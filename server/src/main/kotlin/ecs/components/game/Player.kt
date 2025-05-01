@@ -1,4 +1,4 @@
-package org.example.ecs.components
+package org.example.ecs.components.game
 
 import com.artemis.Component
 

@@ -5,34 +5,32 @@ import com.artemis.annotations.Wire
 import ecs.features.EntityInputFeature
 import model.Event
 import tools.kyro.client.GameClient
-import tools.kyro.common.GameNetworkListener
 
 class ServerInputSystem(private val onDisconnected: () -> Unit): BaseSystem() {
 
     @Wire private lateinit var gameClient: GameClient<Event>
-    private val listeners = ArrayList<GameNetworkListener<*>>()
 
     override fun initialize() {
         EntityInputFeature.initialize(world)
-        listeners.add(
-            gameClient.subscribe<Event>(
-                onDisconnected = { _, _ ->
-                    onDisconnected.invoke()
-                }
-            )
+        //Event
+        gameClient.subscribe<Event>(
+            onDisconnected = { _, _ ->
+                onDisconnected.invoke()
+            }
         )
-        listeners.add(
-            gameClient.subscribe(
-                onReceive = { _, _, data -> EntityInputFeature.onReceiveEntity(data) }
-            )
+        //OnDisconnectPlayer
+        gameClient.subscribe(
+            onReceive = { _, _, data ->
+                EntityInputFeature.onReceivePlayerDisconnected(data)
+            }
         )
-        listeners.add(
-            gameClient.subscribe(
-                onReceive = { _, _, data ->
-                    EntityInputFeature.onReceivePlayerDisconnected(data)
-                }
-            )
+        //Enemy
+        gameClient.subscribe(
+            onReceive = { _, _, data ->
+                EntityInputFeature.onReceiveEnemy(data)
+            }
         )
+        //Player
         gameClient.subscribe(
             onReceive = { listener, _, data ->
                 EntityInputFeature.onReceivePlayer(data)
@@ -45,8 +43,7 @@ class ServerInputSystem(private val onDisconnected: () -> Unit): BaseSystem() {
         EntityInputFeature.notify(0)
     }
 
-    @Suppress("UNCHECKED_CAST")
     override fun dispose() {
-        listeners.forEach { gameClient.unSubscribe(it as GameNetworkListener<Event>) }
+        gameClient.unSubscribeAll()
     }
 }

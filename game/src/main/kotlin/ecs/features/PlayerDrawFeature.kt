@@ -14,9 +14,12 @@ object PlayerDrawFeature: Feature() {
     @Wire private lateinit var camera: OrthographicCamera
     private lateinit var entityMapper: ComponentMapper<Entity>
 
+    private val player = PlayerFeature.getPlayer()
+
     override fun initialize() {}
 
     override fun process(entityId: Int) {
+        if (player.entityId != entityId) return
         val entity = entityMapper[entityId]
 
         renderer.projectionMatrix = camera.combined
