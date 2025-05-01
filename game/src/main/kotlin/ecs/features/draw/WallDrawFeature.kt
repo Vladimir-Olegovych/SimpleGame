@@ -31,7 +31,13 @@ object WallDrawFeature: Feature() {
 
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
-        spriteBatch.draw(texture, entity.x, entity.y, wall.halfWidth, wall.halfHeight)
+        spriteBatch.draw(
+            texture,
+            entity.x - wall.halfWidth,
+            entity.y - wall.halfHeight,
+            wall.halfWidth * 2,
+            wall.halfHeight * 2
+        )
         spriteBatch.end()
     }
 }

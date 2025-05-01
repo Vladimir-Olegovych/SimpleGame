@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.World
 import model.Event
 import org.example.ecs.features.ForceFeature
 import org.example.ecs.features.PlayerFeature
+import org.example.ecs.features.WorldFeature
 import org.example.ecs.systems.ClientInputSystem
 import org.example.ecs.systems.EntitySystem
 import tools.artemis.world.ArtemisWorldBuilder
@@ -25,9 +26,13 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
     override fun create() {
         gameServer.subscribe<Event>(
             onConnected = { listener, connection ->
-                PlayerFeature.createPlayer(connection)
+                val playerId = artemisWorld.create()
+                WorldFeature.createPlayer(playerId)
+                PlayerFeature.createPlayer(playerId, connection)
             },
             onDisconnected = { listener, connection ->
+                val playerId = PlayerFeature.getPlayers()[connection]?: return@subscribe
+                WorldFeature.removePlayer(playerId)
                 PlayerFeature.removePlayer(connection)
                 connection.close()
             },
