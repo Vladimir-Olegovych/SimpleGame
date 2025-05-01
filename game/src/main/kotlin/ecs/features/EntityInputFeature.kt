@@ -32,7 +32,6 @@ object EntityInputFeature: Feature() {
     }
 
     fun onReceiveWall(data: Event.Wall){
-        println("wall")
         val entity: Entity
         val wall: Wall
 

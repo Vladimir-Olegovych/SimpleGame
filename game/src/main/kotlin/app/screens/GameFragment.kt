@@ -4,7 +4,9 @@ import app.navigation.Navigation
 import com.artemis.World
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.Viewport
 import ecs.components.Player
@@ -26,7 +28,9 @@ class GameFragment(
 ): Fragment() {
 
     @Inject lateinit var gameClient: GameClient<Event>
+    @Inject lateinit var assetManager: AssetManager
     @Inject lateinit var shapeRenderer: ShapeRenderer
+    @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var camera: OrthographicCamera
     @Inject lateinit var viewport: Viewport
 
@@ -51,7 +55,9 @@ class GameFragment(
             .addSystem(drawSystem)
             .addObject(gameClient)
             .addObject(shapeRenderer)
+            .addObject(spriteBatch)
             .addObject(camera)
+            .addObject(assetManager)
             .addObject(Player())
             .build()
 

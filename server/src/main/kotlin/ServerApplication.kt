@@ -1,10 +1,12 @@
 package org.example
 
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.World
 import model.Event
 import org.example.ecs.features.ForceFeature
 import org.example.ecs.features.PlayerFeature
 import org.example.ecs.systems.ClientInputSystem
-import org.example.ecs.systems.PhysicSystem
+import org.example.ecs.systems.EntitySystem
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.render.LifecycleUpdater
 import tools.kyro.server.GameServer
@@ -12,11 +14,13 @@ import utils.registerAllEvents
 
 class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
 
+    private val gameServer = GameServer<Event>(lifecycleScope)
+
     private val artemisWorld = ArtemisWorldBuilder()
         .addSystem(ClientInputSystem())
-        .addSystem(PhysicSystem())
+        .addSystem(EntitySystem())
+        .addObject(World(Vector2(0F, 0F), false))
         .build()
-    private val gameServer = GameServer<Event>(lifecycleScope)
 
     override fun create() {
         gameServer.subscribe<Event>(
