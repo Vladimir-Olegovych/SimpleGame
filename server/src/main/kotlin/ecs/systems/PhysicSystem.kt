@@ -6,13 +6,14 @@ import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import org.example.constants.WorldComponents
+import org.example.ecs.components.Enemy
 import org.example.ecs.components.Entity
-import org.example.ecs.components.game.Enemy
-import org.example.ecs.components.game.Wall
+import org.example.ecs.components.Wall
 import org.example.ecs.features.ForceFeature
 import org.example.ecs.features.PlayerFeature
 import org.example.ecs.features.send.SendEnemyFeature
 import org.example.ecs.features.send.SendPlayerFeature
+import org.example.ecs.features.send.SendWallFeature
 import tools.physics.createCircleEntity
 import tools.physics.createWall
 import kotlin.random.Random
@@ -30,6 +31,7 @@ class PhysicSystem: IteratingSystem() {
         ForceFeature.initialize(world)
         SendEnemyFeature.initialize(world)
         SendPlayerFeature.initialize(world)
+        SendWallFeature.initialize(world)
         WorldComponents.setBox2dWorld(box2dWold)
 
         for (i in 0 until 100) {
@@ -67,6 +69,7 @@ class PhysicSystem: IteratingSystem() {
         ForceFeature.notify(entityId)
         SendEnemyFeature.notify(entityId)
         SendPlayerFeature.notify(entityId)
+        SendWallFeature.notify(entityId)
     }
 
     override fun dispose() {

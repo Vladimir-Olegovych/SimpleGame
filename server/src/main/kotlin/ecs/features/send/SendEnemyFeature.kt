@@ -5,8 +5,8 @@ import com.artemis.EntitySubscription
 import com.artemis.annotations.All
 import ecs.components.Client
 import model.Event
+import org.example.ecs.components.Enemy
 import org.example.ecs.components.Entity
-import org.example.ecs.components.game.Enemy
 import tools.artemis.features.Feature
 
 object SendEnemyFeature: Feature() {
@@ -20,13 +20,18 @@ object SendEnemyFeature: Feature() {
 
     override fun process(entityId: Int) {
         val enemy = enemyMapper[entityId]?: return
-        val entity = entityMapper[entityId]
+        val entity = entityMapper[entityId]?: return
+        val entityPosition = entity.body?.position?: return
 
         for (i in 0 until clientIDs.entities.size()) {
             val client = clientMapper[clientIDs.entities[i]]?: continue
-            val entityPosition = entity.body?.position?: continue
-
-            client.addEvent(Event.Enemy(entityId, entityPosition.x, entityPosition.y))
+            client.addEvent(
+                Event.Enemy(
+                    entityId = entityId,
+                    x = entityPosition.x,
+                    y = entityPosition.y
+                )
+            )
         }
     }
 }

@@ -1,4 +1,4 @@
-package ecs.features
+package ecs.features.draw
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import ecs.components.Entity
+import ecs.features.PlayerFeature
 import tools.artemis.features.Feature
 
 object PlayerDrawFeature: Feature() {

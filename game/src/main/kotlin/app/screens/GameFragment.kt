@@ -1,6 +1,5 @@
 package app.screens
 
-import model.Event
 import app.navigation.Navigation
 import com.artemis.World
 import com.badlogic.gdx.Game
@@ -13,6 +12,7 @@ import ecs.features.EntityInputFeature
 import ecs.systems.DrawSystem
 import ecs.systems.InputSystem
 import ecs.systems.ServerInputSystem
+import model.Event
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.input.CycleInputProcessor
 import tools.graphics.screens.fragment.Fragment

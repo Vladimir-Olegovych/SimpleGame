@@ -6,7 +6,7 @@ import ecs.components.Client
 import model.Event
 import org.example.constants.WorldComponents
 import org.example.ecs.components.Entity
-import org.example.ecs.components.game.Player
+import org.example.ecs.components.Player
 import tools.artemis.features.Feature
 import tools.physics.createCircleEntity
 

@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import com.badlogic.gdx.utils.IntMap
 import ecs.components.Enemy
 import ecs.components.Entity
+import ecs.components.Wall
 import model.Event
 import tools.artemis.features.Feature
 
@@ -11,6 +12,7 @@ object EntityInputFeature: Feature() {
 
     private val entityMap = IntMap<Int>()
     private lateinit var enemyMapper: ComponentMapper<Enemy>
+    private lateinit var wallMapper: ComponentMapper<Wall>
     private lateinit var entityMapper: ComponentMapper<Entity>
 
     fun onReceiveEnemy(data: Event.Enemy){
@@ -27,6 +29,28 @@ object EntityInputFeature: Feature() {
 
         entity.x = data.x
         entity.y = data.y
+    }
+
+    fun onReceiveWall(data: Event.Wall){
+        println("wall")
+        val entity: Entity
+        val wall: Wall
+
+        if (entityMap[data.entityId] == null) {
+            val newId = artemisWorld.create()
+            entity = entityMapper.create(newId)
+            wall = wallMapper.create(newId)
+            entityMap.put(data.entityId, newId)
+        } else {
+            entity = entityMapper[entityMap[data.entityId]]
+            wall = wallMapper[entityMap[data.entityId]]
+        }
+
+        entity.x = data.x
+        entity.y = data.y
+
+        wall.halfWidth = data.halfWidth
+        wall.halfHeight = data.halfHeight
     }
 
     fun onReceivePlayerDisconnected(data: Event.PlayerDisconnected){

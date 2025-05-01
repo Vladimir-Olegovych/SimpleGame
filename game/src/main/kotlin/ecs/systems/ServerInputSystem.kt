@@ -24,6 +24,12 @@ class ServerInputSystem(private val onDisconnected: () -> Unit): BaseSystem() {
                 EntityInputFeature.onReceivePlayerDisconnected(data)
             }
         )
+        //Wall
+        gameClient.subscribe(
+            onReceive = { _, _, data ->
+                EntityInputFeature.onReceiveWall(data)
+            }
+        )
         //Enemy
         gameClient.subscribe(
             onReceive = { _, _, data ->

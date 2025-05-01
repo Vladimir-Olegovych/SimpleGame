@@ -1,6 +1,5 @@
 package app
 
-import model.Event
 import app.navigation.Navigation
 import app.screens.GameFragment
 import app.screens.MainFragment
@@ -12,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import di.components.AppComponent
 import di.components.DaggerAppComponent
+import model.Event
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.screens.navigation.NavHostController
 import tools.graphics.screens.navigation.NavigationListener

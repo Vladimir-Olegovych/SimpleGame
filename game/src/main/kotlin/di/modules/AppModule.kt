@@ -1,8 +1,6 @@
 package di.modules
 
-import model.Event
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -11,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import dagger.Module
 import dagger.Provides
+import model.Event
 import tools.kyro.client.GameClient
 import javax.inject.Singleton
 

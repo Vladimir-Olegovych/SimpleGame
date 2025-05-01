@@ -5,9 +5,10 @@ import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import ecs.components.Entity
-import ecs.features.EnemyDrawFeature
-import ecs.features.PlayerDrawFeature
 import ecs.features.PlayerFeature
+import ecs.features.draw.EnemyDrawFeature
+import ecs.features.draw.PlayerDrawFeature
+import ecs.features.draw.WallDrawFeature
 
 @All(Entity::class)
 class DrawSystem : IteratingSystem() {
@@ -15,6 +16,7 @@ class DrawSystem : IteratingSystem() {
         PlayerFeature.initialize(world)
         PlayerDrawFeature.initialize(world)
         EnemyDrawFeature.initialize(world)
+        WallDrawFeature.initialize(world)
     }
 
     override fun begin() {
@@ -26,5 +28,6 @@ class DrawSystem : IteratingSystem() {
         PlayerFeature.notify(entityId)
         PlayerDrawFeature.notify(entityId)
         EnemyDrawFeature.notify(entityId)
+        WallDrawFeature.notify(entityId)
     }
 }

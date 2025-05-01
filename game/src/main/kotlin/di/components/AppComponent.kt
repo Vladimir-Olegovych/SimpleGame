@@ -1,8 +1,8 @@
 package di.components
 
 import app.GameApplication
-import app.screens.MainFragment
 import app.screens.GameFragment
+import app.screens.MainFragment
 import dagger.Component
 import di.modules.AppModule
 import javax.inject.Singleton
