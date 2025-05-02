@@ -2,14 +2,19 @@ package utils
 
 import com.esotericsoftware.kryo.Kryo
 import model.Event
+import type.EntityType
 
 fun Kryo.registerAllEvents(){
     val kryo = this
     kryo.register(Event::class.java)
-    kryo.register(Event.Wall::class.java)
-    kryo.register(Event.Enemy::class.java)
+    kryo.register(EntityType::class.java)
+
     kryo.register(Event.Entity::class.java)
-    kryo.register(Event.Player::class.java)
-    kryo.register(Event.PlayerVelocity::class.java)
-    kryo.register(Event.PlayerDisconnected::class.java)
+
+    kryo.register(Event.Size::class.java)
+    kryo.register(Event.Remove::class.java)
+    kryo.register(Event.Position::class.java)
+
+    kryo.register(Event.CurrentPlayer::class.java)
+    kryo.register(Event.CurrentPlayerVelocity::class.java)
 }

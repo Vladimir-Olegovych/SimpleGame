@@ -3,13 +3,12 @@ package org.example.ecs.features
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.physics.box2d.World
-import org.example.ecs.components.Enemy
 import org.example.ecs.components.Entity
-import org.example.ecs.components.Player
-import org.example.ecs.components.Wall
+import org.example.ecs.components.Size
 import tools.artemis.features.Feature
 import tools.physics.createCircleEntity
 import tools.physics.createWall
+import type.EntityType
 import kotlin.random.Random
 
 object WorldFeature: Feature() {
@@ -17,9 +16,7 @@ object WorldFeature: Feature() {
     @Wire private lateinit var box2dWold: World
 
     private lateinit var entityMapper: ComponentMapper<Entity>
-    private lateinit var enemyMapper: ComponentMapper<Enemy>
-    private lateinit var playerMapper: ComponentMapper<Player>
-    private lateinit var wallMapper: ComponentMapper<Wall>
+    private lateinit var sizeMapper: ComponentMapper<Size>
 
     fun createWall(x: Float = 0F,
                    y: Float = 0F,
@@ -28,9 +25,10 @@ object WorldFeature: Feature() {
     )  {
         val entityId = artemisWorld.create()
         val entity = entityMapper.create(entityId)
-        val wall = wallMapper.create(entityId)
-        wall.halfWidth = halfWidth
-        wall.halfHeight = halfHeight
+        val sizes = sizeMapper.create(entityId)
+        sizes.halfWidth = halfWidth
+        sizes.halfHeight = halfHeight
+        entity.entityType = EntityType.WALL
         entity.body = box2dWold.createWall(
             x = x,
             y = y,
@@ -48,8 +46,7 @@ object WorldFeature: Feature() {
     ) {
         val entityId = artemisWorld.create()
         val entity = entityMapper.create(entityId)
-        val enemy = enemyMapper.create(entityId)
-        enemy.radius = radius
+        entity.entityType = EntityType.ENEMY
         entity.body = box2dWold.createCircleEntity(
             x = x,
             y = y,
@@ -69,8 +66,7 @@ object WorldFeature: Feature() {
                      angularDamping: Float = 0.1F
     ) = tasks.add {
         val entity = entityMapper.create(entityId)
-        val player = playerMapper.create(entityId)
-        player.radius = radius
+        entity.entityType = EntityType.PLAYER
         entity.body = box2dWold.createCircleEntity(
             x = x,
             y = y,
@@ -88,14 +84,13 @@ object WorldFeature: Feature() {
         entity.body = null
 
         entityMapper.remove(entityId)
-        playerMapper.remove(entityId)
     }
 
     override fun initialize() {
         for (i in 0 until 100) {
             createEnemy(
-                x = Random.nextInt(0, 100).toFloat(),
-                y = Random.nextInt(0, 1000).toFloat()
+                x = Random.nextInt(0, 500).toFloat(),
+                y = Random.nextInt(0, 500).toFloat()
             )
         }
 

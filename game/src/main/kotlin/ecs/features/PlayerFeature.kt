@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import ecs.components.Entity
 import ecs.components.Player
 import tools.artemis.features.Feature
+import type.EntityType
 
 object PlayerFeature: Feature() {
 
@@ -17,12 +18,13 @@ object PlayerFeature: Feature() {
 
     override fun initialize() {
         player.entityId = artemisWorld.create()
-        entityMapper.create(player.entityId)
+        val entity = entityMapper.create(player.entityId)
+        entity.entityType = EntityType.PLAYER
     }
 
     override fun process(entityId: Int) {
-        val playerEntity = entityMapper[player.entityId]
-        camera.position.set(playerEntity.x, playerEntity.y, 0F)
+        val entity = entityMapper[player.entityId]
+        camera.position.set(entity.x, entity.y, 0F)
         camera.update()
     }
 }

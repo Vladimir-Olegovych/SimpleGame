@@ -18,7 +18,7 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
     private val gameServer = GameServer<Event>(lifecycleScope)
 
     private val artemisWorld = ArtemisWorldBuilder()
-        .addSystem(ClientInputSystem())
+        .addSystem(ClientInputSystem(lifecycleScope))
         .addSystem(EntitySystem())
         .addObject(World(Vector2(0F, 0F), false))
         .build()
@@ -38,7 +38,7 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
             },
             onReceive = { listener, connection, data ->
                 when(data){
-                    is Event.PlayerVelocity -> {
+                    is Event.CurrentPlayerVelocity -> {
                         val playerId = PlayerFeature.getPlayers()[connection]?: return@subscribe
                         ForceFeature.applyForce(playerId, data.x, data.y)
                     }

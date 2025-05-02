@@ -1,27 +1,25 @@
 package model
 
+import type.EntityType
+
 
 sealed class Event {
 
-    open class Entity(val entityId: Int = 0,
-                 val x: Float = 0F,
-                 val y: Float = 0F): Event()
+    class Entity(val entityId: Int = 0,
+                 val entityType: EntityType = EntityType.NULL): Event()
 
-    open class Enemy(entityId: Int = 0,
-                     x: Float = 0F,
-                     y: Float = 0F): Entity(entityId, x, y)
 
-    class Player(entityId: Int = 0,
-                 x: Float = 0F,
-                 y: Float = 0F): Entity(entityId, x, y)
-
-    class Wall(entityId: Int = 0,
-               x: Float = 0F,
-               y: Float = 0F,
+    class Size(val entityId: Int = 0,
                val halfWidth: Float = 0F,
-               val halfHeight: Float = 0F): Entity(entityId, x, y)
+               val halfHeight: Float = 0F): Event()
 
-    class PlayerDisconnected(val entityId: Int = 0): Event()
+    class Position(val entityId: Int = 0,
+                   val x: Float = 0F,
+                   val y: Float = 0F): Event()
 
-    class PlayerVelocity(val x: Float = 0F, val y: Float = 0F): Event()
+    class Remove(val entityId: Int = 0): Event()
+
+    class CurrentPlayer(val entityId: Int = 0): Event()
+
+    class CurrentPlayerVelocity(val x: Float = 0F, val y: Float = 0F): Event()
 }

@@ -7,9 +7,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import ecs.components.Entity
-import ecs.components.Wall
+import ecs.components.Size
 import tools.artemis.features.Feature
 import tools.graphics.textures.Textures
+import type.EntityType
 
 object WallDrawFeature: Feature() {
 
@@ -17,7 +18,7 @@ object WallDrawFeature: Feature() {
     @Wire private lateinit var camera: OrthographicCamera
     @Wire private lateinit var assetManager: AssetManager
     private lateinit var entityMapper: ComponentMapper<Entity>
-    private lateinit var wallMapper: ComponentMapper<Wall>
+    private lateinit var sizeMapper: ComponentMapper<Size>
 
     private lateinit var texture: Texture
 
@@ -26,17 +27,18 @@ object WallDrawFeature: Feature() {
     }
 
     override fun process(entityId: Int) {
-        val wall = wallMapper[entityId]?: return
-        val entity = entityMapper[entityId]
+        val entity = entityMapper[entityId]?: return
+        val sizes = sizeMapper[entityId]?: return
+        if (entity.entityType != EntityType.WALL) return
 
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
         spriteBatch.draw(
             texture,
-            entity.x - wall.halfWidth,
-            entity.y - wall.halfHeight,
-            wall.halfWidth * 2,
-            wall.halfHeight * 2
+            entity.x - sizes.halfWidth,
+            entity.y - sizes.halfHeight,
+            sizes.halfWidth * 2,
+            sizes.halfHeight * 2
         )
         spriteBatch.end()
     }

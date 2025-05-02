@@ -19,7 +19,7 @@ class InputSystem: BaseSystem(), InputProcessor {
     }
 
     override fun processSystem() {
-        gameClient.sendTCP(Event.PlayerVelocity(forceVector.x, forceVector.y))
+        gameClient.sendTCP(Event.CurrentPlayerVelocity(forceVector.x, forceVector.y))
     }
 
     override fun keyDown(keycode: Int): Boolean {

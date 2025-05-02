@@ -18,28 +18,34 @@ class ServerInputSystem(private val onDisconnected: () -> Unit): BaseSystem() {
                 onDisconnected.invoke()
             }
         )
-        //OnDisconnectPlayer
+        //Entity
         gameClient.subscribe(
             onReceive = { _, _, data ->
-                EntityInputFeature.onReceivePlayerDisconnected(data)
+                EntityInputFeature.onReceiveEntity(data)
             }
         )
-        //Wall
+        //Position
         gameClient.subscribe(
             onReceive = { _, _, data ->
-                EntityInputFeature.onReceiveWall(data)
+                EntityInputFeature.onReceivePosition(data)
             }
         )
-        //Enemy
+        //Size
         gameClient.subscribe(
             onReceive = { _, _, data ->
-                EntityInputFeature.onReceiveEnemy(data)
+                EntityInputFeature.onReceiveSizes(data)
             }
         )
-        //Player
+        //Remove
+        gameClient.subscribe(
+            onReceive = { _, _, data ->
+                EntityInputFeature.onReceiveRemove(data)
+            }
+        )
+        //CurrentPLayer
         gameClient.subscribe(
             onReceive = { listener, _, data ->
-                EntityInputFeature.onReceivePlayer(data)
+                EntityInputFeature.onReceiveCurrentPlayer(data)
                 gameClient.unSubscribe(listener)
             }
         )
