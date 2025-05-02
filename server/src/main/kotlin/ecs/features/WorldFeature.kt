@@ -43,7 +43,7 @@ object WorldFeature: Feature() {
                     radius: Float = 1F,
                     linearDamping: Float = 0.2F,
                     angularDamping: Float = 0.2F
-    ) {
+    ) = tasks.add {
         val entityId = artemisWorld.create()
         val entity = entityMapper.create(entityId)
         entity.entityType = EntityType.ENEMY
@@ -96,7 +96,9 @@ object WorldFeature: Feature() {
 
         for (i in 0 until 10) {
             for (j in 0 until 10) {
-                createWall(i * 5F, j * 5F)
+                createWall(i * 40F, j * 40F,
+                    halfWidth = 10F,
+                    halfHeight = 10F)
             }
         }
     }
