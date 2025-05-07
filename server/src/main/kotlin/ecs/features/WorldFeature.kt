@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.physics.box2d.World
 import org.example.ecs.components.Entity
+import org.example.ecs.components.Radius
 import org.example.ecs.components.Size
 import org.example.models.FixtureType
 import org.example.values.GameValues
@@ -20,6 +21,7 @@ object WorldFeature: Feature() {
 
     private lateinit var entityMapper: ComponentMapper<Entity>
     private lateinit var sizeMapper: ComponentMapper<Size>
+    private lateinit var radiusMapper: ComponentMapper<Radius>
 
     fun createWall(x: Float = 0F,
                    y: Float = 0F,
@@ -52,6 +54,8 @@ object WorldFeature: Feature() {
                     angularDamping: Float = 0.2F
     ) {
         val entityId = artemisWorld.create()
+        val radiusEntity = radiusMapper.create(entityId)
+        radiusEntity.radius = radius
         val entity = entityMapper.create(entityId)
         entity.entityType = EntityType.ENEMY
         post {
@@ -72,11 +76,13 @@ object WorldFeature: Feature() {
                      x: Float = 0F,
                      y: Float = 0F,
                      restitution: Float = 1F,
-                     radius: Float = 0.3F,
+                     radius: Float = 0.15F,
                      linearDamping: Float = 0.1F,
                      angularDamping: Float = 0.1F
     ) {
         val entity = entityMapper.create(entityId)
+        val radiusEntity = radiusMapper.create(entityId)
+        radiusEntity.radius = radius
         entity.entityType = EntityType.PLAYER
         entity.isObserver = true
         post {
@@ -107,15 +113,8 @@ object WorldFeature: Feature() {
     }
 
     override fun initialize() {
-        /*
-        createEnemy(
-            x = 2F,
-            y = 2F
-        )
-
-         */
-        for (i in 0 until 20) {
-            for (j in 0 until 20) {
+        for (i in 0 until 3) {
+            for (j in 0 until 3) {
                 createEnemy(
                     x = i * 0.2F,
                     y = j * 0.2F,

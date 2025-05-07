@@ -3,12 +3,12 @@ package org.example
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import model.Event
-import org.example.values.GameValues.playersMap
 import org.example.ecs.features.ForceFeature
 import org.example.ecs.features.PlayerFeature
 import org.example.ecs.features.WorldFeature
 import org.example.ecs.systems.ClientSystem
 import org.example.ecs.systems.EntitySystem
+import org.example.values.GameValues.playersMap
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.render.LifecycleUpdater
 import tools.kyro.server.GameServer
@@ -56,10 +56,8 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
     }
 
     override fun update(deltaTime: Float) {
-        val time = System.currentTimeMillis()
         artemisWorld.delta = deltaTime
         artemisWorld.process()
-        println("mainTime ${System.currentTimeMillis() - time}")
     }
 
     override fun dispose() {

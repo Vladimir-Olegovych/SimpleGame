@@ -3,6 +3,7 @@ package ecs.features
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.Vector3
 import ecs.components.Entity
 import ecs.components.Player
 import tools.artemis.features.Feature
@@ -24,7 +25,7 @@ object PlayerFeature: Feature() {
 
     override fun process(entityId: Int) {
         val entity = entityMapper[player.entityId]
-        camera.position.set(entity.x, entity.y, 0F)
+        camera.position.lerp(Vector3(entity.x, entity.y, 0f), 0.1f)
         camera.update()
     }
 }

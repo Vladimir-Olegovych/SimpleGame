@@ -12,6 +12,7 @@ fun Kryo.registerAllEvents(){
     kryo.register(Event.Entity::class.java)
 
     kryo.register(Event.Size::class.java)
+    kryo.register(Event.Radius::class.java)
     kryo.register(Event.Remove::class.java)
     kryo.register(Event.Position::class.java)
 

@@ -13,6 +13,9 @@ sealed class Event {
                val halfWidth: Float = 0F,
                val halfHeight: Float = 0F): Event()
 
+    class Radius(val entityId: Int = 0,
+                 val radius: Float = 0F): Event()
+
     class Position(val entityId: Int = 0,
                    val x: Float = 0F,
                    val y: Float = 0F): Event()

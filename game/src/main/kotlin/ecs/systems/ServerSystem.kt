@@ -34,7 +34,13 @@ class ServerSystem(private val onDisconnected: () -> Unit): BaseSystem() {
         //Size
         gameClient.subscribe(
             onReceive = { _, _, data ->
-                EntityInputFeature.onReceiveSizes(data)
+                EntityInputFeature.onReceiveSize(data)
+            }
+        )
+        //Radius
+        gameClient.subscribe(
+            onReceive = { _, _, data ->
+                EntityInputFeature.onReceiveRadius(data)
             }
         )
         //Remove
@@ -57,6 +63,7 @@ class ServerSystem(private val onDisconnected: () -> Unit): BaseSystem() {
     }
 
     override fun dispose() {
+        EntityInputFeature.dispose()
         gameClient.unSubscribeAll()
     }
 }

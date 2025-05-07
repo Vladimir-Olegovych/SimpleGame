@@ -6,6 +6,7 @@ import com.artemis.annotations.All
 import ecs.components.Client
 import model.Event
 import org.example.ecs.components.Entity
+import org.example.ecs.components.Radius
 import org.example.ecs.components.Size
 import tools.artemis.features.Feature
 
@@ -15,6 +16,7 @@ object EventFeature: Feature() {
     private lateinit var clientMapper: ComponentMapper<Client>
     private lateinit var entityMapper: ComponentMapper<Entity>
     private lateinit var sizeMapper: ComponentMapper<Size>
+    private lateinit var radiusMapper: ComponentMapper<Radius>
 
     override fun initialize() {}
 
@@ -26,12 +28,33 @@ object EventFeature: Feature() {
             val entity = entityMapper[id]?: continue
             val entityBody = entity.body?: continue
 
-            client.addEvent(
-                Event.Entity(
-                    entityId = id,
-                    entityType = entity.entityType
+            if (client.ownedEntity[id] == null) {
+                client.addEvent(
+                    Event.Entity(
+                        entityId = id,
+                        entityType = entity.entityType
+                    )
                 )
-            )
+                client.ownedEntity.put(id, 0)
+            }
+
+            radiusMapper[id]?.let {
+                client.addEvent(
+                    Event.Radius(
+                        entityId = id,
+                        radius = it.radius
+                    )
+                )
+            }
+            sizeMapper[id]?.let {
+                client.addEvent(
+                    Event.Size(
+                        entityId = id,
+                        halfHeight = it.halfHeight,
+                        halfWidth = it.halfWidth
+                    )
+                )
+            }
 
             client.addEvent(
                 Event.Position(
@@ -40,16 +63,6 @@ object EventFeature: Feature() {
                     y = entityBody.position.y
                 )
             )
-
-            sizeMapper[id]?.let { sizes ->
-                client.addEvent(
-                    Event.Size(
-                        entityId = id,
-                        halfHeight = sizes.halfHeight,
-                        halfWidth = sizes.halfWidth
-                    )
-                )
-            }
         }
     }
 }
