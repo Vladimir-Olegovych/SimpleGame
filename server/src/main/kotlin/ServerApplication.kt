@@ -17,12 +17,10 @@ import utils.registerAllEvents
 class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
 
     private val gameServer = GameServer<Event>(lifecycleScope)
-    private val box2dWorld = World(Vector2(0F, 0F), false)
-
     private val artemisWorld = ArtemisWorldBuilder()
         .addSystem(ClientSystem(lifecycleScope))
         .addSystem(EntitySystem())
-        .addObject(box2dWorld)
+        .addObject(World(Vector2(0F, -0.1F), false))
         .build()
 
     private var tikTime = 0L
