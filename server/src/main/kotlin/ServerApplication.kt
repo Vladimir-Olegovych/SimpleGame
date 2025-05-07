@@ -27,11 +27,6 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
 
     private var tikTime = 0L
 
-    fun setGravity(x: Float, y: Float){
-        box2dWorld.gravity.x = x
-        box2dWorld.gravity.y = y
-    }
-
     fun getTick(): String {
         return tikTime.toString()
     }
@@ -40,7 +35,6 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
         gameServer.subscribe<Event>(
             onConnected = { listener, connection ->
                 val playerId = artemisWorld.create()
-                println("pid $playerId")
                 WorldFeature.createPlayer(playerId)
                 PlayerFeature.createPlayer(playerId, connection)
             },
