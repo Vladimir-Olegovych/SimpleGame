@@ -22,10 +22,10 @@ class DrawSystem : IteratingSystem() {
     override fun begin() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         Gdx.gl.glClearColor(255F/255F, 255F/255F, 255/255F, 1F)
+        PlayerFeature.notify(0)
     }
 
     override fun process(entityId: Int) {
-        PlayerFeature.notify(entityId)
         PlayerDrawFeature.notify(entityId)
         EnemyDrawFeature.notify(entityId)
         WallDrawFeature.notify(entityId)

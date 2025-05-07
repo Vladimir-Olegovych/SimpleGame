@@ -113,8 +113,8 @@ object WorldFeature: Feature() {
     }
 
     override fun initialize() {
-        for (i in 0 until 3) {
-            for (j in 0 until 3) {
+        for (i in -9 until 8) {
+            for (j in -9 until 8) {
                 createEnemy(
                     x = i * 0.2F,
                     y = j * 0.2F,

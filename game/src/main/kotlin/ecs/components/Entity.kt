@@ -1,10 +1,10 @@
 package ecs.components
 
 import com.artemis.Component
+import com.badlogic.gdx.math.Vector2
 import type.EntityType
 
 class Entity: Component() {
     var entityType = EntityType.NULL
-    var x = 0F
-    var y = 0F
+    val position: Vector2 = Vector2(0F, 0F)
 }

@@ -30,8 +30,8 @@ object EntityInputFeature: Disposable, Feature() {
 
     fun onReceivePosition(data: Event.Position){
         val entity = entityMapper[entityMap[data.entityId]]?: return
-        entity.x = data.x
-        entity.y = data.y
+        entity.position.x = data.x
+        entity.position.y = data.y
     }
 
     fun onReceiveSize(data: Event.Size){

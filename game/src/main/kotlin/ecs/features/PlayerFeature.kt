@@ -25,7 +25,7 @@ object PlayerFeature: Feature() {
 
     override fun process(entityId: Int) {
         val entity = entityMapper[player.entityId]
-        camera.position.lerp(Vector3(entity.x, entity.y, 0f), 0.1f)
+        camera.position.lerp(Vector3(entity.position.x, entity.position.y, 0f), 0.1f)
         camera.update()
     }
 }

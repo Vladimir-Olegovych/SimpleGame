@@ -35,8 +35,8 @@ object WallDrawFeature: Feature() {
         spriteBatch.begin()
         spriteBatch.draw(
             texture,
-            entity.x - sizes.halfWidth,
-            entity.y - sizes.halfHeight,
+            entity.position.x - sizes.halfWidth,
+            entity.position.y - sizes.halfHeight,
             sizes.halfWidth * 2,
             sizes.halfHeight * 2
         )

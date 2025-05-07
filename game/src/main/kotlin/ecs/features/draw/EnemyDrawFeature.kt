@@ -27,7 +27,7 @@ object EnemyDrawFeature: Feature() {
         renderer.projectionMatrix = camera.combined
         renderer.begin(ShapeRenderer.ShapeType.Filled)
         renderer.color = Color.BLUE
-        renderer.circle(entity.x, entity.y, radius.radius, 36)
+        renderer.circle(entity.position.x, entity.position.y, radius.radius, 36)
         renderer.end()
     }
 }
