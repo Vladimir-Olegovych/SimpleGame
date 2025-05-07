@@ -12,20 +12,24 @@ object ContactFeature: ContactListener, Feature() {
     private lateinit var entityMapper: ComponentMapper<Entity>
 
     override fun beginContact(contact: Contact) {
+        //val sensor = getFixtureSensor(contact.fixtureB) ?: return
+        //val entity = getFixtureEntity(contact.fixtureA) ?: return
 
     }
 
     override fun endContact(contact: Contact) {
+        //val sensor = getFixtureSensor(contact.fixtureB)?: return
+        //val entity = getFixtureEntity(contact.fixtureA)?: return
 
     }
 
     override fun preSolve(contact: Contact, manifold: Manifold) {}
     override fun postSolve(contact: Contact, contactImpulse: ContactImpulse) {}
 
-
     override fun initialize() {
         box2dWold.setContactListener(this)
     }
 
     override fun process(entityId: Int) {}
+
 }

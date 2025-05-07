@@ -17,17 +17,30 @@ import utils.registerAllEvents
 class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
 
     private val gameServer = GameServer<Event>(lifecycleScope)
+    private val box2dWorld = World(Vector2(0F, 0F), false)
 
     private val artemisWorld = ArtemisWorldBuilder()
         .addSystem(ClientSystem(lifecycleScope))
         .addSystem(EntitySystem())
-        .addObject(World(Vector2(0F, 0F), false))
+        .addObject(box2dWorld)
         .build()
+
+    private var tikTime = 0L
+
+    fun setGravity(x: Float, y: Float){
+        box2dWorld.gravity.x = x
+        box2dWorld.gravity.y = y
+    }
+
+    fun getTick(): String {
+        return tikTime.toString()
+    }
 
     override fun create() {
         gameServer.subscribe<Event>(
             onConnected = { listener, connection ->
                 val playerId = artemisWorld.create()
+                println("pid $playerId")
                 WorldFeature.createPlayer(playerId)
                 PlayerFeature.createPlayer(playerId, connection)
             },
@@ -56,8 +69,10 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
     }
 
     override fun update(deltaTime: Float) {
+        val time = System.currentTimeMillis()
         artemisWorld.delta = deltaTime
         artemisWorld.process()
+        tikTime = System.currentTimeMillis() - time
     }
 
     override fun dispose() {

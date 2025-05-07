@@ -25,8 +25,8 @@ object WorldFeature: Feature() {
 
     fun createWall(x: Float = 0F,
                    y: Float = 0F,
-                   halfWidth: Float = 1F,
-                   halfHeight: Float = 1F
+                   halfWidth: Float = 0.5F,
+                   halfHeight: Float = 0.5F
     ) {
         val entityId = artemisWorld.create()
         val entity = entityMapper.create(entityId)
@@ -119,6 +119,19 @@ object WorldFeature: Feature() {
                     x = i * 0.2F,
                     y = j * 0.2F,
                 )
+            }
+        }
+
+        for (i in -10..10) {
+            for (j in -10..10) {
+                if (i == -10 || i == 10 || j == -10 || j == 10) {
+                    createWall(
+                        x = i * 0.2F,
+                        y = j * 0.2F,
+                        halfWidth = 0.2F,
+                        halfHeight = 0.2F
+                    )
+                }
             }
         }
 

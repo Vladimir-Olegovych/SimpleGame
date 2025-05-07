@@ -1,12 +1,14 @@
 package org.example.ecs.components
 
 import com.artemis.Component
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import type.EntityType
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class Entity: Component() {
     private val observers = ConcurrentLinkedQueue<Entity>()
+    val moveForce = Vector2(0F, 0F)
     var isObserver = false
     var body: Body? = null
     var entityType = EntityType.NULL
