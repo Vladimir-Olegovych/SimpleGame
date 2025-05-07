@@ -10,10 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.Viewport
 import ecs.components.Player
-import ecs.features.EntityInputFeature
 import ecs.systems.DrawSystem
 import ecs.systems.InputSystem
-import ecs.systems.ServerInputSystem
+import ecs.systems.ServerSystem
 import model.Event
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.input.CycleInputProcessor
@@ -39,10 +38,9 @@ class GameFragment(
 
 
     override fun onCreate(game: Game) {
-        val features = arrayOf(EntityInputFeature)
         val inputSystem = InputSystem()
         val drawSystem = DrawSystem()
-        val serverInputSystem = ServerInputSystem(
+        val serverSystem = ServerSystem(
             onDisconnected = {
                 onDisconnected.invoke()
             }
@@ -50,7 +48,7 @@ class GameFragment(
 
         inputProcessor.addProcessor(inputSystem)
         artemisWorld = ArtemisWorldBuilder()
-            .addSystem(serverInputSystem)
+            .addSystem(serverSystem)
             .addSystem(inputSystem)
             .addSystem(drawSystem)
             .addObject(gameClient)
@@ -58,10 +56,7 @@ class GameFragment(
             .addObject(spriteBatch)
             .addObject(camera)
             .addObject(assetManager)
-            .addObject(Player())
             .build()
-
-        features.forEach { artemisWorld.inject(it) }
 
         Gdx.input.inputProcessor = inputProcessor
     }

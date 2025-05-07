@@ -44,7 +44,7 @@ class MainFragment(
         val skin = assetManager.get<Skin>(SkinID.MAIN.path)
         val menuTable = Table().apply {
             setFillParent(true)
-            pad(28F)
+            pad(1F)
             top()
         }
 

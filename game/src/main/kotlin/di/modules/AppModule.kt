@@ -29,11 +29,11 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideOrthographicCamera(): OrthographicCamera = OrthographicCamera(100F, 100F)
+    fun provideOrthographicCamera(): OrthographicCamera = OrthographicCamera(10F, 10F)
 
     @Provides
     @Singleton
-    fun provideViewport(camera: OrthographicCamera): Viewport = FillViewport(100F, 100F, camera)
+    fun provideViewport(camera: OrthographicCamera): Viewport = FillViewport(10F, 10F, camera)
 
     @Provides
     @Singleton

@@ -9,7 +9,7 @@ import org.example.ecs.components.Entity
 import org.example.ecs.components.Size
 import tools.artemis.features.Feature
 
-object SendEntityFeature: Feature() {
+object EventFeature: Feature() {
 
     @All(Entity::class) private lateinit var entityIds: EntitySubscription
     private lateinit var clientMapper: ComponentMapper<Client>
@@ -26,15 +26,12 @@ object SendEntityFeature: Feature() {
             val entity = entityMapper[id]?: continue
             val entityBody = entity.body?: continue
 
-            if (client.hasEntities[id] == null) {
-                client.addEvent(
-                    Event.Entity(
-                        entityId = id,
-                        entityType = entity.entityType
-                    )
+            client.addEvent(
+                Event.Entity(
+                    entityId = id,
+                    entityType = entity.entityType
                 )
-                client.hasEntities.put(id, 0)
-            }
+            )
 
             client.addEvent(
                 Event.Position(

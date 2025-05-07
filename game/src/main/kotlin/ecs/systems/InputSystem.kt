@@ -16,11 +16,11 @@ class InputSystem: BaseSystem(), InputProcessor {
     private fun setForceVector(x: Float? = null, y: Float? = null){
         forceVector.x = x?: forceVector.x
         forceVector.y = y?: forceVector.y
-    }
 
-    override fun processSystem() {
         gameClient.sendTCP(Event.CurrentPlayerVelocity(forceVector.x, forceVector.y))
     }
+
+    override fun processSystem() {}
 
     override fun keyDown(keycode: Int): Boolean {
         when (keycode) {

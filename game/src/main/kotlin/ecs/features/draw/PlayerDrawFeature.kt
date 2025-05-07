@@ -24,7 +24,7 @@ object PlayerDrawFeature: Feature() {
         renderer.projectionMatrix = camera.combined
         renderer.begin(ShapeRenderer.ShapeType.Filled)
         renderer.color = Color.RED
-        renderer.circle(entity.x, entity.y, 1F, 36)
+        renderer.circle(entity.x, entity.y, 0.3F, 36)
         renderer.end()
     }
 }

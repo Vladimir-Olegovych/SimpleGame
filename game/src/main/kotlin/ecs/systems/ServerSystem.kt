@@ -6,7 +6,7 @@ import ecs.features.EntityInputFeature
 import model.Event
 import tools.kyro.client.GameClient
 
-class ServerInputSystem(private val onDisconnected: () -> Unit): BaseSystem() {
+class ServerSystem(private val onDisconnected: () -> Unit): BaseSystem() {
 
     @Wire private lateinit var gameClient: GameClient<Event>
 
@@ -15,6 +15,7 @@ class ServerInputSystem(private val onDisconnected: () -> Unit): BaseSystem() {
         //Event
         gameClient.subscribe<Event>(
             onDisconnected = { _, _ ->
+                gameClient.stop()
                 onDisconnected.invoke()
             }
         )

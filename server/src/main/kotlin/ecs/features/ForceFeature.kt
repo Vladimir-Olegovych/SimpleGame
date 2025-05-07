@@ -4,11 +4,11 @@ import com.artemis.ComponentMapper
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.IntMap
 import org.example.ecs.components.Entity
+import org.example.values.GameValues
 import tools.artemis.features.Feature
 
 object ForceFeature: Feature() {
 
-    private const val SPEED = 2F
     private val entityForces = IntMap<Vector2>()
     private lateinit var entityMapper: ComponentMapper<Entity>
 
@@ -16,12 +16,12 @@ object ForceFeature: Feature() {
     fun applyForce(entityId: Int, x: Float, y: Float){
         val force = Vector2(x, y)
         when {
-            force.x > 0 -> force.x = SPEED
-            force.x < 0 -> force.x = -SPEED
+            force.x > 0 -> force.x = GameValues.MAX_SPEED
+            force.x < 0 -> force.x = -GameValues.MAX_SPEED
         }
         when {
-            force.y > 0 -> force.y = SPEED
-            force.y < 0 -> force.y = -SPEED
+            force.y > 0 -> force.y = GameValues.MAX_SPEED
+            force.y < 0 -> force.y = -GameValues.MAX_SPEED
         }
         entityForces.put(entityId, force)
     }
