@@ -1,6 +1,7 @@
 package ecs.features
 
 import com.artemis.ComponentMapper
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.IntMap
 import ecs.components.Entity
@@ -8,8 +9,14 @@ import ecs.components.Radius
 import ecs.components.Size
 import model.Event
 import tools.artemis.features.Feature
+import tools.chunk.ChunkManager
 
 object EntityInputFeature: Disposable, Feature() {
+
+    private val chunkManager = ChunkManager(
+        processedRadius = 1,
+        chunkSize = Vector2(2F, 2F)
+    )
 
     private val entityMap = IntMap<Int>()
     private lateinit var sizeMapper: ComponentMapper<Size>

@@ -31,8 +31,11 @@ object WorldFeature: ChunkListener, Feature() {
     private lateinit var chunkManager: ChunkManager
 
     override fun onChunkCreate(chunk: Chunk) {
-        val position = chunk.getWorldPosition()
-        createEnemy(position.x, position.y)
+        for (x in 2 until 8) {
+            for (y in 0 until 10) {
+                createEnemy(x * 0.2F, y * 0.2F, chunk, radius = 0.1F)
+            }
+        }
     }
 
     override fun onChunkDisable(chunk: Chunk) {
@@ -61,12 +64,6 @@ object WorldFeature: ChunkListener, Feature() {
             processedRadius = preference.chunkRadius,
             chunkSize = preference.chunkSize.toVector2()
         ).apply { setChunkListener(this@WorldFeature) }
-
-        for (x in -100 .. 100) {
-            for (y in -100 .. 100) {
-                chunkManager.createChunk(IntVector2(x, y))
-            }
-        }
     }
 
     fun getAllChunksInRadius(vector2: ImmutableIntVector2, action: (Chunk) -> Unit) {
@@ -84,17 +81,16 @@ object WorldFeature: ChunkListener, Feature() {
         val body = entity.body?: return
         val bodyChunk = chunkManager.getChunkByWorld(body.position)?: return
         if (bodyChunk.getPosition() == entity.chunkPosition) return
+        if (entity.isObserver){
+            println("move ${entity.chunkPosition}, ${bodyChunk.getPosition()}")
+        }
         chunkManager.move(entityId, bodyChunk.getPosition(), entity.isObserver)
         entity.chunkPosition = bodyChunk.getPosition()
+
     }
 
-    private fun setEntityChunk(entityId: Int,
-                               entity: Entity,
-                               x: Float,
-                               y: Float,
-                               isObserver: Boolean){
-        val vector2 = Vector2(x, y)
-        val chunk = chunkManager.getChunkByWorld(vector2)?: chunkManager.createChunk(vector2)
+    private fun applyEntityChunk(entityId: Int, chunk: Chunk, isObserver: Boolean){
+        val entity = entityMapper[entityId]
         entity.chunkPosition = chunk.getPosition()
         chunk.addEntity(entityId)
         if (isObserver) chunk.addObserver(entityId)
@@ -102,6 +98,7 @@ object WorldFeature: ChunkListener, Feature() {
 
     fun createWall(x: Float = 0F,
                    y: Float = 0F,
+                   chunk: Chunk,
                    halfWidth: Float = 0.5F,
                    halfHeight: Float = 0.5F
     ) {
@@ -113,19 +110,19 @@ object WorldFeature: ChunkListener, Feature() {
         entity.entityType = EntityType.WALL
         post {
             val body = box2dWold.createWall(
-                x = x,
-                y = y,
+                x = x + chunk.getWorldPosition().x,
+                y = y + chunk.getWorldPosition().y,
                 userData = FixtureType.Entity(entityId),
                 halfWidth = halfWidth,
                 halfHeight = halfHeight,
             )
             entity.body = body
         }
-        setEntityChunk(entityId, entity, x, y, false)
     }
 
     fun createEnemy(x: Float = 0F,
                     y: Float = 0F,
+                    chunk: Chunk,
                     restitution: Float = 1F,
                     radius: Float = 0.1F,
                     linearDamping: Float = 0.2F,
@@ -138,8 +135,8 @@ object WorldFeature: ChunkListener, Feature() {
         entity.entityType = EntityType.ENEMY
         post {
             val body = box2dWold.createCircleEntity(
-                x = x,
-                y = y,
+                x = x + chunk.getWorldPosition().x,
+                y = y + chunk.getWorldPosition().y,
                 userData = FixtureType.Entity(entityId),
                 restitution = restitution,
                 radius = radius,
@@ -148,7 +145,7 @@ object WorldFeature: ChunkListener, Feature() {
             )
             entity.body = body
         }
-        setEntityChunk(entityId, entity, x, y, false)
+        applyEntityChunk(entityId, chunk, false)
     }
 
     fun createPlayer(entityId: Int,
@@ -159,6 +156,7 @@ object WorldFeature: ChunkListener, Feature() {
                      linearDamping: Float = 0.1F,
                      angularDamping: Float = 0.1F
     ) {
+        val chunk = chunkManager.createChunk(IntVector2(0, 0))
         val entity = entityMapper.create(entityId)
         val radiusEntity = radiusMapper.create(entityId)
         radiusEntity.radius = radius
@@ -166,8 +164,8 @@ object WorldFeature: ChunkListener, Feature() {
         entity.isObserver = true
         post {
             val body = box2dWold.createCircleEntity(
-                x = x,
-                y = y,
+                x = x + chunk.getWorldPosition().x,
+                y = y + chunk.getWorldPosition().y,
                 userData = FixtureType.Entity(entityId),
                 restitution = restitution,
                 radius = radius,
@@ -180,7 +178,7 @@ object WorldFeature: ChunkListener, Feature() {
             )
             entity.body = body
         }
-        setEntityChunk(entityId, entity, x, y, true)
+        applyEntityChunk(entityId, chunk, true)
     }
 
     fun removeEntity(entityId: Int) {
