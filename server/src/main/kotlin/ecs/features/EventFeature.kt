@@ -12,7 +12,6 @@ import tools.artemis.features.Feature
 
 object EventFeature: Feature() {
 
-    @All(Entity::class) private lateinit var entityIds: EntitySubscription
     private lateinit var clientMapper: ComponentMapper<Client>
     private lateinit var entityMapper: ComponentMapper<Entity>
     private lateinit var sizeMapper: ComponentMapper<Size>
@@ -22,47 +21,55 @@ object EventFeature: Feature() {
 
     override fun process(entityId: Int) {
         val client = clientMapper[entityId]?: return
+        val clientEntity = entityMapper[entityId]?: return
 
-        for (i in 0 until entityIds.entities.size()) {
-            val id = entityIds.entities[i]
-            val entity = entityMapper[id]?: continue
-            val entityBody = entity.body?: continue
-
-            if (client.ownedEntity[id] == null) {
-                client.addEvent(
-                    Event.Entity(
-                        entityId = id,
-                        entityType = entity.entityType
-                    )
-                )
-                client.ownedEntity.put(id, 0)
+        var size = 0
+        WorldFeature.getAllChunksInRadius(clientEntity.chunkPosition) { chunk ->
+            size++
+            for(id in chunk.getEntities()){
+                client.processEntityOnChunk(id)
             }
+        }
+    }
 
-            radiusMapper[id]?.let {
-                client.addEvent(
-                    Event.Radius(
-                        entityId = id,
-                        radius = it.radius
-                    )
-                )
-            }
-            sizeMapper[id]?.let {
-                client.addEvent(
-                    Event.Size(
-                        entityId = id,
-                        halfHeight = it.halfHeight,
-                        halfWidth = it.halfWidth
-                    )
-                )
-            }
+    private fun Client.processEntityOnChunk(id: Int){
+        val entity = entityMapper[id]?: return
+        val entityBody = entity.body?: return
 
-            client.addEvent(
-                Event.Position(
+        if (this.ownedEntity[id] == null) {
+            this.addEvent(
+                Event.Entity(
                     entityId = id,
-                    x = entityBody.position.x,
-                    y = entityBody.position.y
+                    entityType = entity.entityType
+                )
+            )
+            this.ownedEntity.put(id, 0)
+        }
+
+        radiusMapper[id]?.let {
+            this.addEvent(
+                Event.Radius(
+                    entityId = id,
+                    radius = it.radius
                 )
             )
         }
+        sizeMapper[id]?.let {
+            this.addEvent(
+                Event.Size(
+                    entityId = id,
+                    halfHeight = it.halfHeight,
+                    halfWidth = it.halfWidth
+                )
+            )
+        }
+
+        this.addEvent(
+            Event.Position(
+                entityId = id,
+                x = entityBody.position.x,
+                y = entityBody.position.y
+            )
+        )
     }
 }

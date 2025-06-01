@@ -8,26 +8,27 @@ import org.example.ecs.features.PlayerFeature
 import org.example.ecs.features.WorldFeature
 import org.example.ecs.systems.ClientSystem
 import org.example.ecs.systems.EntitySystem
+import org.example.models.ServerPreference
+import org.example.values.GameValues
 import org.example.values.GameValues.playersMap
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.render.LifecycleUpdater
 import tools.kyro.server.GameServer
+import tools.preference.JsonPreference
 import utils.registerAllEvents
 
 class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
+
+    private val jsonPreference = JsonPreference("server", ServerPreference())
+
+    init { GameValues.setServerPreference(jsonPreference.getPreference()) }
 
     private val gameServer = GameServer<Event>(lifecycleScope)
     private val artemisWorld = ArtemisWorldBuilder()
         .addSystem(ClientSystem(lifecycleScope))
         .addSystem(EntitySystem())
-        .addObject(World(Vector2(0F, -0.1F), false))
+        .addObject(World(Vector2(0F, 0F), false))
         .build()
-
-    private var tikTime = 0L
-
-    fun getTick(): String {
-        return tikTime.toString()
-    }
 
     override fun create() {
         gameServer.subscribe<Event>(
@@ -61,10 +62,8 @@ class ServerApplication(private val port: Int = 5000): LifecycleUpdater() {
     }
 
     override fun update(deltaTime: Float) {
-        val time = System.currentTimeMillis()
         artemisWorld.delta = deltaTime
         artemisWorld.process()
-        tikTime = System.currentTimeMillis() - time
     }
 
     override fun dispose() {

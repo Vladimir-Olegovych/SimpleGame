@@ -9,6 +9,7 @@ import ecs.components.Entity
 import ecs.components.Radius
 import tools.artemis.features.Feature
 import type.EntityType
+import values.GameValues
 
 object PlayerDrawFeature: Feature() {
 
@@ -26,7 +27,7 @@ object PlayerDrawFeature: Feature() {
 
         renderer.projectionMatrix = camera.combined
         renderer.begin(ShapeRenderer.ShapeType.Filled)
-        renderer.color = Color.RED
+        renderer.color = Color(GameValues.getClientPreference().playerColor)
         renderer.circle(entity.position.x, entity.position.y, radius.radius, 36)
         renderer.end()
     }

@@ -5,10 +5,7 @@ import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.physics.box2d.World
 import org.example.ecs.components.Entity
-import org.example.ecs.features.ContactFeature
-import org.example.ecs.features.ForceFeature
-import org.example.ecs.features.PlayerFeature
-import org.example.ecs.features.WorldFeature
+import org.example.ecs.features.*
 
 @All(Entity::class)
 class EntitySystem: IteratingSystem() {

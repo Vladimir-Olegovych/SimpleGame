@@ -1,9 +1,15 @@
 package org.example.values
 
 import com.esotericsoftware.kryonet.Connection
+import org.example.models.ServerPreference
 
 object GameValues {
+    private var serverPreference: ServerPreference? = null
     val playersMap = HashMap<Connection, Int>()
-    const val SENSOR_RADIUS = 1F
-    const val MAX_SPEED = 0.05F
+
+    fun getServerPreference(): ServerPreference = serverPreference!!
+
+    fun setServerPreference(serverPreference: ServerPreference) {
+        this.serverPreference = serverPreference
+    }
 }

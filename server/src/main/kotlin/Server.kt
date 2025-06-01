@@ -11,7 +11,6 @@ fun main() {
         val command = readlnOrNull()
         when(command) {
             Commands.STOP -> process = false
-            Commands.TIK -> println(serverApplication.getTick())
         }
     }
 

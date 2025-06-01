@@ -12,15 +12,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import di.components.AppComponent
 import di.components.DaggerAppComponent
 import model.Event
+import models.ClientPreference
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.screens.navigation.NavHostController
 import tools.graphics.screens.navigation.NavigationListener
 import tools.graphics.textures.SkinID
 import tools.graphics.textures.Textures
 import tools.kyro.client.GameClient
+import tools.preference.JsonPreference
+import values.GameValues
 import javax.inject.Inject
 
 class GameApplication: Game() {
+    private val jsonPreference = JsonPreference("client", ClientPreference())
     private lateinit var appComponent: AppComponent
 
     @Inject lateinit var spriteBatch: SpriteBatch
@@ -29,6 +33,7 @@ class GameApplication: Game() {
     @Inject lateinit var gameClient: GameClient<Event>
 
     override fun create() {
+        GameValues.setClientPreference(jsonPreference.getPreference())
         appComponent = DaggerAppComponent.create()
         appComponent.inject(this)
 
@@ -69,6 +74,8 @@ class GameApplication: Game() {
     }
 
     override fun dispose() {
+        jsonPreference.setPreference(GameValues.getClientPreference())
+
         gameClient.stop()
         spriteBatch.dispose()
         stage.dispose()

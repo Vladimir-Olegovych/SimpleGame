@@ -3,6 +3,7 @@ package org.example.ecs.components
 import com.artemis.Component
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
+import tools.math.ImmutableIntVector2
 import type.EntityType
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -11,6 +12,7 @@ class Entity: Component() {
     val moveForce = Vector2(0F, 0F)
     var isObserver = false
     var body: Body? = null
+    var chunkPosition = ImmutableIntVector2.ZERO
     var entityType = EntityType.NULL
 
     fun isObservable(): Boolean = observers.isNotEmpty()

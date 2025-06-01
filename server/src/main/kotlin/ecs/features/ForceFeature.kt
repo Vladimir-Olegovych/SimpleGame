@@ -3,7 +3,7 @@ package org.example.ecs.features
 import com.artemis.ComponentMapper
 import com.badlogic.gdx.math.Vector2
 import org.example.ecs.components.Entity
-import org.example.values.GameValues.MAX_SPEED
+import org.example.values.GameValues
 import tools.artemis.features.Feature
 
 object ForceFeature: Feature() {
@@ -15,12 +15,12 @@ object ForceFeature: Feature() {
         val force = Vector2(x, y)
 
         when {
-            force.x > 0 -> force.x = MAX_SPEED
-            force.x < 0 -> force.x = -MAX_SPEED
+            force.x > 0 -> force.x = GameValues.getServerPreference().maxSpeed
+            force.x < 0 -> force.x = -GameValues.getServerPreference().maxSpeed
         }
         when {
-            force.y > 0 -> force.y = MAX_SPEED
-            force.y < 0 -> force.y = -MAX_SPEED
+            force.y > 0 -> force.y = GameValues.getServerPreference().maxSpeed
+            force.y < 0 -> force.y = -GameValues.getServerPreference().maxSpeed
         }
 
         entity.moveForce.x = force.x
