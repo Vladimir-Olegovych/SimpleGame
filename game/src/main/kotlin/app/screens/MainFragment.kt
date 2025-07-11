@@ -15,13 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
-import model.Event
 import tools.graphics.fillDraw
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.setOnClickListener
 import tools.graphics.textures.SkinID
-import tools.kyro.client.GameClient
-import utils.registerAllEvents
 import javax.inject.Inject
 
 class MainFragment(
@@ -34,7 +31,6 @@ class MainFragment(
     @Inject lateinit var camera: OrthographicCamera
     @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var assetManager: AssetManager
-    @Inject lateinit var gameClient: GameClient<Event>
 
     private lateinit var backgroundTexture: TextureRegion
     init { Gdx.gl.glClearColor(255F/255F, 255F/255F, 255/255F, 1F) }
@@ -49,19 +45,7 @@ class MainFragment(
         }
 
         val play = ImageButton(skin, "play").setOnClickListener {
-            gameClient.subscribe(
-                onConnected = { listener, connection ->
-                    gameClient.unSubscribe(listener)
-                    onStart.invoke()
-                }
-            )
-            gameClient.start(
-                address = "127.0.0.1",
-                port = 5000,
-                custom = { kryo ->
-                    kryo.registerAllEvents()
-                }
-            )
+            onStart.invoke()
         }
 
         menuTable.add(play).height(10F).width(30F).row()

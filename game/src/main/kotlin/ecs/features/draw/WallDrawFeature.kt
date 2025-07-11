@@ -1,5 +1,6 @@
 package ecs.features.draw
 
+/*
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.assets.AssetManager
@@ -30,16 +31,19 @@ object WallDrawFeature: Feature() {
         val entity = entityMapper[entityId]?: return
         val sizes = sizeMapper[entityId]?: return
         if (entity.entityType != EntityType.WALL) return
+        val position = entity.position?: return
 
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
         spriteBatch.draw(
             texture,
-            entity.position.x - sizes.halfWidth,
-            entity.position.y - sizes.halfHeight,
+            position.x - sizes.halfWidth,
+            position.y - sizes.halfHeight,
             sizes.halfWidth * 2,
             sizes.halfHeight * 2
         )
         spriteBatch.end()
     }
 }
+
+ */

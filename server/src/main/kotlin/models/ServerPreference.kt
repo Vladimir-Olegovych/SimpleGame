@@ -1,14 +1,10 @@
 package org.example.models
 
-import com.badlogic.gdx.math.Vector2
+import model.Vector2Data
 
 data class ServerPreference(
     val sensorRadius: Float = 1F,
     val maxSpeed: Float = 0.05F,
-    val chunkRadius: Int = 6,
-    val chunkSize: SavedVector2 = SavedVector2(4F, 4F)
+    val chunkRadius: Int = 2,
+    val chunkSize: Vector2Data = Vector2Data(4F, 4F)
 )
-
-data class SavedVector2(val x: Float = 0F, val y: Float = 0F) {
-    fun toVector2(): Vector2 = Vector2(x, y)
-}

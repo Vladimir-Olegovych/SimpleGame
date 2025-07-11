@@ -9,6 +9,7 @@ import model.Event
 import tools.kyro.client.GameClient
 
 class InputSystem: BaseSystem(), InputProcessor {
+
     @Wire private lateinit var gameClient: GameClient<Event>
 
     private val forceVector = Vector2.Zero

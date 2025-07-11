@@ -18,6 +18,7 @@ repositories {
 }
 
 dependencies {
+
     api(project(":game"))
     api("com.badlogicgames.gdx:gdx-box2d-platform:1.13.1:natives-desktop")
     api("com.badlogicgames.gdx:gdx-freetype-platform:1.13.1:natives-desktop")

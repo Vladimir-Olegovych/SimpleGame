@@ -3,7 +3,7 @@ package org.example
 import org.example.values.Commands
 
 fun main() {
-    val serverApplication = ServerApplication(5000)
+    val serverApplication = ServerApplication(port = 5000)
     serverApplication.start()
     var process = true
 

@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     api("com.esotericsoftware:kryonet:2.22.0-RC1")
+    api("com.badlogicgames.gdx:gdx-freetype:1.13.1")
 
     testImplementation(kotlin("test"))
 }

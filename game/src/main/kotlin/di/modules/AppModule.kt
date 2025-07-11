@@ -1,5 +1,6 @@
 package di.modules
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -9,8 +10,11 @@ import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import dagger.Module
 import dagger.Provides
+import eventbus.GameEventBus
+import kotlinx.coroutines.asCoroutineDispatcher
 import model.Event
 import tools.kyro.client.GameClient
+import java.util.concurrent.Executor
 import javax.inject.Singleton
 
 @Module
@@ -25,7 +29,20 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideGameClient(): GameClient<Event> = GameClient()
+    fun provideGameClient(): GameClient<Event> {
+        val gameClient = GameClient<Event>()
+        val executor = Executor { runnable -> Gdx.app.postRunnable(runnable) }
+        gameClient.setCustomDispatcher(executor.asCoroutineDispatcher())
+        return gameClient
+    }
+
+    @Provides
+    @Singleton
+    fun provideEventBus(gameClient: GameClient<Event>): GameEventBus {
+        val eventBus = GameEventBus()
+        gameClient.subscribe(eventBus.getListener())
+        return eventBus
+    }
 
     @Provides
     @Singleton

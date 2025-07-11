@@ -1,36 +1,38 @@
 package org.example.ecs.systems
 
+import com.artemis.ComponentMapper
 import com.artemis.annotations.All
-import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import com.badlogic.gdx.physics.box2d.World
-import org.example.ecs.components.Entity
-import org.example.ecs.features.*
+import org.example.ecs.components.EntityModel
+import org.example.ecs.components.Move
+import org.example.ecs.components.Size
+import org.example.models.eventbus.BusEvent
+import tools.eventbus.annotation.EventCallback
 
-@All(Entity::class)
+@All(EntityModel::class)
 class EntitySystem: IteratingSystem() {
 
-    @Wire private lateinit var box2dWold: World
+    private lateinit var entityMapper: ComponentMapper<EntityModel>
+    private lateinit var sizeMapper: ComponentMapper<Size>
+    private lateinit var moveMapper: ComponentMapper<Move>
 
-    override fun initialize() {
-        WorldFeature.initialize(world)
-        ContactFeature.initialize(world)
-        PlayerFeature.initialize(world)
-        ForceFeature.initialize(world)
+    @EventCallback
+    private fun createEntity(busEvent: BusEvent.CreateEntity){
+        val entity = entityMapper.create(busEvent.entityId)
+        entity.isObserver = busEvent.isObserver
+        entity.entityType = busEvent.entityType
+        val size = sizeMapper.create(busEvent.entityId)
+        size.radius = 0.1F
+        val move = moveMapper.create(busEvent.entityId)
     }
 
-    override fun begin() {
-        box2dWold.step(world.delta, 8, 3)
+    @EventCallback
+    private fun removeEntity(busEvent: BusEvent.RemoveEntity) {
+        entityMapper.remove(busEvent.entityId)
+        sizeMapper.remove(busEvent.entityId)
     }
 
     override fun process(entityId: Int) {
-        WorldFeature.notify(entityId)
-        ContactFeature.notify(entityId)
-        PlayerFeature.notify(entityId)
-        ForceFeature.notify(entityId)
-    }
 
-    override fun dispose() {
-        box2dWold.dispose()
     }
 }
