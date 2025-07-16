@@ -6,7 +6,7 @@ import com.artemis.systems.IteratingSystem
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Move
 import org.example.ecs.components.Size
-import org.example.models.eventbus.BusEvent
+import org.example.eventbus.event.BusEvent
 import tools.eventbus.annotation.EventCallback
 
 @All(EntityModel::class)

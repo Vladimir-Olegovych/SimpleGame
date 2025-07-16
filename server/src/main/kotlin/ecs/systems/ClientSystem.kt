@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
+import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
 import ecs.components.Client
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +13,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import model.Event
 import org.example.eventbus.ServerEventBus
-import org.example.models.eventbus.BusEvent
+import org.example.eventbus.event.BusEvent
 import org.example.values.GameValues
 import tools.eventbus.annotation.EventCallback
 import type.EntityType
@@ -33,6 +34,7 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
         clientMapper.remove(entityId)
         playersMap.remove(busEvent.connection)
 
+        serverEventBus.sendEvent(BusEvent.RemoveEntityChunk(entityId))
         serverEventBus.sendEvent(BusEvent.RemoveBody(entityId))
         serverEventBus.sendEvent(BusEvent.RemoveEntity(entityId))
     }
@@ -60,8 +62,11 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
         serverEventBus.sendEvent(BusEvent.CreateEntity(
             entityId, true, EntityType.PLAYER
         ))
+        serverEventBus.sendEvent(BusEvent.ApplyEntityToChunk(
+            entityId, Vector2(0F, 0F)
+        ))
         serverEventBus.sendEvent(BusEvent.CreateBody(
-            0F, 0F, entityId
+            Vector2(0F, 0F), entityId
         ))
     }
     
@@ -74,19 +79,13 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
     }
 
     override fun process(entityId: Int) {
+
         val client = clientMapper[entityId]?: return
         client.getEvents().forEach { event ->
-            var iset = false
-            if (event is Event.CurrentPlayer) {
-                iset = true
-                println(client.getEvents())
-                println("daaaa")
-            }
             tasks.add(scope.async<Unit> {
                 try {
                     client.connection?.sendTCP(event)
-                    if(iset) println("sender")
-                } catch (e: Throwable) {}
+                } catch (_: Throwable) {}
             })
         }
         client.clearEvents()

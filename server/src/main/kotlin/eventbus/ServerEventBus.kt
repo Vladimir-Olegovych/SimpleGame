@@ -2,7 +2,7 @@ package org.example.eventbus
 
 import com.esotericsoftware.kryonet.Connection
 import model.Event
-import org.example.models.eventbus.BusEvent
+import org.example.eventbus.event.BusEvent
 import tools.eventbus.EventBus
 import tools.kyro.common.GameNetworkListener
 

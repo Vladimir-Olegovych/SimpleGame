@@ -6,13 +6,11 @@ import model.Event
 import org.example.ecs.systems.*
 import org.example.eventbus.ServerEventBus
 import org.example.models.ServerPreference
-import org.example.models.eventbus.BusEvent
 import org.example.values.GameValues
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.render.LifecycleUpdater
 import tools.kyro.server.GameServer
 import tools.preference.JsonPreference
-import type.EntityType
 import utils.registerAllEvents
 import java.util.concurrent.Executor
 
@@ -36,6 +34,15 @@ class ServerApplication(
     private val moveSystem = MoveSystem()
     private val entitySystem = EntitySystem()
 
+    init {
+        serverEventBus.addHandler(entitySystem)
+        serverEventBus.addHandler(moveSystem)
+        serverEventBus.addHandler(physicsSystem)
+        serverEventBus.addHandler(chunkSystem)
+        serverEventBus.addHandler(eventSystem)
+        serverEventBus.addHandler(clientSystem)
+    }
+
     private val artemisWorld = ArtemisWorldBuilder()
         .addSystem(entitySystem)
         .addSystem(moveSystem)
@@ -56,24 +63,6 @@ class ServerApplication(
                 kryo.registerAllEvents()
             }
         )
-
-        serverEventBus.addHandler(entitySystem)
-        serverEventBus.addHandler(moveSystem)
-        serverEventBus.addHandler(physicsSystem)
-        serverEventBus.addHandler(chunkSystem)
-        serverEventBus.addHandler(eventSystem)
-        serverEventBus.addHandler(clientSystem)
-
-        for (i in 0 .. 100) {
-            val entityId = artemisWorld.create()
-
-            serverEventBus.sendEvent(BusEvent.CreateEntity(
-                entityId, false, EntityType.ENEMY
-            ))
-            serverEventBus.sendEvent(BusEvent.CreateBody(
-                2F, 2F, entityId
-            ))
-        }
     }
 
 

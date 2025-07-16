@@ -10,6 +10,7 @@ import ecs.components.EntityModel
 import ecs.components.Player
 import ecs.components.Size
 import model.Event
+import model.Vector2Data
 import models.eventbus.BusEvent
 import tools.eventbus.annotation.EventCallback
 import tools.eventbus.annotation.EventType
@@ -20,9 +21,10 @@ class EntitySystem(): IteratingSystem() {
 
     @Wire private lateinit var player: Player
 
+    private var chunkParams = Event.CurrentChunkParams(2, Vector2Data(4F, 4F))
     private val entityMap = IntMap<Int>()
-    private lateinit var sizeMapper: ComponentMapper<Size>
     private lateinit var entityMapper: ComponentMapper<EntityModel>
+    private lateinit var sizeMapper: ComponentMapper<Size>
 
     @EventType(BusEvent.FIELD_EVENT)
     @EventCallback
@@ -36,6 +38,7 @@ class EntitySystem(): IteratingSystem() {
             entity = entityMapper[entityMap[busEvent.event.entityId]]
         }
         entity.entityType = busEvent.event.entityType
+        entity.updateTime = System.currentTimeMillis()
     }
 
     @EventType(BusEvent.FIELD_EVENT)
@@ -46,6 +49,7 @@ class EntitySystem(): IteratingSystem() {
         position.x = busEvent.event.x
         position.y = busEvent.event.y
         entity.position = position
+        entity.updateTime = System.currentTimeMillis()
     }
 
     @EventType(BusEvent.FIELD_EVENT)
@@ -62,7 +66,7 @@ class EntitySystem(): IteratingSystem() {
     @EventType(BusEvent.FIELD_EVENT)
     @EventCallback
     private fun onReceiveCurrentChunkParams(busEvent: BusEvent.OnReceive<Event.CurrentChunkParams>){
-
+        this.chunkParams = busEvent.event
     }
 
     @EventType(BusEvent.FIELD_EVENT)
@@ -78,10 +82,22 @@ class EntitySystem(): IteratingSystem() {
     }
 
     private fun removeEntity(entityId: Int){
-        entityMapper.remove(entityMap[entityId]?: return)
-        entityMap.remove(entityId)
+        entityMapper.remove(entityId)
         sizeMapper.remove(entityId)
+        val iterator = entityMap.iterator()
+        for(entry in iterator) {
+            if (entry.value != entityId) continue
+            iterator.remove()
+            return
+        }
+    }
 
+    private fun processRemove(entityId: Int){
+        if (player.entityId == entityId) return
+        val entity = entityMapper[entityId]?: return
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - entity.updateTime < 1_000L) return
+        removeEntity(entityId)
     }
 
     override fun initialize() {
@@ -90,12 +106,8 @@ class EntitySystem(): IteratingSystem() {
         entity.entityType = EntityType.PLAYER
     }
 
-    override fun begin() {
-        super.begin()
-    }
-
     override fun process(entityId: Int) {
-
+        processRemove(entityId)
     }
 
 

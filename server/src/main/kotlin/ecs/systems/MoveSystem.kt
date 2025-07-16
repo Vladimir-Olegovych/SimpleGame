@@ -6,7 +6,7 @@ import com.artemis.systems.IteratingSystem
 import model.Event
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Move
-import org.example.models.eventbus.BusEvent
+import org.example.eventbus.event.BusEvent
 import org.example.values.GameValues
 import tools.eventbus.annotation.EventCallback
 import tools.eventbus.annotation.EventType

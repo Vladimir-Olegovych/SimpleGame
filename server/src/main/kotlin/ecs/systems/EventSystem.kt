@@ -31,6 +31,7 @@ class EventSystem: IteratingSystem() {
     private fun Client.processEntityPosition(id: Int){
         val entity = entityMapper[id]?: return
         val entityBody = entity.body?: return
+        if (!entityBody.isActive) return
         addEvent(
             Event.Position(
                 entityId = id,
@@ -42,6 +43,7 @@ class EventSystem: IteratingSystem() {
 
     private fun Client.processEntity(id: Int){
         val entity = entityMapper[id]?: return
+        if (entity.body?.isActive == false) return
         addEvent(
             Event.Entity(
                 entityId = id,

@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.World
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Size
 import org.example.models.FixtureType
-import org.example.models.eventbus.BusEvent
+import org.example.eventbus.event.BusEvent
 import org.example.values.GameValues
 import tools.artemis.systems.BaseTaskSystem
 import tools.eventbus.annotation.EventCallback
@@ -26,8 +26,8 @@ class PhysicsSystem: BaseTaskSystem() {
 
         addTask {
             val body = box2dWold.createCircleEntity(
-                x = busEvent.x,
-                y = busEvent.y,
+                x = busEvent.vector2.x,
+                y = busEvent.vector2.y,
                 userData = FixtureType.Entity(busEvent.entityId),
                 restitution = 1F,
                 radius = size.radius,
