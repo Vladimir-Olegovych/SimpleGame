@@ -17,7 +17,7 @@ sealed class BusEvent {
     data class CreateEntity(val entityId: Int, val isObserver: Boolean, val entityType: EntityType): BusEvent()
     data class RemoveEntity(val entityId: Int): BusEvent()
 
-    data class CreateBody(val vector2: Vector2, val entityId: Int): BusEvent()
+    data class CreateBody(val entityId: Int, val vector2: Vector2): BusEvent()
     data class RemoveBody(val entityId: Int): BusEvent()
 
     companion object {

@@ -66,7 +66,7 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
             entityId, Vector2(0F, 0F)
         ))
         serverEventBus.sendEvent(BusEvent.CreateBody(
-            Vector2(0F, 0F), entityId
+            entityId, Vector2(0F, 0F)
         ))
     }
     

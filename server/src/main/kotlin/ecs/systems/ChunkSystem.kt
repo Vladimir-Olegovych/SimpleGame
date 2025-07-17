@@ -3,38 +3,31 @@ package org.example.ecs.systems
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
+import com.badlogic.gdx.math.Vector2
+import org.example.chunks.ChunkGeneratorImpl
 import org.example.ecs.components.EntityModel
 import org.example.eventbus.ServerEventBus
 import org.example.eventbus.event.BusEvent
 import org.example.values.GameValues
 import tools.artemis.systems.IteratingTaskSystem
 import tools.chunk.Chunk
+import tools.chunk.ChunkGenerator
 import tools.chunk.ChunkListener
 import tools.chunk.ChunkManager
 import tools.eventbus.annotation.EventCallback
 import tools.math.IntVector2
-import type.EntityType
 
 @All(EntityModel::class)
 class ChunkSystem: IteratingTaskSystem() {
     @Wire private lateinit var serverEventBus: ServerEventBus
 
+    private lateinit var chunkGenerator: ChunkGenerator
     private lateinit var chunkManager: ChunkManager
     private lateinit var entityMapper: ComponentMapper<EntityModel>
 
     private val chunkListener = object : ChunkListener {
         override fun onChunkCreate(chunk: Chunk) {
-            val entityId = world.create()
-
-            serverEventBus.sendEvent(BusEvent.CreateEntity(
-                entityId, false, EntityType.ENEMY
-            ))
-
-            serverEventBus.sendEvent(BusEvent.CreateBody(
-                chunk.getWorldPosition(), entityId
-            ))
-
-            applyEntityChunk(entityId, chunk)
+            chunkGenerator.notify(chunk)
         }
 
         override fun onChunkEnabled(chunk: Chunk) {
@@ -83,8 +76,10 @@ class ChunkSystem: IteratingTaskSystem() {
             chunkSize = preference.chunkSize.toVector2()
         ).apply { setChunkListener(chunkListener) }
 
-        for (x in -10 .. 10){
-            for (y in -10 .. 10){
+        chunkGenerator = ChunkGeneratorImpl(world, serverEventBus, chunkManager.chunkSize, 0.2F)
+
+        for (x in -1 .. 1){
+            for (y in -1 .. 1){
                 val chunk = chunkManager.createChunk(IntVector2(x, y))
             }
         }
