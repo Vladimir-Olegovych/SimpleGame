@@ -34,11 +34,14 @@ class ChunkGeneratorImpl(private val world: World,
                 )
             )
 
+            /*
             serverEventBus.sendEvent(
                 BusEvent.ApplyEntityToChunk(
                     entityId, position
                 )
             )
+
+             */
         }
 
     }

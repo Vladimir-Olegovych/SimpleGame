@@ -3,6 +3,8 @@ package org.example
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import model.Event
+import org.example.ecs.processors.GameProcessor
+import org.example.ecs.processors.impl.ClientProcessor
 import org.example.ecs.systems.*
 import org.example.eventbus.ServerEventBus
 import org.example.models.ServerPreference
@@ -24,35 +26,28 @@ class ServerApplication(
 
     private val serverEventBus = ServerEventBus()
     private val gameServer = GameServer<Event>()
-
     private val box2dWold = World(Vector2(0F, 0F), false)
 
-    private val clientSystem = ClientSystem(lifecycleScope)
-    private val eventSystem = EventSystem()
-    private val chunkSystem = ChunkSystem()
-    private val physicsSystem = PhysicsSystem()
-    private val moveSystem = MoveSystem()
-    private val entitySystem = EntitySystem()
+    private val systems = arrayOf(
+        ClientSystem(lifecycleScope),
+        EventSystem(),
+        PhysicsSystem(),
+        MoveSystem(),
+        EntitySystem()
+    )
+
+    private val processors: Array<GameProcessor> = arrayOf(
+        ClientProcessor(serverEventBus)
+    )
 
     init {
-        serverEventBus.addHandler(entitySystem)
-        serverEventBus.addHandler(moveSystem)
-        serverEventBus.addHandler(physicsSystem)
-        serverEventBus.addHandler(chunkSystem)
-        serverEventBus.addHandler(eventSystem)
-        serverEventBus.addHandler(clientSystem)
+        serverEventBus.addHandlers(processors)
+        serverEventBus.addHandlers(systems)
     }
 
     private val artemisWorld = ArtemisWorldBuilder()
-        .addSystem(entitySystem)
-        .addSystem(moveSystem)
-        .addSystem(physicsSystem)
-        .addSystem(chunkSystem)
-        .addSystem(eventSystem)
-        .addSystem(clientSystem)
-
+        .addSystems(systems)
         .addObject(box2dWold)
-        .addObject(serverEventBus)
         .build()
 
     override fun create() {

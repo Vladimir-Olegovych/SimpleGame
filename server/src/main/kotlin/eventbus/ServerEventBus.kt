@@ -10,16 +10,16 @@ class ServerEventBus(): EventBus<BusEvent>() {
 
     private val listener = object : GameNetworkListener<Event>() {
         override fun onConnected(connection: Connection) {
-            sendEvent(BusEvent.OnConnected(connection))
+            val clientEntityId = sendEvent(BusEvent.ProcessorEvent.OnConnected(connection))
         }
 
         override fun onDisconnected(connection: Connection) {
-            sendEvent(BusEvent.OnDisconnected(connection))
+            sendEvent(BusEvent.ProcessorEvent.OnDisconnected(connection))
             connection.close()
         }
 
         override fun onReceive(connection: Connection, value: Event) {
-            sendEvent(BusEvent.OnReceive(connection, value))
+            sendEvent(BusEvent.ProcessorEvent.OnReceive(connection, value))
         }
 
     }

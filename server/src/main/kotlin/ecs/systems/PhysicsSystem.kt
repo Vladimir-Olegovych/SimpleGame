@@ -5,8 +5,8 @@ import com.artemis.annotations.Wire
 import com.badlogic.gdx.physics.box2d.World
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Size
-import org.example.models.FixtureType
 import org.example.eventbus.event.BusEvent
+import org.example.models.FixtureType
 import org.example.values.GameValues
 import tools.artemis.systems.BaseTaskSystem
 import tools.eventbus.annotation.EventCallback
