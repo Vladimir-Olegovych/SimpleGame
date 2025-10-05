@@ -24,9 +24,6 @@ class EntitySystem: IteratingSystem() {
         entity.entityType = busEvent.entityType
         val size = sizeMapper.create(busEvent.entityId)
         size.radius = 0.1F
-        if (busEvent.entityType == EntityType.PLAYER) {
-            size.radius = 0.7F
-        }
         val move = moveMapper.create(busEvent.entityId)
     }
 

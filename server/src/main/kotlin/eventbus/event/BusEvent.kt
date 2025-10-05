@@ -18,11 +18,16 @@ sealed class BusEvent {
     data class RemoveClient(val connection: Connection): BusEvent()
     data class ConnectionToId(val connection: Connection): BusEvent()
 
-    data class CreateEntity(val entityId: Int, val isObserver: Boolean, val entityType: EntityType): BusEvent()
+    data class CreateEntity(val entityId: Int, val entityType: EntityType, val isObserver: Boolean): BusEvent()
     data class RemoveEntity(val entityId: Int): BusEvent()
 
     data class CreateBody(val entityId: Int, val vector2: Vector2): BusEvent()
     data class RemoveBody(val entityId: Int): BusEvent()
+    data class PauseBody(val entityId: Int): BusEvent()
+    data class ResumeBody(val entityId: Int): BusEvent()
+
+    data class ApplyEntityToChunk(val entityId: Int, val vector2: Vector2): BusEvent()
+    data class RemoveEntityChunk(val entityId: Int): BusEvent()
 
     companion object {
         const val FIELD_EVENT = "event"

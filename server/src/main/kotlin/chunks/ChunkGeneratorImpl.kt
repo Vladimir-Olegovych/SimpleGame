@@ -1,5 +1,6 @@
 package org.example.chunks
 
+/*
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2
 import org.example.eventbus.ServerEventBus
@@ -46,3 +47,5 @@ class ChunkGeneratorImpl(private val world: World,
 
     }
 }
+
+ */

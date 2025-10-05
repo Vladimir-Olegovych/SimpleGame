@@ -52,6 +52,24 @@ class PhysicsSystem: BaseTaskSystem() {
         }
     }
 
+    @EventCallback
+    private fun pauseBody(busEvent: BusEvent.PauseBody) {
+        val entity = entityModelMapper.get(busEvent.entityId) ?: return
+        addTask {
+            val body = entity.body
+            body?.isActive = false
+        }
+    }
+
+    @EventCallback
+    private fun resumeBody(busEvent: BusEvent.ResumeBody) {
+        val entity = entityModelMapper.get(busEvent.entityId) ?: return
+        addTask {
+            val body = entity.body
+            body?.isActive = true
+        }
+    }
+
     override fun begin() {
         getAddTasks().forEach { it.invoke() }
         clearTasks()
