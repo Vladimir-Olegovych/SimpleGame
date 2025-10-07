@@ -1,7 +1,5 @@
 package org.example
 
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.World
 import model.Event
 import org.example.ecs.processors.impl.ChunkProcessor
 import org.example.ecs.processors.impl.ClientProcessor

@@ -63,7 +63,8 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
         client.getEvents().forEach { event ->
             tasks.add(scope.async<Unit> {
                 try {
-                    client.connection?.sendTCP(event)
+                    if (event !is Event.Position) client.connection?.sendTCP(event)
+                    else client.connection?.sendUDP(event)
                 } catch (_: Throwable) {}
             })
         }

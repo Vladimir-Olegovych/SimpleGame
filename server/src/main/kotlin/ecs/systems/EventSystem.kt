@@ -9,10 +9,11 @@ import model.Event
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Size
 import org.example.eventbus.event.BusEvent
+import tools.artemis.systems.IteratingTaskSystem
 import tools.eventbus.annotation.EventCallback
 
 @All(Client::class)
-class EventSystem: IteratingSystem() {
+class EventSystem: IteratingTaskSystem() {
 
     private lateinit var clientMapper: ComponentMapper<Client>
     private lateinit var entityMapper: ComponentMapper<EntityModel>
@@ -20,12 +21,16 @@ class EventSystem: IteratingSystem() {
 
     @All(EntityModel::class) private lateinit var entityIds: EntitySubscription
 
+    override fun begin() {
+        getAddTasks().forEach { it.invoke() }
+        clearTasks()
+    }
+
     override fun process(entityId: Int) {
         val client = clientMapper[entityId]?: return
 
         for (i in 0 until entityIds.entities.size()) {
             val entityId = entityIds.entities.get(i)
-            client.processEntity(entityId)
             client.processEntityPosition(entityId)
         }
     }
@@ -45,7 +50,6 @@ class EventSystem: IteratingSystem() {
 
     private fun Client.processEntity(id: Int){
         val entity = entityMapper[id]?: return
-        if (entity.body?.isActive == false) return
         addEvent(
             Event.Entity(
                 entityId = id,
@@ -66,12 +70,17 @@ class EventSystem: IteratingSystem() {
     }
 
     @EventCallback
-    private fun loadChunk(busEvent: BusEvent.LoadChunk){
+    private fun loadChunks(busEvent: BusEvent.LoadChunks){
         val client = clientMapper[busEvent.entityId]?: return
+        for (chunk in busEvent.chunks) {
+            for (entityId in chunk.getEntities()) {
+                addTask { client.processEntity(entityId) }
+            }
+        }
     }
 
     @EventCallback
-    private fun unloadChunk(busEvent: BusEvent.UnloadChunk){
+    private fun unloadChunks(busEvent: BusEvent.UnloadChunks){
         val client = clientMapper[busEvent.entityId]?: return
     }
 }

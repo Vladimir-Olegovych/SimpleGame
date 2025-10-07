@@ -30,8 +30,8 @@ sealed class BusEvent {
     data class ApplyEntityToChunk(val entityId: Int, val vector2: Vector2): BusEvent()
     data class RemoveEntityChunk(val entityId: Int): BusEvent()
 
-    data class LoadChunk(val entityId: Int, val chunk: Chunk): BusEvent()
-    data class UnloadChunk(val entityId: Int, val chunk: Chunk): BusEvent()
+    data class LoadChunks(val entityId: Int, val chunks: List<Chunk>): BusEvent()
+    data class UnloadChunks(val entityId: Int, val chunks: List<Chunk>): BusEvent()
 
     companion object {
         const val FIELD_EVENT = "event"

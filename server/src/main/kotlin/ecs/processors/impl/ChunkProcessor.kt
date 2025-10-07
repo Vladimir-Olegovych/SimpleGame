@@ -40,12 +40,12 @@ class ChunkProcessor(
         }
     }
 
-    override fun onChunkLoaded(entityId: Int, chunk: Chunk) {
-        serverEventBus.sendEvent(BusEvent.LoadChunk(entityId, chunk))
+    override fun onChunkLoaded(entityId: Int, chunks: List<Chunk>) {
+        serverEventBus.sendEvent(BusEvent.LoadChunks(entityId, chunks))
     }
 
-    override fun onChunkUnloaded(entityId: Int, chunk: Chunk) {
-        serverEventBus.sendEvent(BusEvent.UnloadChunk(entityId, chunk))
+    override fun onChunkUnloaded(entityId: Int, chunks: List<Chunk>) {
+        serverEventBus.sendEvent(BusEvent.UnloadChunks(entityId, chunks))
     }
 
     override fun onMoved(entityId: Int, from: Chunk, to: Chunk) {
