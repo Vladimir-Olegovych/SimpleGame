@@ -8,7 +8,6 @@ import org.example.ecs.processors.impl.ClientProcessor
 import org.example.ecs.systems.*
 import org.example.eventbus.ServerEventBus
 import org.example.models.ServerPreference
-import org.example.values.GameValues
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.render.LifecycleUpdater
 import tools.kyro.server.GameServer
@@ -19,14 +18,11 @@ import java.util.concurrent.Executor
 class ServerApplication(
     private val port: Int = 5000
 ): LifecycleUpdater(), Executor {
-
     private val jsonPreference = JsonPreference("server", ServerPreference())
-
-    init { GameValues.setServerPreference(jsonPreference.getPreference()) }
+    private val serverPreferences = jsonPreference.getPreference()
 
     private val serverEventBus = ServerEventBus()
     private val gameServer = GameServer<Event>()
-    private val box2dWold = World(Vector2(0F, 0F), false)
 
     private val systems = arrayOf(
         ClientSystem(lifecycleScope),
@@ -37,26 +33,24 @@ class ServerApplication(
         EntitySystem()
     )
 
-    private val chunkProcessor = ChunkProcessor(serverEventBus)
     private val processors = arrayOf(
         ClientProcessor(serverEventBus),
-        chunkProcessor
+        ChunkProcessor(serverEventBus, serverPreferences)
     )
+
+    private val artemisWorld = ArtemisWorldBuilder()
+        .addSystems(systems)
+        .addObjects(processors)
+        .addObject(serverPreferences)
+        .build()
 
     init {
         serverEventBus.addHandlers(processors)
         serverEventBus.addHandlers(systems)
     }
 
-    private val artemisWorld = ArtemisWorldBuilder()
-        .addSystems(systems)
-        .addObject(box2dWold)
-        .addObject(chunkProcessor)
-        .build()
-
     override fun create() {
-        chunkProcessor.artemisWorld = artemisWorld
-
+        processors.forEach { it.create(artemisWorld) }
         gameServer.subscribe(serverEventBus.getListener())
         gameServer.start(
             port = port,
@@ -77,6 +71,7 @@ class ServerApplication(
     }
 
     override fun dispose() {
+        serverEventBus.clearHandlers()
         gameServer.stop()
         artemisWorld.dispose()
     }

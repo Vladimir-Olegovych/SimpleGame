@@ -8,6 +8,8 @@ import ecs.components.Client
 import model.Event
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Size
+import org.example.eventbus.event.BusEvent
+import tools.eventbus.annotation.EventCallback
 
 @All(Client::class)
 class EventSystem: IteratingSystem() {
@@ -61,5 +63,15 @@ class EventSystem: IteratingSystem() {
                 )
             )
         }
+    }
+
+    @EventCallback
+    private fun loadChunk(busEvent: BusEvent.LoadChunk){
+        val client = clientMapper[busEvent.entityId]?: return
+    }
+
+    @EventCallback
+    private fun unloadChunk(busEvent: BusEvent.UnloadChunk){
+        val client = clientMapper[busEvent.entityId]?: return
     }
 }

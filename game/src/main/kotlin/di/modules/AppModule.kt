@@ -50,7 +50,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideViewport(camera: OrthographicCamera): Viewport = FillViewport(10F, 10F, camera)
+    fun provideViewport(camera: OrthographicCamera): Viewport = FillViewport(100F, 100F, camera)
 
     @Provides
     @Singleton

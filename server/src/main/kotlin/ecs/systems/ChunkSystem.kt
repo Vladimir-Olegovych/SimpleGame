@@ -6,17 +6,16 @@ import com.artemis.annotations.Wire
 import org.example.ecs.components.EntityModel
 import org.example.ecs.processors.impl.ChunkProcessor
 import org.example.eventbus.event.BusEvent
-import org.example.values.GameValues
+import org.example.models.ServerPreference
 import tools.artemis.systems.IteratingTaskSystem
 import tools.chunk.ChunkManager
-import tools.chunk.ChunkManager.MutableChunk
 import tools.eventbus.annotation.EventCallback
-import tools.math.ImmutableIntVector2
 
 @All(EntityModel::class)
 class ChunkSystem: IteratingTaskSystem() {
 
     @Wire private lateinit var chunkProcessor: ChunkProcessor
+    @Wire private lateinit var serverPreference: ServerPreference
     private lateinit var chunkManager: ChunkManager
     private lateinit var entityMapper: ComponentMapper<EntityModel>
 
@@ -34,10 +33,9 @@ class ChunkSystem: IteratingTaskSystem() {
     }
 
     override fun initialize() {
-        val preference = GameValues.getServerPreference()
         chunkManager = ChunkManager(
-            processedRadius = preference.chunkRadius,
-            chunkSize = preference.chunkSize.toVector2()
+            processedRadius = serverPreference.chunkRadius,
+            chunkSize = serverPreference.chunkSize.toVector2()
         ).apply { setChunkListener(chunkProcessor) }
     }
 
@@ -45,6 +43,7 @@ class ChunkSystem: IteratingTaskSystem() {
         val entity = entityMapper[entityId]?: return
         val body = entity.body?: return
 
+        if (!body.isActive) return
         val currentChunk = chunkManager.getChunkByEntity(entityId)?: return
         val nextChunk = chunkManager.getChunkByWorld(body.position)?: return
 

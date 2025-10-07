@@ -1,39 +1,31 @@
 package org.example.ecs.processors.impl
 
 import com.artemis.World
+import org.example.chunks.ServerChunkGenerator
 import org.example.ecs.processors.GameProcessor
 import org.example.eventbus.ServerEventBus
 import org.example.eventbus.event.BusEvent
+import org.example.models.ServerPreference
 import tools.chunk.Chunk
 import tools.chunk.ChunkListener
-import type.EntityType
 
 class ChunkProcessor(
     private val serverEventBus: ServerEventBus,
-): GameProcessor, ChunkListener {
+    private val serverPreferences: ServerPreference
+): ChunkListener, GameProcessor {
 
-    var artemisWorld: World? = null
+    private lateinit var chunkGenerator: ServerChunkGenerator
+
+    override fun create(artemisWorld: World) {
+        chunkGenerator = ServerChunkGenerator(
+            artemisWorld = artemisWorld,
+            serverEventBus = serverEventBus,
+            serverPreferences = serverPreferences
+        )
+    }
 
     override fun onChunkCreate(chunk: Chunk) {
-        val entityId = artemisWorld?.create()?: return
-
-        serverEventBus.sendEvent(
-            BusEvent.CreateEntity(
-                entityId, EntityType.ENEMY, false
-            )
-        )
-
-        serverEventBus.sendEvent(
-            BusEvent.CreateBody(
-                entityId, chunk.getWorldPosition()
-            )
-        )
-
-        serverEventBus.sendEvent(
-            BusEvent.ApplyEntityToChunk(
-                entityId, chunk.getWorldPosition()
-            )
-        )
+        chunkGenerator.applyChunkCreation(chunk)
     }
 
     override fun onChunkEnabled(chunk: Chunk) {
@@ -46,6 +38,14 @@ class ChunkProcessor(
         for (entityId in chunk.getEntities()){
             serverEventBus.sendEvent(BusEvent.PauseBody(entityId))
         }
+    }
+
+    override fun onChunkLoaded(entityId: Int, chunk: Chunk) {
+        serverEventBus.sendEvent(BusEvent.LoadChunk(entityId, chunk))
+    }
+
+    override fun onChunkUnloaded(entityId: Int, chunk: Chunk) {
+        serverEventBus.sendEvent(BusEvent.UnloadChunk(entityId, chunk))
     }
 
     override fun onMoved(entityId: Int, from: Chunk, to: Chunk) {

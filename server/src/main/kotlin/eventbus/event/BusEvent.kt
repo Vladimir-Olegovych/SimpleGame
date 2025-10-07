@@ -3,6 +3,7 @@ package org.example.eventbus.event
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
 import model.Event
+import tools.chunk.Chunk
 import type.EntityType
 
 sealed class BusEvent {
@@ -28,6 +29,9 @@ sealed class BusEvent {
 
     data class ApplyEntityToChunk(val entityId: Int, val vector2: Vector2): BusEvent()
     data class RemoveEntityChunk(val entityId: Int): BusEvent()
+
+    data class LoadChunk(val entityId: Int, val chunk: Chunk): BusEvent()
+    data class UnloadChunk(val entityId: Int, val chunk: Chunk): BusEvent()
 
     companion object {
         const val FIELD_EVENT = "event"

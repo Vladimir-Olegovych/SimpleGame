@@ -1,3 +1,7 @@
 package org.example.ecs.processors
 
-interface GameProcessor
+import com.artemis.World
+
+interface GameProcessor {
+    fun create(artemisWorld: World)
+}

@@ -1,5 +1,6 @@
 package org.example.ecs.processors.impl
 
+import com.artemis.World
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
 import org.example.ecs.processors.GameProcessor
@@ -8,7 +9,12 @@ import org.example.eventbus.event.BusEvent
 import tools.eventbus.annotation.EventCallback
 import type.EntityType
 
-class ClientProcessor(private val serverEventBus: ServerEventBus): GameProcessor {
+
+class ClientProcessor(
+    private val serverEventBus: ServerEventBus
+): GameProcessor {
+
+    override fun create(artemisWorld: World) {}
 
     @EventCallback
     private fun onConnected(busEvent: BusEvent.ProcessorEvent.OnConnected) {

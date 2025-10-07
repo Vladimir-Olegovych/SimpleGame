@@ -2,6 +2,7 @@ package org.example.ecs.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
+import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.esotericsoftware.kryonet.Connection
 import ecs.components.Client
@@ -11,12 +12,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import model.Event
 import org.example.eventbus.event.BusEvent
-import org.example.values.GameValues
+import org.example.models.ServerPreference
 import tools.eventbus.annotation.EventCallback
 
 @All(Client::class)
 class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
 
+    @Wire private lateinit var serverPreference: ServerPreference
     private lateinit var clientMapper: ComponentMapper<Client>
     private val playersMap = HashMap<Connection, Int>()
     private val tasks = ArrayList<Deferred<Unit>>()
@@ -33,15 +35,14 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
     @EventCallback
     private fun createClient(busEvent: BusEvent.CreateClient) {
         val entityId = world.create()
-        val preference = GameValues.getServerPreference()
         playersMap[busEvent.connection] = entityId
         val client = clientMapper.create(entityId)
         client.connection = busEvent.connection
 
         client.addEvent(
             Event.CurrentChunkParams(
-                chunkRadius = preference.chunkRadius,
-                chunkSize = preference.chunkSize
+                chunkRadius = serverPreference.chunkRadius,
+                chunkSize = serverPreference.chunkSize
             )
         )
         client.addEvent(
