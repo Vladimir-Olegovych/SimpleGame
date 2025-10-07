@@ -25,7 +25,8 @@ class ServerChunkGenerator(
     }
 
     override fun onCreateEntity(chunk: Chunk, position: Vector2) {
-        //val result = random.nextInt(0, 2)
+        val result = random.nextInt(0, 2)
+        if (result >= 1) return
         val entityId = artemisWorld.create()
 
         serverEventBus.sendEvent(
