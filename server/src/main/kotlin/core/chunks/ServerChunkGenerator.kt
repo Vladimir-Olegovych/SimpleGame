@@ -1,10 +1,10 @@
-package org.example.chunks
+package org.example.core.chunks
 
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2
-import org.example.eventbus.ServerEventBus
-import org.example.eventbus.event.BusEvent
-import org.example.models.ServerPreference
+import org.example.core.eventbus.ServerEventBus
+import org.example.core.eventbus.event.BusEvent
+import org.example.core.models.ServerPreference
 import tools.chunk.Chunk
 import tools.chunk.ChunkGenerator
 import type.EntityType
@@ -25,8 +25,8 @@ class ServerChunkGenerator(
     }
 
     override fun onCreateEntity(chunk: Chunk, position: Vector2) {
-        val result = random.nextInt(0, 2)
-        if (result >= 1) return
+        val result = random.nextInt(0, 30)
+        if (result >= 2) return
         val entityId = artemisWorld.create()
 
         serverEventBus.sendEvent(

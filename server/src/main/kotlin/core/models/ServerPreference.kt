@@ -1,4 +1,4 @@
-package org.example.models
+package org.example.core.models
 
 import model.Vector2Data
 

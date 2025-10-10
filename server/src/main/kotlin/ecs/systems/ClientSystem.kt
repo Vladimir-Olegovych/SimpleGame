@@ -11,14 +11,18 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import model.Event
-import org.example.eventbus.event.BusEvent
-import org.example.models.ServerPreference
+import org.example.core.eventbus.event.BusEvent
+import org.example.core.models.ServerPreference
+import org.example.ecs.processors.impl.ChunkProcessor
+import org.example.ecs.processors.impl.ClientProcessor
 import tools.eventbus.annotation.EventCallback
 
 @All(Client::class)
 class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
 
     @Wire private lateinit var serverPreference: ServerPreference
+    @Wire private lateinit var clientProcessor: ClientProcessor
+
     private lateinit var clientMapper: ComponentMapper<Client>
     private val playersMap = HashMap<Connection, Int>()
     private val tasks = ArrayList<Deferred<Unit>>()
@@ -27,7 +31,7 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
     private fun removeClient(busEvent: BusEvent.RemoveClient){
         val entityId = playersMap[busEvent.connection]?: return
         val client = clientMapper[entityId]
-        client.connection = null
+        client.dispose()
         clientMapper.remove(entityId)
         playersMap.remove(busEvent.connection)
     }
@@ -57,16 +61,15 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
         return playersMap[busEvent.connection]
     }
 
+    override fun initialize() {
+        clientProcessor.create(world)
+    }
+
     override fun process(entityId: Int) {
 
         val client = clientMapper[entityId]?: return
         client.getEvents().forEach { event ->
-            tasks.add(scope.async<Unit> {
-                try {
-                    if (event !is Event.Position) client.connection?.sendTCP(event)
-                    else client.connection?.sendUDP(event)
-                } catch (_: Throwable) {}
-            })
+            tasks.add(scope.async { client.sendEvent(event) })
         }
         client.clearEvents()
     }
@@ -75,6 +78,17 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
         runBlocking {
             tasks.forEach { it.await() }
             tasks.clear()
+        }
+    }
+
+    private fun Client.sendEvent(event: Event){
+        try {
+            when (event) {
+                is Event.Position -> this.connection?.sendUDP(event)
+                else -> this.connection?.sendTCP(event)
+            }
+        } catch (_: Throwable){
+
         }
     }
 }

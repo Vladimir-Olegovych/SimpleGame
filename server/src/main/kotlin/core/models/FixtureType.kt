@@ -1,4 +1,4 @@
-package org.example.models
+package org.example.core.models
 
 sealed class FixtureType(val entityId: Int) {
     class Sensor(entityId: Int): FixtureType(entityId)

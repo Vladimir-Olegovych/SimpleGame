@@ -1,11 +1,11 @@
 package org.example.ecs.processors.impl
 
 import com.artemis.World
-import org.example.chunks.ServerChunkGenerator
+import org.example.core.chunks.ServerChunkGenerator
 import org.example.ecs.processors.GameProcessor
-import org.example.eventbus.ServerEventBus
-import org.example.eventbus.event.BusEvent
-import org.example.models.ServerPreference
+import org.example.core.eventbus.ServerEventBus
+import org.example.core.eventbus.event.BusEvent
+import org.example.core.models.ServerPreference
 import tools.chunk.Chunk
 import tools.chunk.ChunkListener
 
@@ -38,6 +38,10 @@ class ChunkProcessor(
         for (entityId in chunk.getEntities()){
             serverEventBus.sendEvent(BusEvent.PauseBody(entityId))
         }
+    }
+
+    override fun onEntityObservable(entityId: Int, chunk: Chunk) {
+        serverEventBus.sendEvent(BusEvent.EntityMovedOnChunk(entityId, chunk))
     }
 
     override fun onChunkLoaded(entityId: Int, chunks: List<Chunk>) {

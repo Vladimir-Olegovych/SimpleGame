@@ -1,11 +1,12 @@
 package org.example
 
+import com.artemis.World
 import model.Event
 import org.example.ecs.processors.impl.ChunkProcessor
 import org.example.ecs.processors.impl.ClientProcessor
 import org.example.ecs.systems.*
-import org.example.eventbus.ServerEventBus
-import org.example.models.ServerPreference
+import org.example.core.eventbus.ServerEventBus
+import org.example.core.models.ServerPreference
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.render.LifecycleUpdater
 import tools.kyro.server.GameServer
@@ -36,19 +37,18 @@ class ServerApplication(
         ChunkProcessor(serverEventBus, serverPreferences)
     )
 
-    private val artemisWorld = ArtemisWorldBuilder()
-        .addSystems(systems)
-        .addObjects(processors)
-        .addObject(serverPreferences)
-        .build()
-
     init {
         serverEventBus.addHandlers(processors)
         serverEventBus.addHandlers(systems)
     }
 
+    private val artemisWorld: World = ArtemisWorldBuilder()
+        .addSystems(systems)
+        .addObjects(processors)
+        .addObject(serverPreferences)
+        .build()
+
     override fun create() {
-        processors.forEach { it.create(artemisWorld) }
         gameServer.subscribe(serverEventBus.getListener())
         gameServer.start(
             port = port,

@@ -6,9 +6,9 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Size
-import org.example.eventbus.event.BusEvent
-import org.example.models.FixtureType
-import org.example.models.ServerPreference
+import org.example.core.eventbus.event.BusEvent
+import org.example.core.models.FixtureType
+import org.example.core.models.ServerPreference
 import tools.artemis.systems.BaseTaskSystem
 import tools.eventbus.annotation.EventCallback
 import tools.physics.createCircleEntity

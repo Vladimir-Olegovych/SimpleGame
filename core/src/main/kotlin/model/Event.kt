@@ -26,4 +26,5 @@ sealed class Event {
     class CurrentPlayer(val entityId: Int = 0): Event()
 
     class CurrentPlayerVelocity(val x: Float = 0F, val y: Float = 0F): Event()
+
 }

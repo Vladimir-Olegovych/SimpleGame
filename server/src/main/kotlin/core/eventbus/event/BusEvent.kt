@@ -1,4 +1,4 @@
-package org.example.eventbus.event
+package org.example.core.eventbus.event
 
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
@@ -30,6 +30,7 @@ sealed class BusEvent {
     data class ApplyEntityToChunk(val entityId: Int, val vector2: Vector2): BusEvent()
     data class RemoveEntityChunk(val entityId: Int): BusEvent()
 
+    data class EntityMovedOnChunk(val entityId: Int, val chunk: Chunk): BusEvent()
     data class LoadChunks(val entityId: Int, val chunks: List<Chunk>): BusEvent()
     data class UnloadChunks(val entityId: Int, val chunks: List<Chunk>): BusEvent()
 

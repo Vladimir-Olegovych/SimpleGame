@@ -3,12 +3,11 @@ package org.example.ecs.systems
 import com.artemis.ComponentMapper
 import com.artemis.EntitySubscription
 import com.artemis.annotations.All
-import com.artemis.systems.IteratingSystem
 import ecs.components.Client
 import model.Event
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Size
-import org.example.eventbus.event.BusEvent
+import org.example.core.eventbus.event.BusEvent
 import tools.artemis.systems.IteratingTaskSystem
 import tools.eventbus.annotation.EventCallback
 
@@ -19,8 +18,6 @@ class EventSystem: IteratingTaskSystem() {
     private lateinit var entityMapper: ComponentMapper<EntityModel>
     private lateinit var sizeMapper: ComponentMapper<Size>
 
-    @All(EntityModel::class) private lateinit var entityIds: EntitySubscription
-
     override fun begin() {
         getAddTasks().forEach { it.invoke() }
         clearTasks()
@@ -29,9 +26,10 @@ class EventSystem: IteratingTaskSystem() {
     override fun process(entityId: Int) {
         val client = clientMapper[entityId]?: return
 
-        for (i in 0 until entityIds.entities.size()) {
-            val entityId = entityIds.entities.get(i)
-            client.processEntityPosition(entityId)
+        for (chunk in client.getChunks()) {
+            for (entityId in chunk.getEntities()) {
+                client.processEntityPosition(entityId)
+            }
         }
     }
 
@@ -70,9 +68,19 @@ class EventSystem: IteratingTaskSystem() {
     }
 
     @EventCallback
+    private fun entityMovedOnChunk(busEvent: BusEvent.EntityMovedOnChunk){
+        for (observerId in busEvent.chunk.getObservers()){
+            if (busEvent.entityId == observerId) continue
+            val client = clientMapper[observerId]?: continue
+            addTask { client.processEntity(busEvent.entityId) }
+        }
+    }
+
+    @EventCallback
     private fun loadChunks(busEvent: BusEvent.LoadChunks){
         val client = clientMapper[busEvent.entityId]?: return
         for (chunk in busEvent.chunks) {
+            client.addChunk(chunk)
             for (entityId in chunk.getEntities()) {
                 addTask { client.processEntity(entityId) }
             }
@@ -80,7 +88,10 @@ class EventSystem: IteratingTaskSystem() {
     }
 
     @EventCallback
-    private fun unloadChunks(busEvent: BusEvent.UnloadChunks){
-        val client = clientMapper[busEvent.entityId]?: return
+    private fun unloadChunks(busEvent: BusEvent.UnloadChunks) {
+        val client = clientMapper[busEvent.entityId] ?: return
+        for (chunk in busEvent.chunks) {
+            client.removeChunk(chunk)
+        }
     }
 }

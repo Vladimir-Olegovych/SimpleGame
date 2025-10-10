@@ -4,8 +4,8 @@ import com.artemis.World
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
 import org.example.ecs.processors.GameProcessor
-import org.example.eventbus.ServerEventBus
-import org.example.eventbus.event.BusEvent
+import org.example.core.eventbus.ServerEventBus
+import org.example.core.eventbus.event.BusEvent
 import tools.eventbus.annotation.EventCallback
 import type.EntityType
 
