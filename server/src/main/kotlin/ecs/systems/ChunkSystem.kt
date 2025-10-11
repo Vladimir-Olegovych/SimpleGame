@@ -38,7 +38,7 @@ class ChunkSystem: IteratingSystem() {
     override fun initialize() {
         chunkProcessor.create(world)
         chunkManager = ChunkManager(
-            processedRadius = serverPreference.chunkRadius,
+            visibleRadius = serverPreference.chunkRadius,
             chunkSize = serverPreference.chunkSize.toVector2()
         ).apply {
             setChunkListener(chunkProcessor)

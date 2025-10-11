@@ -16,9 +16,9 @@ class Client: Disposable, Component() {
     fun clearEvents() { events.clear() }
     fun addEvent(event: Event){ events.add(event) }
 
-    fun getChunks(): Iterable<Chunk> = chunks.asIterable()
+    fun getChunks(): Array<Chunk> = chunks.toTypedArray()
     fun addChunk(chunk: Chunk){ chunks.add(chunk) }
-    fun removeChunk(chunk: Chunk){ chunks.add(chunk) }
+    fun removeChunk(chunk: Chunk){ chunks.remove(chunk) }
 
     override fun dispose() {
         connection = null
