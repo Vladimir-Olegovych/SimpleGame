@@ -10,12 +10,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.Viewport
 import ecs.components.Player
+import ecs.processors.ClientProcessor
 import ecs.systems.DrawSystem
 import ecs.systems.EntitySystem
 import ecs.systems.InputSystem
 import eventbus.GameEventBus
-import kotlinx.coroutines.launch
-import model.Event
+import model.GamePaket
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.input.CycleInputProcessor
 import tools.graphics.screens.fragment.Fragment
@@ -26,10 +26,10 @@ import javax.inject.Inject
 
 class GameFragment(
     private val navigation: Navigation.Game,
-    private val onDisconnected: () -> Unit
+    private val onDisconnect: () -> Unit
 ): Fragment() {
 
-    @Inject lateinit var gameClient: GameClient<Event>
+    @Inject lateinit var gameClient: GameClient<GamePaket>
     @Inject lateinit var assetManager: AssetManager
     @Inject lateinit var shapeRenderer: ShapeRenderer
     @Inject lateinit var spriteBatch: SpriteBatch
@@ -42,22 +42,16 @@ class GameFragment(
 
 
     override fun onCreate(game: Game) {
-        gameClient.subscribe(
-            onConnected = { listener, connection ->
-
-            },
-            onDisconnected = { listener, connection ->
-                lifecycleScope.launch {
-                    gameClient.unSubscribe(listener)
-                    onDisconnected.invoke()
-                }
-            }
+        val clientProcessor = ClientProcessor(
+            gameEventBus = eventBus,
+            onDisconnect = onDisconnect
         )
 
         val inputSystem = InputSystem()
         val drawSystem = DrawSystem()
         val entitySystem = EntitySystem()
 
+        eventBus.addHandler(clientProcessor)
         eventBus.addHandler(inputSystem)
         eventBus.addHandler(drawSystem)
         eventBus.addHandler(entitySystem)
@@ -75,11 +69,14 @@ class GameFragment(
             .addObject(assetManager)
             .build()
 
+        clientProcessor.create(artemisWorld)
+
         Gdx.input.inputProcessor = inputProcessor
 
         gameClient.start(
             address = "127.0.0.1",
             port = 5000,
+            bufferSize = 262144,
             custom = { kryo ->
                 kryo.registerAllEvents()
             }

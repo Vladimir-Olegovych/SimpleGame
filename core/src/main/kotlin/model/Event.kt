@@ -2,6 +2,7 @@ package model
 
 import type.EntityType
 
+class GamePaket(val events: Array<Event> = emptyArray())
 
 sealed class Event {
 
@@ -21,7 +22,7 @@ sealed class Event {
     class Remove(val entityId: Int = 0): Event()
 
     class CurrentChunkParams(val chunkRadius: Int = 0,
-                             val chunkSize: Vector2Data = Vector2Data()): Event()
+                             val chunkSize: Float = 0F): Event()
 
     class CurrentPlayer(val entityId: Int = 0): Event()
 

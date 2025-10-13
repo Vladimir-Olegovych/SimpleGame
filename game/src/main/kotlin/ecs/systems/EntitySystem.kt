@@ -10,7 +10,6 @@ import ecs.components.EntityModel
 import ecs.components.Player
 import ecs.components.Size
 import model.Event
-import model.Vector2Data
 import models.eventbus.BusEvent
 import tools.eventbus.annotation.EventCallback
 import tools.eventbus.annotation.EventType
@@ -21,7 +20,7 @@ class EntitySystem(): IteratingSystem() {
 
     @Wire private lateinit var player: Player
 
-    private var chunkParams = Event.CurrentChunkParams(2, Vector2Data(4F, 4F))
+    private var chunkParams = Event.CurrentChunkParams(2, 16F)
     private val entityMap = IntMap<Int>()
     private lateinit var entityMapper: ComponentMapper<EntityModel>
     private lateinit var sizeMapper: ComponentMapper<Size>

@@ -2,15 +2,16 @@ package utils
 
 import com.esotericsoftware.kryo.Kryo
 import model.Event
-import model.Vector2Data
+import model.GamePaket
 import type.EntityType
 
 fun Kryo.registerAllEvents(){
     val kryo = this
 
-    kryo.register(Vector2Data::class.java)
-
     kryo.register(Event::class.java)
+    kryo.register(Array<Event>::class.java)
+    kryo.register(GamePaket::class.java)
+
     kryo.register(EntityType::class.java)
 
     kryo.register(Event.Entity::class.java)

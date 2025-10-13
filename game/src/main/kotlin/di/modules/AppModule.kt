@@ -12,7 +12,7 @@ import dagger.Module
 import dagger.Provides
 import eventbus.GameEventBus
 import kotlinx.coroutines.asCoroutineDispatcher
-import model.Event
+import model.GamePaket
 import tools.kyro.client.GameClient
 import java.util.concurrent.Executor
 import javax.inject.Singleton
@@ -29,8 +29,8 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideGameClient(): GameClient<Event> {
-        val gameClient = GameClient<Event>()
+    fun provideGameClient(): GameClient<GamePaket> {
+        val gameClient = GameClient<GamePaket>()
         val executor = Executor { runnable -> Gdx.app.postRunnable(runnable) }
         gameClient.setCustomDispatcher(executor.asCoroutineDispatcher())
         return gameClient
@@ -38,7 +38,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideEventBus(gameClient: GameClient<Event>): GameEventBus {
+    fun provideEventBus(gameClient: GameClient<GamePaket>): GameEventBus {
         val eventBus = GameEventBus()
         gameClient.subscribe(eventBus.getListener())
         return eventBus

@@ -1,13 +1,14 @@
 package org.example.ecs.systems
 
 import com.artemis.ComponentMapper
-import com.artemis.EntitySubscription
 import com.artemis.annotations.All
 import ecs.components.Client
 import model.Event
-import org.example.ecs.components.EntityModel
-import org.example.ecs.components.Size
 import org.example.core.eventbus.event.BusEvent
+import org.example.ecs.components.EntityModel
+import org.example.ecs.components.Physics
+import org.example.ecs.components.Size
+import org.example.ecs.components.StaticPosition
 import tools.artemis.systems.IteratingTaskSystem
 import tools.eventbus.annotation.EventCallback
 
@@ -15,27 +16,26 @@ import tools.eventbus.annotation.EventCallback
 class EventSystem: IteratingTaskSystem() {
 
     private lateinit var clientMapper: ComponentMapper<Client>
+    private lateinit var staticPositionMapper: ComponentMapper<StaticPosition>
     private lateinit var entityMapper: ComponentMapper<EntityModel>
+    private lateinit var physicsMapper: ComponentMapper<Physics>
     private lateinit var sizeMapper: ComponentMapper<Size>
 
-    override fun begin() {
+    override fun end() {
         getAddTasks().forEach { it.invoke() }
         clearTasks()
     }
 
     override fun process(entityId: Int) {
         val client = clientMapper[entityId]?: return
-
-        for (chunk in client.getChunks()) {
-            for (entityId in chunk.getEntities()) {
-                client.processEntityPosition(entityId)
-            }
+        for (entityId in client.getEntities()) {
+            client.processEntityPosition(entityId)
         }
     }
 
     private fun Client.processEntityPosition(id: Int){
-        val entity = entityMapper[id]?: return
-        val entityBody = entity.body?: return
+        val physics = physicsMapper[id]?: return
+        val entityBody = physics.body?: return
         if (!entityBody.isActive) return
         addEvent(
             Event.Position(
@@ -65,33 +65,29 @@ class EventSystem: IteratingTaskSystem() {
                 )
             )
         }
-    }
-
-    @EventCallback
-    private fun entityMovedOnChunk(busEvent: BusEvent.EntityMovedOnChunk){
-        for (observerId in busEvent.chunk.getObservers()){
-            if (busEvent.entityId == observerId) continue
-            val client = clientMapper[observerId]?: continue
-            addTask { client.processEntity(busEvent.entityId) }
+        staticPositionMapper[id]?.position?.let {
+            addEvent(
+                Event.Position(
+                    entityId = id,
+                    x = it.x,
+                    y = it.y,
+                )
+            )
         }
     }
 
     @EventCallback
-    private fun loadChunks(busEvent: BusEvent.LoadChunks){
+    fun showEntities(busEvent: BusEvent.ShowEntities){
         val client = clientMapper[busEvent.entityId]?: return
-        for (chunk in busEvent.chunks) {
-            client.addChunk(chunk)
-            for (entityId in chunk.getEntities()) {
-                addTask { client.processEntity(entityId) }
-            }
+        client.addEntities(busEvent.entities)
+        for (entityId in busEvent.entities) {
+            addTask { client.processEntity(entityId) }
         }
     }
 
     @EventCallback
-    private fun unloadChunks(busEvent: BusEvent.UnloadChunks) {
+    fun hideEntities(busEvent: BusEvent.HideEntities) {
         val client = clientMapper[busEvent.entityId] ?: return
-        for (chunk in busEvent.chunks) {
-            client.removeChunk(chunk)
-        }
+        client.removeEntities(busEvent.entities)
     }
 }

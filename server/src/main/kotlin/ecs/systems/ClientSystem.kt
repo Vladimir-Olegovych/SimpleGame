@@ -6,29 +6,28 @@ import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.esotericsoftware.kryonet.Connection
 import ecs.components.Client
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import model.Event
+import model.GamePaket
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
-import org.example.ecs.processors.impl.ChunkProcessor
-import org.example.ecs.processors.impl.ClientProcessor
+import org.example.ecs.processors.ClientProcessor
 import tools.eventbus.annotation.EventCallback
 
 @All(Client::class)
-class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
+class ClientSystem(): IteratingSystem() {
 
     @Wire private lateinit var serverPreference: ServerPreference
     @Wire private lateinit var clientProcessor: ClientProcessor
+
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private lateinit var clientMapper: ComponentMapper<Client>
     private val playersMap = HashMap<Connection, Int>()
     private val tasks = ArrayList<Deferred<Unit>>()
 
     @EventCallback
-    private fun removeClient(busEvent: BusEvent.RemoveClient){
+    fun removeClient(busEvent: BusEvent.RemoveClient){
         val entityId = playersMap[busEvent.connection]?: return
         val client = clientMapper[entityId]
         client.dispose()
@@ -37,7 +36,7 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
     }
 
     @EventCallback
-    private fun createClient(busEvent: BusEvent.CreateClient) {
+    fun createClient(busEvent: BusEvent.CreateClient) {
         val entityId = world.create()
         playersMap[busEvent.connection] = entityId
         val client = clientMapper.create(entityId)
@@ -57,7 +56,7 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
     }
 
     @EventCallback
-    private fun connectionToId(busEvent: BusEvent.ConnectionToId): Int? {
+    fun connectionToId(busEvent: BusEvent.ConnectionToId): Int? {
         return playersMap[busEvent.connection]
     }
 
@@ -65,30 +64,29 @@ class ClientSystem(private val scope: CoroutineScope): IteratingSystem() {
         clientProcessor.create(world)
     }
 
-    override fun process(entityId: Int) {
-
-        val client = clientMapper[entityId]?: return
-        client.getEvents().forEach { event ->
-            tasks.add(scope.async { client.sendEvent(event) })
-        }
-        client.clearEvents()
-    }
-
-    override fun end() {
+    override fun begin() {
         runBlocking {
             tasks.forEach { it.await() }
             tasks.clear()
         }
     }
 
-    private fun Client.sendEvent(event: Event){
-        try {
-            when (event) {
-                is Event.Position -> this.connection?.sendUDP(event)
-                else -> this.connection?.sendTCP(event)
-            }
-        } catch (_: Throwable){
+    override fun process(entityId: Int) {
+        val client = clientMapper[entityId]?: return
+        val events = client.getEvents()
+        val gamePaket = GamePaket(events.toTypedArray())
+        tasks.add(
+            scope.async { client.sendPaket(gamePaket) }
+        )
+        client.clearEvents()
+    }
 
+    private fun Client.sendPaket(gamePaket: GamePaket){
+        if (gamePaket.events.isEmpty()) return
+        try {
+            this.connection?.sendTCP(gamePaket)
+        } catch (e: Throwable){
+            e.printStackTrace()
         }
     }
 }

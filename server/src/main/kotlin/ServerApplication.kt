@@ -2,11 +2,11 @@ package org.example
 
 import com.artemis.World
 import model.Event
-import org.example.ecs.processors.impl.ChunkProcessor
-import org.example.ecs.processors.impl.ClientProcessor
-import org.example.ecs.systems.*
 import org.example.core.eventbus.ServerEventBus
 import org.example.core.models.ServerPreference
+import org.example.ecs.processors.ChunkProcessor
+import org.example.ecs.processors.ClientProcessor
+import org.example.ecs.systems.*
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.render.LifecycleUpdater
 import tools.kyro.server.GameServer
@@ -24,8 +24,8 @@ class ServerApplication(
     private val gameServer = GameServer<Event>()
 
     private val systems = arrayOf(
-        ClientSystem(lifecycleScope),
         EventSystem(),
+        ClientSystem(),
         MoveSystem(),
         PhysicsSystem(),
         ChunkSystem(),
@@ -34,7 +34,7 @@ class ServerApplication(
 
     private val processors = arrayOf(
         ClientProcessor(serverEventBus),
-        ChunkProcessor(serverEventBus, serverPreferences)
+        ChunkProcessor(serverPreferences)
     )
 
     init {
@@ -45,6 +45,7 @@ class ServerApplication(
     private val artemisWorld: World = ArtemisWorldBuilder()
         .addSystems(systems)
         .addObjects(processors)
+        .addInjects(processors)
         .addObject(serverPreferences)
         .build()
 
@@ -52,12 +53,12 @@ class ServerApplication(
         gameServer.subscribe(serverEventBus.getListener())
         gameServer.start(
             port = port,
+            bufferSize = 262144,
             custom = { kryo ->
                 kryo.registerAllEvents()
             }
         )
     }
-
 
     override fun update(deltaTime: Float) {
         artemisWorld.delta = deltaTime

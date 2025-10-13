@@ -5,10 +5,11 @@ import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import model.Event
-import org.example.ecs.components.EntityModel
-import org.example.ecs.components.Move
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
+import org.example.ecs.components.EntityModel
+import org.example.ecs.components.Move
+import org.example.ecs.components.Physics
 import tools.eventbus.annotation.EventCallback
 import tools.eventbus.annotation.EventType
 
@@ -17,11 +18,12 @@ class MoveSystem: IteratingSystem() {
 
     @Wire private lateinit var serverPreference: ServerPreference
     private lateinit var entityMapper: ComponentMapper<EntityModel>
+    private lateinit var physicsMapper: ComponentMapper<Physics>
     private lateinit var moveMapper: ComponentMapper<Move>
 
     @EventType(BusEvent.FIELD_EVENT)
     @EventCallback
-    private fun applyForceToBody(busEvent: BusEvent.OnReceiveId<Event.CurrentPlayerVelocity>){
+    fun applyForceToBody(busEvent: BusEvent.OnReceiveId<Event.CurrentPlayerVelocity>){
         val move = moveMapper[busEvent.entityId]?: return
         when {
             busEvent.event.x > 0 -> move.vector.x = serverPreference.maxSpeed
@@ -36,10 +38,10 @@ class MoveSystem: IteratingSystem() {
     }
 
     override fun process(entityId: Int) {
-        val entity = entityMapper[entityId]?: return
+        val physics = physicsMapper[entityId]?: return
         val move = moveMapper[entityId]?: return
 
-        val body = entity.body?: return
+        val body = physics.body?: return
         body.applyForce(move.vector, body.worldCenter, true)
     }
 }

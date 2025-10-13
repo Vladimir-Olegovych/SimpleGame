@@ -4,11 +4,11 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
-import org.example.ecs.components.EntityModel
-import org.example.ecs.components.Size
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.FixtureType
 import org.example.core.models.ServerPreference
+import org.example.ecs.components.Physics
+import org.example.ecs.components.Size
 import tools.artemis.systems.BaseTaskSystem
 import tools.eventbus.annotation.EventCallback
 import tools.physics.createCircleEntity
@@ -19,13 +19,13 @@ class PhysicsSystem: BaseTaskSystem() {
     @Wire private lateinit var serverPreference: ServerPreference
     private val box2dWold: World = World(Vector2(0F, 0F), false)
 
-    private lateinit var entityModelMapper: ComponentMapper<EntityModel>
     private lateinit var sizeMapper: ComponentMapper<Size>
+    private lateinit var physicsMapper: ComponentMapper<Physics>
 
     @EventCallback
-    private fun createBody(busEvent: BusEvent.CreateBody) {
-        val entity = entityModelMapper.get(busEvent.entityId)?: return
-        val size = sizeMapper.get(busEvent.entityId)
+    fun createBody(busEvent: BusEvent.CreateBody) {
+        val physics = physicsMapper.get(busEvent.entityId)?: return
+        val size = sizeMapper.get(busEvent.entityId)?: return
 
         addTask {
             val body = box2dWold.createCircleEntity(
@@ -41,14 +41,14 @@ class PhysicsSystem: BaseTaskSystem() {
                 userData = FixtureType.Sensor(busEvent.entityId),
                 radius = serverPreference.sensorRadius
             )
-            entity.body = body
+            physics.body = body
         }
     }
 
     @EventCallback
-    private fun removeBody(busEvent: BusEvent.RemoveBody) {
-        val entity = entityModelMapper.get(busEvent.entityId)?: return
-        val body = entity.body?: return
+    fun removeBody(busEvent: BusEvent.RemoveBody) {
+        val physics = physicsMapper.get(busEvent.entityId)?: return
+        val body = physics.body?: return
 
         addTask {
             box2dWold.destroyBody(body)
@@ -56,19 +56,19 @@ class PhysicsSystem: BaseTaskSystem() {
     }
 
     @EventCallback
-    private fun pauseBody(busEvent: BusEvent.PauseBody) {
-        val entity = entityModelMapper.get(busEvent.entityId) ?: return
+    fun pauseBody(busEvent: BusEvent.PauseBody) {
+        val physics = physicsMapper.get(busEvent.entityId)?: return
         addTask {
-            val body = entity.body
+            val body = physics.body
             body?.isActive = false
         }
     }
 
     @EventCallback
-    private fun resumeBody(busEvent: BusEvent.ResumeBody) {
-        val entity = entityModelMapper.get(busEvent.entityId) ?: return
+    fun resumeBody(busEvent: BusEvent.ResumeBody) {
+        val physics = physicsMapper.get(busEvent.entityId)?: return
         addTask {
-            val body = entity.body
+            val body = physics.body
             body?.isActive = true
         }
     }

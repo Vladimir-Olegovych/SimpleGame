@@ -1,9 +1,9 @@
 package org.example.core.eventbus.event
 
+import alexey.tools.common.collections.IntCollection
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
 import model.Event
-import tools.chunk.Chunk
 import type.EntityType
 
 sealed class BusEvent {
@@ -19,7 +19,13 @@ sealed class BusEvent {
     data class RemoveClient(val connection: Connection): BusEvent()
     data class ConnectionToId(val connection: Connection): BusEvent()
 
-    data class CreateEntity(val entityId: Int, val entityType: EntityType, val isObserver: Boolean): BusEvent()
+    data class CreateEntity(val entityId: Int,
+                            val entityType: EntityType,
+                            val isObserver: Boolean,
+                            val isStatic: Boolean,
+                            val isPhysical: Boolean,
+                            val position: Vector2? = null): BusEvent()
+
     data class RemoveEntity(val entityId: Int): BusEvent()
 
     data class CreateBody(val entityId: Int, val vector2: Vector2): BusEvent()
@@ -30,9 +36,8 @@ sealed class BusEvent {
     data class ApplyEntityToChunk(val entityId: Int, val vector2: Vector2): BusEvent()
     data class RemoveEntityChunk(val entityId: Int): BusEvent()
 
-    data class EntityMovedOnChunk(val entityId: Int, val chunk: Chunk): BusEvent()
-    data class LoadChunks(val entityId: Int, val chunks: List<Chunk>): BusEvent()
-    data class UnloadChunks(val entityId: Int, val chunks: List<Chunk>): BusEvent()
+    data class ShowEntities(val entityId: Int, val entities: IntCollection): BusEvent()
+    data class HideEntities(val entityId: Int, val entities: IntCollection): BusEvent()
 
     companion object {
         const val FIELD_EVENT = "event"
