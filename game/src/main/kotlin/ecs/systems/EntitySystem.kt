@@ -4,12 +4,12 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.IntMap
 import ecs.components.EntityModel
 import ecs.components.Player
+import ecs.components.EntityPosition
 import ecs.components.Size
-import model.Event
+import event.Event
 import models.eventbus.BusEvent
 import tools.eventbus.annotation.EventCallback
 import tools.eventbus.annotation.EventType
@@ -20,9 +20,10 @@ class EntitySystem(): IteratingSystem() {
 
     @Wire private lateinit var player: Player
 
-    private var chunkParams = Event.CurrentChunkParams(2, 16F)
+    private var maxDistance = 32F
     private val entityMap = IntMap<Int>()
     private lateinit var entityMapper: ComponentMapper<EntityModel>
+    private lateinit var entityPositionMapper: ComponentMapper<EntityPosition>
     private lateinit var sizeMapper: ComponentMapper<Size>
 
     @EventType(BusEvent.FIELD_EVENT)
@@ -37,18 +38,15 @@ class EntitySystem(): IteratingSystem() {
             entity = entityMapper[entityMap[busEvent.event.entityId]]
         }
         entity.entityType = busEvent.event.entityType
-        entity.updateTime = System.currentTimeMillis()
     }
 
     @EventType(BusEvent.FIELD_EVENT)
     @EventCallback
     private fun onReceivePosition(busEvent: BusEvent.OnReceive<Event.Position>){
-        val entity = entityMapper[entityMap[busEvent.event.entityId]]?: return
-        val position = entity.position?: Vector2()
-        position.x = busEvent.event.x
-        position.y = busEvent.event.y
-        entity.position = position
-        entity.updateTime = System.currentTimeMillis()
+        val entityPosition = entityPositionMapper[entityMap[busEvent.event.entityId]]?: run {
+            entityPositionMapper.create(entityMap[busEvent.event.entityId])
+        }
+        entityPosition.setPosition(busEvent.event.x, busEvent.event.y)
     }
 
     @EventType(BusEvent.FIELD_EVENT)
@@ -65,7 +63,7 @@ class EntitySystem(): IteratingSystem() {
     @EventType(BusEvent.FIELD_EVENT)
     @EventCallback
     private fun onReceiveCurrentChunkParams(busEvent: BusEvent.OnReceive<Event.CurrentChunkParams>){
-        this.chunkParams = busEvent.event
+        maxDistance = (busEvent.event.chunkSize * busEvent.event.chunkRadius) * 2 + busEvent.event.chunkRadius
     }
 
     @EventType(BusEvent.FIELD_EVENT)
@@ -83,6 +81,7 @@ class EntitySystem(): IteratingSystem() {
     private fun removeEntity(entityId: Int){
         entityMapper.remove(entityId)
         sizeMapper.remove(entityId)
+        entityPositionMapper.remove(entityId)
         val iterator = entityMap.iterator()
         for(entry in iterator) {
             if (entry.value != entityId) continue
@@ -93,9 +92,14 @@ class EntitySystem(): IteratingSystem() {
 
     private fun processRemove(entityId: Int){
         if (player.entityId == entityId) return
-        val entity = entityMapper[entityId]?: return
-        val currentTime = System.currentTimeMillis()
-        if (currentTime - entity.updateTime < 1_000L) return
+        val entityPosition = entityPositionMapper[entityId]?.getServerPosition()?: return
+        val playerPosition = entityPositionMapper[player.entityId]?.getServerPosition()?: return
+
+        val dx = entityPosition.x - playerPosition.x
+        val dy = entityPosition.y - playerPosition.y
+        val distanceSquared = dx * dx + dy * dy
+
+        if (distanceSquared < maxDistance * maxDistance) return
         removeEntity(entityId)
     }
 

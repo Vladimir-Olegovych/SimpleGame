@@ -1,4 +1,4 @@
-package org.example.core.models
+package models
 
 enum class SendType {
     TCP,

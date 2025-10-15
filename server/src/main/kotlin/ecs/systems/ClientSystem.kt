@@ -7,8 +7,8 @@ import com.artemis.systems.IteratingSystem
 import com.esotericsoftware.kryonet.Connection
 import ecs.components.Client
 import kotlinx.coroutines.*
-import model.Event
-import model.GamePaket
+import event.Event
+import event.GamePaket
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
 import org.example.ecs.processors.ClientProcessor

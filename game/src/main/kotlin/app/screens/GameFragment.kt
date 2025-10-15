@@ -15,7 +15,7 @@ import ecs.systems.DrawSystem
 import ecs.systems.EntitySystem
 import ecs.systems.InputSystem
 import eventbus.GameEventBus
-import model.GamePaket
+import event.GamePaket
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.input.CycleInputProcessor
 import tools.graphics.screens.fragment.Fragment

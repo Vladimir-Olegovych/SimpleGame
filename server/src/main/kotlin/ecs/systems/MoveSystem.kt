@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import model.Event
+import event.Event
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
 import org.example.ecs.components.EntityModel

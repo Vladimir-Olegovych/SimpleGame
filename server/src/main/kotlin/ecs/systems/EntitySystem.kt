@@ -8,6 +8,7 @@ import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
 import org.example.ecs.components.*
 import tools.eventbus.annotation.EventCallback
+import kotlin.random.Random
 
 @All(EntityModel::class)
 class EntitySystem: IteratingSystem() {

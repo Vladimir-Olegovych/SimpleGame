@@ -1,7 +1,7 @@
 package org.example
 
 import com.artemis.World
-import model.Event
+import event.Event
 import org.example.core.eventbus.ServerEventBus
 import org.example.core.models.ServerPreference
 import org.example.ecs.processors.ChunkProcessor

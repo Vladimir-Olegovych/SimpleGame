@@ -3,7 +3,7 @@ package org.example.core.eventbus.event
 import alexey.tools.common.collections.IntCollection
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
-import model.Event
+import event.Event
 import type.EntityType
 
 sealed class BusEvent {
@@ -28,7 +28,7 @@ sealed class BusEvent {
 
     data class RemoveEntity(val entityId: Int): BusEvent()
 
-    data class CreateBody(val entityId: Int, val vector2: Vector2): BusEvent()
+    data class CreateBody(val entityId: Int, val isEnabled: Boolean, val vector2: Vector2): BusEvent()
     data class RemoveBody(val entityId: Int): BusEvent()
     data class PauseBody(val entityId: Int): BusEvent()
     data class ResumeBody(val entityId: Int): BusEvent()

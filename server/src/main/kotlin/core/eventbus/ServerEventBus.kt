@@ -1,7 +1,7 @@
 package org.example.core.eventbus
 
 import com.esotericsoftware.kryonet.Connection
-import model.Event
+import event.Event
 import org.example.core.eventbus.event.BusEvent
 import tools.eventbus.EventBus
 import tools.kyro.common.GameNetworkListener
@@ -10,7 +10,7 @@ class ServerEventBus(): EventBus<BusEvent>() {
 
     private val listener = object : GameNetworkListener<Event>() {
         override fun onConnected(connection: Connection) {
-            val clientEntityId = sendEvent(BusEvent.ProcessorEvent.OnConnected(connection))
+            sendEvent(BusEvent.ProcessorEvent.OnConnected(connection))
         }
 
         override fun onDisconnected(connection: Connection) {

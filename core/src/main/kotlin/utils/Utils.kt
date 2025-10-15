@@ -1,8 +1,8 @@
 package utils
 
 import com.esotericsoftware.kryo.Kryo
-import model.Event
-import model.GamePaket
+import event.Event
+import event.GamePaket
 import type.EntityType
 
 fun Kryo.registerAllEvents(){

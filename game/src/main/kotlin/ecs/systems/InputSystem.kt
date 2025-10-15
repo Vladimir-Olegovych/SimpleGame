@@ -5,7 +5,7 @@ import com.artemis.annotations.Wire
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.Vector2
-import model.Event
+import event.Event
 import tools.kyro.client.GameClient
 
 class InputSystem: BaseSystem(), InputProcessor {

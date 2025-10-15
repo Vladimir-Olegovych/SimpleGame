@@ -37,6 +37,7 @@ class PhysicsSystem: BaseTaskSystem() {
                 linearDamping = 1F,
                 angularDamping = 1F
             )
+            body.isActive = busEvent.isEnabled
             body.setSensorRadius(
                 userData = FixtureType.Sensor(busEvent.entityId),
                 radius = serverPreference.sensorRadius

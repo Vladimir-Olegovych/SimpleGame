@@ -4,7 +4,7 @@ import alexey.tools.common.collections.IntCollection
 import com.artemis.Component
 import com.badlogic.gdx.utils.Disposable
 import com.esotericsoftware.kryonet.Connection
-import model.Event
+import event.Event
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 

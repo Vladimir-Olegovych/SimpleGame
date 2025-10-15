@@ -6,6 +6,4 @@ import type.EntityType
 
 class EntityModel: Component() {
     var entityType = EntityType.NULL
-    var position: Vector2? = null
-    var updateTime: Long = -1L
 }

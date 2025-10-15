@@ -3,7 +3,7 @@ package org.example.ecs.systems
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import ecs.components.Client
-import model.Event
+import event.Event
 import org.example.core.eventbus.event.BusEvent
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Physics

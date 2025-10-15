@@ -1,8 +1,8 @@
 package models.eventbus
 
 import com.esotericsoftware.kryonet.Connection
-import model.Event
-import model.GamePaket
+import event.Event
+import event.GamePaket
 
 sealed class BusEvent {
     sealed class ProcessorEvent: BusEvent() {

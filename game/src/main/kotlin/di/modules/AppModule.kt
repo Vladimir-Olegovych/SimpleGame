@@ -12,7 +12,7 @@ import dagger.Module
 import dagger.Provides
 import eventbus.GameEventBus
 import kotlinx.coroutines.asCoroutineDispatcher
-import model.GamePaket
+import event.GamePaket
 import tools.kyro.client.GameClient
 import java.util.concurrent.Executor
 import javax.inject.Singleton
@@ -50,7 +50,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideViewport(camera: OrthographicCamera): Viewport = FillViewport(20F, 20F, camera)
+    fun provideViewport(camera: OrthographicCamera): Viewport = FillViewport(120F, 120F, camera)
 
     @Provides
     @Singleton

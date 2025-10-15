@@ -40,7 +40,9 @@ class ClientProcessor(private val serverEventBus: ServerEventBus): GameProcessor
         val position = Vector2(0F, 0F)
 
         physicsSystem.createBody(BusEvent.CreateBody(
-            entityId, position
+            entityId = entityId,
+            vector2 = position,
+            isEnabled = true
         ))
 
         chunkSystem.applyEntityChunk(BusEvent.ApplyEntityToChunk(

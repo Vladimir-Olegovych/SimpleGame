@@ -13,8 +13,9 @@ import tools.chunk.ChunkGenerator
 import type.EntityType
 import kotlin.random.Random
 
-class ServerChunkGenerator(
+class ServerWorldGenerator(
     private val artemisWorld: World,
+    private val seed: Int = Random.nextInt(),
     serverPreferences: ServerPreference
 ): ChunkGenerator(
     chunkSize = serverPreferences.chunkSize,
@@ -24,14 +25,22 @@ class ServerChunkGenerator(
     @Wire private lateinit var physicsSystem: PhysicsSystem
     @Wire private lateinit var chunkSystem: ChunkSystem
 
-    private val random = Random(12)
+    override fun onCreateChunk(chunk: Chunk, positions: Array<Vector2>) {
+        val chunkPosition = chunk.getPosition()
+        val seed = (chunkPosition.x.toLong() shl 32) or (chunkPosition.y.toLong() and 0xFFFFFFFF)
+        val random = Random(seed + this.seed)
+        positions.forEach { position ->
+            onCreateEntity(
+                chunk = chunk,
+                position = position,
+                randInt = random.nextInt(0, 30)
+            )
+        }
+    }
 
-    override fun onCreateChunk(chunk: Chunk) {}
-
-    override fun onCreateEntity(chunk: Chunk, position: Vector2) {
-        val result = random.nextInt(0, 30)
+    private fun onCreateEntity(chunk: Chunk, position: Vector2, randInt: Int) {
         onGenerateFloor(position)
-        if (result >= 4) return
+        if (randInt >= 1) return
         onGenerateEntity(position)
     }
 
@@ -63,7 +72,9 @@ class ServerChunkGenerator(
         ))
         physicsSystem.createBody(
             BusEvent.CreateBody(
-                entityId, position
+                entityId = entityId,
+                vector2 = position,
+                isEnabled = false
             )
         )
         chunkSystem.applyEntityChunk(

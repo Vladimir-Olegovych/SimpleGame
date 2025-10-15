@@ -5,7 +5,7 @@ import alexey.tools.common.level.Chunk
 import alexey.tools.common.level.ChunkManager
 import com.artemis.World
 import com.artemis.annotations.Wire
-import org.example.core.chunks.ServerChunkGenerator
+import org.example.core.chunks.ServerWorldGenerator
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
 import org.example.ecs.systems.EventSystem
@@ -18,10 +18,10 @@ class ChunkProcessor(
 
     @Wire private lateinit var physicsSystem: PhysicsSystem
     @Wire private lateinit var eventSystem: EventSystem
-    private lateinit var chunkGenerator: ServerChunkGenerator
+    private lateinit var chunkGenerator: ServerWorldGenerator
 
     override fun create(artemisWorld: World) {
-        chunkGenerator = ServerChunkGenerator(
+        chunkGenerator = ServerWorldGenerator(
             artemisWorld = artemisWorld,
             serverPreferences = serverPreferences
         )
