@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import di.components.AppComponent
 import di.components.DaggerAppComponent
-import event.GamePaket
+import event.GamePacket
 import models.ClientPreference
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.screens.navigation.NavHostController
@@ -30,7 +30,7 @@ class GameApplication: Game() {
     @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var stage: Stage
     @Inject lateinit var assetManager: AssetManager
-    @Inject lateinit var gameClient: GameClient<GamePaket>
+    @Inject lateinit var gameClient: GameClient<GamePacket>
 
     override fun create() {
         GameValues.setClientPreference(jsonPreference.getPreference())

@@ -39,8 +39,8 @@ class ServerWorldGenerator(
     }
 
     private fun onCreateEntity(chunk: Chunk, position: Vector2, randInt: Int) {
-        onGenerateFloor(position)
-        if (randInt >= 1) return
+        //onGenerateFloor(position)
+        if (randInt >= 10) return
         onGenerateEntity(position)
     }
 

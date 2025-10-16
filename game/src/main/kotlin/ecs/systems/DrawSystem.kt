@@ -41,6 +41,7 @@ class DrawSystem : IteratingSystem() {
         camera.position.lerp(Vector3(position.x, position.y, 0f), 0.1f)
         camera.update()
     }
+
     private lateinit var texture: Texture
 
     override fun initialize() {

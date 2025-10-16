@@ -4,13 +4,13 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import ecs.components.Client
 import event.Event
+import models.SendType
 import org.example.core.eventbus.event.BusEvent
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Physics
 import org.example.ecs.components.Size
 import org.example.ecs.components.StaticPosition
 import tools.artemis.systems.IteratingTaskSystem
-import tools.eventbus.annotation.EventCallback
 
 @All(Client::class)
 class EventSystem: IteratingTaskSystem() {
@@ -21,7 +21,7 @@ class EventSystem: IteratingTaskSystem() {
     private lateinit var physicsMapper: ComponentMapper<Physics>
     private lateinit var sizeMapper: ComponentMapper<Size>
 
-    override fun end() {
+    override fun begin() {
         getAddTasks().forEach { it.invoke() }
         clearTasks()
     }
@@ -42,7 +42,8 @@ class EventSystem: IteratingTaskSystem() {
                 entityId = id,
                 x = entityBody.position.x,
                 y = entityBody.position.y
-            )
+            ),
+            sendType = SendType.UDP
         )
     }
 
@@ -76,7 +77,6 @@ class EventSystem: IteratingTaskSystem() {
         }
     }
 
-    @EventCallback
     fun showEntities(busEvent: BusEvent.ShowEntities){
         val client = clientMapper[busEvent.entityId]?: return
         client.addEntities(busEvent.entities)
@@ -85,7 +85,6 @@ class EventSystem: IteratingTaskSystem() {
         }
     }
 
-    @EventCallback
     fun hideEntities(busEvent: BusEvent.HideEntities) {
         val client = clientMapper[busEvent.entityId] ?: return
         client.removeEntities(busEvent.entities)

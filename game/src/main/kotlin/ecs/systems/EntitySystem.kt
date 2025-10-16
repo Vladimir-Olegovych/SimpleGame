@@ -6,13 +6,10 @@ import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.utils.IntMap
 import ecs.components.EntityModel
-import ecs.components.Player
 import ecs.components.EntityPosition
+import ecs.components.Player
 import ecs.components.Size
 import event.Event
-import models.eventbus.BusEvent
-import tools.eventbus.annotation.EventCallback
-import tools.eventbus.annotation.EventType
 import type.EntityType
 
 @All(EntityModel::class)
@@ -20,62 +17,51 @@ class EntitySystem(): IteratingSystem() {
 
     @Wire private lateinit var player: Player
 
-    private var maxDistance = 32F
+    private var maxDistance = Float.MAX_VALUE
     private val entityMap = IntMap<Int>()
     private lateinit var entityMapper: ComponentMapper<EntityModel>
     private lateinit var entityPositionMapper: ComponentMapper<EntityPosition>
     private lateinit var sizeMapper: ComponentMapper<Size>
 
-    @EventType(BusEvent.FIELD_EVENT)
-    @EventCallback
-    private fun onReceiveEntity(busEvent: BusEvent.OnReceive<Event.Entity>){
+    fun setEntity(event: Event.Entity){
         val entity: EntityModel
-        if (entityMap[busEvent.event.entityId] == null) {
+        if (entityMap[event.entityId] == null) {
             val newId = world.create()
             entity = entityMapper.create(newId)
-            entityMap.put(busEvent.event.entityId, newId)
+            entityMap.put(event.entityId, newId)
         } else {
-            entity = entityMapper[entityMap[busEvent.event.entityId]]
+            entity = entityMapper[entityMap[event.entityId]]
         }
-        entity.entityType = busEvent.event.entityType
+        entity.entityType = event.entityType
     }
 
-    @EventType(BusEvent.FIELD_EVENT)
-    @EventCallback
-    private fun onReceivePosition(busEvent: BusEvent.OnReceive<Event.Position>){
-        val entityPosition = entityPositionMapper[entityMap[busEvent.event.entityId]]?: run {
-            entityPositionMapper.create(entityMap[busEvent.event.entityId])
+    fun setPosition(event: Event.Position){
+        val entityPosition = entityPositionMapper[entityMap[event.entityId]]?: run {
+            entityPositionMapper.create(entityMap[event.entityId])
         }
-        entityPosition.setPosition(busEvent.event.x, busEvent.event.y)
+        entityPosition.setPosition(event.x, event.y)
     }
 
-    @EventType(BusEvent.FIELD_EVENT)
-    @EventCallback
-    private fun onReceiveSize(busEvent: BusEvent.OnReceive<Event.Size>){
-        val size = sizeMapper[entityMap[busEvent.event.entityId]]?: run {
-            sizeMapper.create(entityMap[busEvent.event.entityId])
+    fun setSize(event: Event.Size){
+        val size = sizeMapper[entityMap[event.entityId]]?: run {
+            sizeMapper.create(entityMap[event.entityId])
         }
-        size.radius = busEvent.event.radius
-        size.halfWidth = busEvent.event.halfWidth
-        size.halfHeight = busEvent.event.halfHeight
+        size.radius = event.radius
+        size.halfWidth = event.halfWidth
+        size.halfHeight = event.halfHeight
     }
 
-    @EventType(BusEvent.FIELD_EVENT)
-    @EventCallback
-    private fun onReceiveCurrentChunkParams(busEvent: BusEvent.OnReceive<Event.CurrentChunkParams>){
-        maxDistance = (busEvent.event.chunkSize * busEvent.event.chunkRadius) * 2 + busEvent.event.chunkRadius
+    fun setChunkParams(event: Event.CurrentChunkParams){
+        maxDistance = (event.chunkSize * event.chunkRadius) * 2 + event.chunkRadius
     }
 
-    @EventType(BusEvent.FIELD_EVENT)
-    @EventCallback
-    private fun onReceiveRemove(busEvent: BusEvent.OnReceive<Event.Remove>){
-        removeEntity(busEvent.event.entityId)
+
+    fun setRemove(event: Event.Remove){
+        removeEntity(event.entityId)
     }
 
-    @EventType(BusEvent.FIELD_EVENT)
-    @EventCallback
-    private fun onReceiveCurrentPlayer(busEvent: BusEvent.OnReceive<Event.CurrentPlayer>){
-        entityMap.put(busEvent.event.entityId, player.entityId)
+    fun setCurrentPlayer(event: Event.CurrentPlayer){
+        entityMap.put(event.entityId, player.entityId)
     }
 
     private fun removeEntity(entityId: Int){

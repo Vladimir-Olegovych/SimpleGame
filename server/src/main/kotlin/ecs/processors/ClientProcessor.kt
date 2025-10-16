@@ -71,7 +71,7 @@ class ClientProcessor(private val serverEventBus: ServerEventBus): GameProcessor
     }
 
     private fun getEntityId(connection: Connection): Int? {
-        return (serverEventBus.sendEvent(BusEvent.ConnectionToId(connection)) as? Int)
+        return clientSystem.connectionToId(connection)
     }
 
 }

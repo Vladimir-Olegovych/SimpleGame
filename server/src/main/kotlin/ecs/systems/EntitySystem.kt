@@ -7,8 +7,6 @@ import com.artemis.systems.IteratingSystem
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
 import org.example.ecs.components.*
-import tools.eventbus.annotation.EventCallback
-import kotlin.random.Random
 
 @All(EntityModel::class)
 class EntitySystem: IteratingSystem() {
@@ -20,7 +18,6 @@ class EntitySystem: IteratingSystem() {
     private lateinit var sizeMapper: ComponentMapper<Size>
     private lateinit var moveMapper: ComponentMapper<Move>
 
-    @EventCallback
     fun createEntity(busEvent: BusEvent.CreateEntity){
         val entity = entityMapper.create(busEvent.entityId)
         entity.isObserver = busEvent.isObserver
@@ -44,7 +41,6 @@ class EntitySystem: IteratingSystem() {
         }
     }
 
-    @EventCallback
     fun removeEntity(busEvent: BusEvent.RemoveEntity) {
         entityMapper.remove(busEvent.entityId)
         staticPositionMapper.remove(busEvent.entityId)

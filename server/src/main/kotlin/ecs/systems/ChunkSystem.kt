@@ -10,7 +10,6 @@ import org.example.core.models.ServerPreference
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Physics
 import org.example.ecs.processors.ChunkProcessor
-import tools.eventbus.annotation.EventCallback
 
 @All(EntityModel::class)
 class ChunkSystem: IteratingSystem() {
@@ -21,12 +20,10 @@ class ChunkSystem: IteratingSystem() {
     private lateinit var physicsMapper: ComponentMapper<Physics>
     private lateinit var entityMapper: ComponentMapper<EntityModel>
 
-    @EventCallback
     fun removeEntityChunk(busEvent: BusEvent.RemoveEntityChunk){
         chunkManager.remove(busEvent.entityId)
     }
 
-    @EventCallback
     fun applyEntityChunk(busEvent: BusEvent.ApplyEntityToChunk){
         val chunk = chunkManager.obtainChunk(busEvent.vector2)
         val entity = entityMapper[busEvent.entityId]

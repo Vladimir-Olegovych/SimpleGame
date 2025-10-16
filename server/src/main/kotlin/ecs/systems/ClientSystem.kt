@@ -6,13 +6,14 @@ import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.esotericsoftware.kryonet.Connection
 import ecs.components.Client
-import kotlinx.coroutines.*
 import event.Event
-import event.GamePaket
+import event.GamePacket
+import event.SendContainer
+import kotlinx.coroutines.*
+import models.SendType
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
 import org.example.ecs.processors.ClientProcessor
-import tools.eventbus.annotation.EventCallback
 
 @All(Client::class)
 class ClientSystem(): IteratingSystem() {
@@ -24,9 +25,8 @@ class ClientSystem(): IteratingSystem() {
 
     private lateinit var clientMapper: ComponentMapper<Client>
     private val playersMap = HashMap<Connection, Int>()
-    private val tasks = ArrayList<Deferred<Unit>>()
+    private val tasks = ArrayList<Deferred<Any?>>()
 
-    @EventCallback
     fun removeClient(busEvent: BusEvent.RemoveClient){
         val entityId = playersMap[busEvent.connection]?: return
         val client = clientMapper[entityId]
@@ -35,7 +35,6 @@ class ClientSystem(): IteratingSystem() {
         playersMap.remove(busEvent.connection)
     }
 
-    @EventCallback
     fun createClient(busEvent: BusEvent.CreateClient) {
         val entityId = world.create()
         playersMap[busEvent.connection] = entityId
@@ -55,9 +54,8 @@ class ClientSystem(): IteratingSystem() {
         )
     }
 
-    @EventCallback
-    fun connectionToId(busEvent: BusEvent.ConnectionToId): Int? {
-        return playersMap[busEvent.connection]
+    fun connectionToId(connection: Connection): Int? {
+        return playersMap[connection]
     }
 
     override fun initialize() {
@@ -74,20 +72,28 @@ class ClientSystem(): IteratingSystem() {
     override fun process(entityId: Int) {
         val client = clientMapper[entityId]?: return
         val events = client.getEvents()
-        val gamePaket = GamePaket(events.toTypedArray())
-        tasks.add(
-            scope.async { client.sendPaket(gamePaket) }
-        )
+
+        val tcpArray = events.filter { it.sendType == SendType.TCP }.map { it.data }.toTypedArray()
+        val udpArray = events.filter { it.sendType == SendType.UDP }.map { it.data }.toTypedArray()
+
+        client.sendPaket(SendContainer(GamePacket(tcpArray), SendType.TCP))
+        client.sendPaket(SendContainer(GamePacket(udpArray), SendType.UDP))
+
         client.clearEvents()
     }
 
-    private fun Client.sendPaket(gamePaket: GamePaket){
-        if (gamePaket.events.isEmpty()) return
-        try {
-            this.connection?.sendTCP(gamePaket)
-        } catch (e: Throwable){
-            e.printStackTrace()
+    private fun Client.sendPaket(paket: SendContainer<GamePacket>){
+        val deferred = scope.async {
+            try {
+                when(paket.sendType) {
+                    SendType.TCP -> this@sendPaket.connection?.sendTCP(paket.data)
+                    SendType.UDP -> this@sendPaket.connection?.sendUDP(paket.data)
+                }
+            } catch (e: Throwable){
+                e.printStackTrace()
+            }
         }
+        tasks.add(deferred)
     }
 }
 

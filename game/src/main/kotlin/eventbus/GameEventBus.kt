@@ -1,14 +1,14 @@
 package eventbus
 
 import com.esotericsoftware.kryonet.Connection
-import event.GamePaket
+import event.GamePacket
 import models.eventbus.BusEvent
 import tools.eventbus.EventBus
 import tools.kyro.common.GameNetworkListener
 
 class GameEventBus: EventBus<BusEvent>() {
 
-    private val listener = object : GameNetworkListener<GamePaket>() {
+    private val listener = object : GameNetworkListener<GamePacket>() {
         override fun onConnected(connection: Connection) {
             sendEvent(BusEvent.ProcessorEvent.OnConnected(connection))
         }
@@ -18,12 +18,12 @@ class GameEventBus: EventBus<BusEvent>() {
             connection.close()
         }
 
-        override fun onReceive(connection: Connection, value: GamePaket) {
+        override fun onReceive(connection: Connection, value: GamePacket) {
             sendEvent(BusEvent.ProcessorEvent.OnGamePaket(connection, value))
         }
 
     }
 
-    fun getListener(): GameNetworkListener<GamePaket> = listener
+    fun getListener(): GameNetworkListener<GamePacket> = listener
 
 }

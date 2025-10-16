@@ -10,7 +10,6 @@ import org.example.core.models.ServerPreference
 import org.example.ecs.components.Physics
 import org.example.ecs.components.Size
 import tools.artemis.systems.BaseTaskSystem
-import tools.eventbus.annotation.EventCallback
 import tools.physics.createCircleEntity
 import tools.physics.setSensorRadius
 
@@ -22,7 +21,6 @@ class PhysicsSystem: BaseTaskSystem() {
     private lateinit var sizeMapper: ComponentMapper<Size>
     private lateinit var physicsMapper: ComponentMapper<Physics>
 
-    @EventCallback
     fun createBody(busEvent: BusEvent.CreateBody) {
         val physics = physicsMapper.get(busEvent.entityId)?: return
         val size = sizeMapper.get(busEvent.entityId)?: return
@@ -46,7 +44,6 @@ class PhysicsSystem: BaseTaskSystem() {
         }
     }
 
-    @EventCallback
     fun removeBody(busEvent: BusEvent.RemoveBody) {
         val physics = physicsMapper.get(busEvent.entityId)?: return
         val body = physics.body?: return
@@ -56,7 +53,6 @@ class PhysicsSystem: BaseTaskSystem() {
         }
     }
 
-    @EventCallback
     fun pauseBody(busEvent: BusEvent.PauseBody) {
         val physics = physicsMapper.get(busEvent.entityId)?: return
         addTask {
@@ -65,7 +61,6 @@ class PhysicsSystem: BaseTaskSystem() {
         }
     }
 
-    @EventCallback
     fun resumeBody(busEvent: BusEvent.ResumeBody) {
         val physics = physicsMapper.get(busEvent.entityId)?: return
         addTask {

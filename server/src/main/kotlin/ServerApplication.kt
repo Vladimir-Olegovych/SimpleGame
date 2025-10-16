@@ -3,6 +3,7 @@ package org.example
 import com.artemis.World
 import event.Event
 import org.example.core.eventbus.ServerEventBus
+import org.example.core.getType
 import org.example.core.models.ServerPreference
 import org.example.ecs.processors.ChunkProcessor
 import org.example.ecs.processors.ClientProcessor
@@ -39,7 +40,7 @@ class ServerApplication(
 
     init {
         serverEventBus.addHandlers(processors)
-        serverEventBus.addHandlers(systems)
+        serverEventBus.addHandler(systems.getType<MoveSystem>())
     }
 
     private val artemisWorld: World = ArtemisWorldBuilder()

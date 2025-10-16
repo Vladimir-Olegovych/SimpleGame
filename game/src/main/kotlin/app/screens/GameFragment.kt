@@ -15,7 +15,7 @@ import ecs.systems.DrawSystem
 import ecs.systems.EntitySystem
 import ecs.systems.InputSystem
 import eventbus.GameEventBus
-import event.GamePaket
+import event.GamePacket
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.input.CycleInputProcessor
 import tools.graphics.screens.fragment.Fragment
@@ -29,7 +29,7 @@ class GameFragment(
     private val onDisconnect: () -> Unit
 ): Fragment() {
 
-    @Inject lateinit var gameClient: GameClient<GamePaket>
+    @Inject lateinit var gameClient: GameClient<GamePacket>
     @Inject lateinit var assetManager: AssetManager
     @Inject lateinit var shapeRenderer: ShapeRenderer
     @Inject lateinit var spriteBatch: SpriteBatch
@@ -42,19 +42,18 @@ class GameFragment(
 
 
     override fun onCreate(game: Game) {
+
+        val entitySystem = EntitySystem()
+
         val clientProcessor = ClientProcessor(
-            gameEventBus = eventBus,
+            entitySystem = entitySystem,
             onDisconnect = onDisconnect
         )
 
         val inputSystem = InputSystem()
         val drawSystem = DrawSystem()
-        val entitySystem = EntitySystem()
 
         eventBus.addHandler(clientProcessor)
-        eventBus.addHandler(inputSystem)
-        eventBus.addHandler(drawSystem)
-        eventBus.addHandler(entitySystem)
 
         inputProcessor.addProcessor(inputSystem)
         artemisWorld = ArtemisWorldBuilder()

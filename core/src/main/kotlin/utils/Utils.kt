@@ -2,7 +2,7 @@ package utils
 
 import com.esotericsoftware.kryo.Kryo
 import event.Event
-import event.GamePaket
+import event.GamePacket
 import type.EntityType
 
 fun Kryo.registerAllEvents(){
@@ -10,7 +10,7 @@ fun Kryo.registerAllEvents(){
 
     kryo.register(Event::class.java)
     kryo.register(Array<Event>::class.java)
-    kryo.register(GamePaket::class.java)
+    kryo.register(GamePacket::class.java)
 
     kryo.register(EntityType::class.java)
 

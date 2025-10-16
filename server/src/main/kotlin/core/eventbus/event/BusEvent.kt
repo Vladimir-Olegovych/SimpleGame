@@ -17,7 +17,6 @@ sealed class BusEvent {
 
     data class CreateClient(val connection: Connection): BusEvent()
     data class RemoveClient(val connection: Connection): BusEvent()
-    data class ConnectionToId(val connection: Connection): BusEvent()
 
     data class CreateEntity(val entityId: Int,
                             val entityType: EntityType,
