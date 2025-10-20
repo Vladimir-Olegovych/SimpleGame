@@ -39,7 +39,7 @@ class ServerWorldGenerator(
     }
 
     private fun onCreateEntity(chunk: Chunk, position: Vector2, randInt: Int) {
-        //onGenerateFloor(position)
+        onGenerateFloor(position)
         if (randInt >= 10) return
         onGenerateEntity(position)
     }
@@ -81,6 +81,9 @@ class ServerWorldGenerator(
             BusEvent.ApplyEntityToChunk(
                 entityId, position
             )
+        )
+        physicsSystem.pauseBody(
+            BusEvent.PauseBody(entityId)
         )
     }
 }

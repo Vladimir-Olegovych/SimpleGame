@@ -5,7 +5,6 @@ import app.screens.GameFragment
 import app.screens.MainFragment
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -13,11 +12,10 @@ import di.components.AppComponent
 import di.components.DaggerAppComponent
 import event.GamePacket
 import models.ClientPreference
+import textures.SkinID
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.screens.navigation.NavHostController
 import tools.graphics.screens.navigation.NavigationListener
-import tools.graphics.textures.SkinID
-import tools.graphics.textures.Textures
 import tools.kyro.client.GameClient
 import tools.preference.JsonPreference
 import values.GameValues
@@ -38,7 +36,8 @@ class GameApplication: Game() {
         appComponent.inject(this)
 
         SkinID.entries.forEach { assetManager.load(it.path, Skin::class.java) }
-        assetManager.load(Textures.FLOOR.path, Texture::class.java)
+        //assetManager.load(Textures.FLOOR.path, Texture::class.java)
+
         assetManager.finishLoading()
 
         val navHostController = NavHostController<Navigation>(this)

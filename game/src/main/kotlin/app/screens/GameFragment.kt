@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.Viewport
 import ecs.components.Player
 import ecs.processors.ClientProcessor
-import ecs.systems.DrawSystem
+import ecs.systems.draw.DrawSystem
 import ecs.systems.EntitySystem
 import ecs.systems.InputSystem
 import eventbus.GameEventBus

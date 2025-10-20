@@ -32,7 +32,9 @@ class EntitySystem(): IteratingSystem() {
         } else {
             entity = entityMapper[entityMap[event.entityId]]
         }
+        entity.isStatic = event.isStatic
         entity.entityType = event.entityType
+        updateEntityTime(entityMap[event.entityId])
     }
 
     fun setPosition(event: Event.Position){
@@ -40,6 +42,7 @@ class EntitySystem(): IteratingSystem() {
             entityPositionMapper.create(entityMap[event.entityId])
         }
         entityPosition.setPosition(event.x, event.y)
+        updateEntityTime(entityMap[event.entityId])
     }
 
     fun setSize(event: Event.Size){
@@ -49,6 +52,7 @@ class EntitySystem(): IteratingSystem() {
         size.radius = event.radius
         size.halfWidth = event.halfWidth
         size.halfHeight = event.halfHeight
+        updateEntityTime(entityMap[event.entityId])
     }
 
     fun setChunkParams(event: Event.CurrentChunkParams){
@@ -62,6 +66,11 @@ class EntitySystem(): IteratingSystem() {
 
     fun setCurrentPlayer(event: Event.CurrentPlayer){
         entityMap.put(event.entityId, player.entityId)
+    }
+
+    private fun updateEntityTime(entityId: Int){
+        val entity = entityMapper[entityId]
+        entity.updateTime = System.currentTimeMillis()
     }
 
     private fun removeEntity(entityId: Int){
@@ -78,6 +87,13 @@ class EntitySystem(): IteratingSystem() {
 
     private fun processRemove(entityId: Int){
         if (player.entityId == entityId) return
+
+        val entity = entityMapper[entityId]?: return
+        if (!entity.isStatic && System.currentTimeMillis() - entity.updateTime > ENTITY_TIMEOUT) {
+            removeEntity(entityId)
+            return
+        }
+
         val entityPosition = entityPositionMapper[entityId]?.getServerPosition()?: return
         val playerPosition = entityPositionMapper[player.entityId]?.getServerPosition()?: return
 
@@ -103,5 +119,9 @@ class EntitySystem(): IteratingSystem() {
     override fun dispose() {
 
 
+    }
+
+    companion object {
+        const val ENTITY_TIMEOUT = 500L
     }
 }

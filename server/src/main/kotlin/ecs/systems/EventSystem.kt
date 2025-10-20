@@ -35,8 +35,12 @@ class EventSystem: IteratingTaskSystem() {
 
     private fun Client.processEntityPosition(id: Int){
         val physics = physicsMapper[id]?: return
+        val entity = entityMapper[id]?: return
         val entityBody = physics.body?: return
+
+        if (entity.isStatic) return
         if (!entityBody.isActive) return
+
         addEvent(
             Event.Position(
                 entityId = id,
@@ -52,6 +56,7 @@ class EventSystem: IteratingTaskSystem() {
         addEvent(
             Event.Entity(
                 entityId = id,
+                isStatic = entity.isStatic,
                 entityType = entity.entityType
             )
         )

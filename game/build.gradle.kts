@@ -14,7 +14,7 @@ repositories {
 dependencies {
     implementation(kotlin("reflect"))
 
-    implementation(files("/home/vladimir/Documents/Projects/kotlin/Game-v1-library/build/libs/Game-v1-library-1.0-SNAPSHOT-all.jar"))
+    implementation(files("/home/vladimir/Documents/Projects/Kotlin/Game-v1-library/build/libs/Game-v1-library-1.0-SNAPSHOT-all.jar"))
     api(project(":core"))
 
     api("com.badlogicgames.gdx:gdx-freetype:1.13.1")

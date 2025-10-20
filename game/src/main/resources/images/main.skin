@@ -26,10 +26,10 @@
   }
   ImageButtonStyle: {
     play: {
-      up: btn_play,
+      up: ic_play_button,
     }
     default: {
-      up: btn_play
+      up: ic_play_button
     }
   }
   LabelStyle: {

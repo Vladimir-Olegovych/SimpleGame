@@ -22,7 +22,7 @@ dependencies {
     implementation(kotlin("reflect"))
 
     api(project(":core"))
-    implementation(files("/home/vladimir/Documents/Projects/kotlin/Game-v1-library/build/libs/Game-v1-library-1.0-SNAPSHOT-all.jar"))
+    implementation(files("/home/vladimir/Documents/Projects/Kotlin/Game-v1-library/build/libs/Game-v1-library-1.0-SNAPSHOT-all.jar"))
     implementation(files("../libs/GameServerUtils.jar"))
     implementation(files("../libs/CommonUtils.jar"))
 

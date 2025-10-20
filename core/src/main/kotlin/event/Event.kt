@@ -13,6 +13,7 @@ class GamePacket(val events: Array<Event> = emptyArray())
 sealed class Event {
 
     class Entity(val entityId: Int = 0,
+                 val isStatic: Boolean = false,
                  val entityType: EntityType = EntityType.NULL): Event()
 
     class Size(val entityId: Int = 0,

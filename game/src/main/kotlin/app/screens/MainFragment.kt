@@ -15,10 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.Viewport
+import textures.SkinID
 import tools.graphics.fillDraw
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.setOnClickListener
-import tools.graphics.textures.SkinID
 import javax.inject.Inject
 
 class MainFragment(
@@ -36,7 +36,7 @@ class MainFragment(
     init { Gdx.gl.glClearColor(255F/255F, 255F/255F, 255/255F, 1F) }
 
     override fun onCreate(game: Game) {
-        backgroundTexture = assetManager.get<TextureAtlas>("images/main.atlas").findRegion("menu")
+        backgroundTexture = assetManager.get<TextureAtlas>("images/main.atlas").findRegion("ic_menu_background")
         val skin = assetManager.get<Skin>(SkinID.MAIN.path)
         val menuTable = Table().apply {
             setFillParent(true)

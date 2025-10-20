@@ -31,7 +31,7 @@ class EntitySystem: IteratingSystem() {
         size.halfHeight = serverPreference.blockSize / 2F
 
         if(entity.isPhysical) {
-            moveMapper.create(busEvent.entityId)
+            val move = moveMapper.create(busEvent.entityId)
             physicsMapper.create(busEvent.entityId)
         }
 
