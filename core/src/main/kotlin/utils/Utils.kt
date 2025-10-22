@@ -3,6 +3,7 @@ package utils
 import com.esotericsoftware.kryo.Kryo
 import event.Event
 import event.GamePacket
+import models.TextureType
 import type.EntityType
 
 fun Kryo.registerAllEvents(){
@@ -12,6 +13,7 @@ fun Kryo.registerAllEvents(){
     kryo.register(Array<Event>::class.java)
     kryo.register(GamePacket::class.java)
 
+    kryo.register(TextureType::class.java)
     kryo.register(EntityType::class.java)
 
     kryo.register(Event.Entity::class.java)

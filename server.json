@@ -1,7 +1,7 @@
 {
   "sensorRadius" : 1.0,
   "maxSpeed" : 4.05,
-  "chunkRadius" : 2,
+  "chunkRadius" : 4,
   "blockSize" : 1,
-  "chunkSize" : 8
+  "chunkSize" : 4
 }

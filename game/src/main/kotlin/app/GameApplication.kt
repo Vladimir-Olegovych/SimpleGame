@@ -11,14 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import di.components.AppComponent
 import di.components.DaggerAppComponent
 import event.GamePacket
-import models.ClientPreference
-import textures.SkinID
+import core.models.ClientPreference
+import core.textures.SkinID
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.screens.navigation.NavHostController
 import tools.graphics.screens.navigation.NavigationListener
 import tools.kyro.client.GameClient
 import tools.preference.JsonPreference
-import values.GameValues
+import core.values.GameValues
 import javax.inject.Inject
 
 class GameApplication: Game() {
@@ -35,7 +35,7 @@ class GameApplication: Game() {
         appComponent = DaggerAppComponent.create()
         appComponent.inject(this)
 
-        SkinID.entries.forEach { assetManager.load(it.path, Skin::class.java) }
+        SkinID.entries.forEach { assetManager.load(it.skin, Skin::class.java) }
         //assetManager.load(Textures.FLOOR.path, Texture::class.java)
 
         assetManager.finishLoading()

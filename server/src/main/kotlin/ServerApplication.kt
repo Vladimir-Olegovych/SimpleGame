@@ -17,7 +17,7 @@ import java.util.concurrent.Executor
 
 class ServerApplication(
     private val port: Int = 5000
-): LifecycleUpdater(), Executor {
+): LifecycleUpdater(1F / 30F), Executor {
     private val jsonPreference = JsonPreference("server", ServerPreference())
     private val serverPreferences = jsonPreference.getPreference()
 

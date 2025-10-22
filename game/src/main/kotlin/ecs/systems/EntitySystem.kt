@@ -34,6 +34,7 @@ class EntitySystem(): IteratingSystem() {
         }
         entity.isStatic = event.isStatic
         entity.entityType = event.entityType
+        entity.textureType = event.textureType
         updateEntityTime(entityMap[event.entityId])
     }
 
@@ -107,8 +108,7 @@ class EntitySystem(): IteratingSystem() {
 
     override fun initialize() {
         player.entityId = world.create()
-        val entity = entityMapper.create(player.entityId)
-        entity.entityType = EntityType.PLAYER
+        entityMapper.create(player.entityId)
     }
 
     override fun process(entityId: Int) {

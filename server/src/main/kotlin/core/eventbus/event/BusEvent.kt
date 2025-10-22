@@ -4,6 +4,7 @@ import alexey.tools.common.collections.IntCollection
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
 import event.Event
+import models.TextureType
 import type.EntityType
 
 sealed class BusEvent {
@@ -20,6 +21,7 @@ sealed class BusEvent {
 
     data class CreateEntity(val entityId: Int,
                             val entityType: EntityType,
+                            val textureType: TextureType,
                             val isObserver: Boolean,
                             val isStatic: Boolean,
                             val isPhysical: Boolean,

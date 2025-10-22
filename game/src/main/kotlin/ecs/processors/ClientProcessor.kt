@@ -3,7 +3,7 @@ package ecs.processors
 import com.artemis.World
 import ecs.systems.EntitySystem
 import event.Event
-import models.eventbus.BusEvent
+import core.models.eventbus.BusEvent
 import tools.artemis.processor.GameProcessor
 import tools.eventbus.annotation.EventCallback
 

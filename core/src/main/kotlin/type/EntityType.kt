@@ -1,9 +1,9 @@
 package type
 
 enum class EntityType {
-    ENEMY,
-    PLAYER,
+    ENTITY,
     WALL,
-    GRASS,
+    FLOOR,
+    CEILING,
     NULL
 }

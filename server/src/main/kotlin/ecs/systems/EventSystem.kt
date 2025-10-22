@@ -57,6 +57,7 @@ class EventSystem: IteratingTaskSystem() {
             Event.Entity(
                 entityId = id,
                 isStatic = entity.isStatic,
+                textureType = entity.textureType,
                 entityType = entity.entityType
             )
         )

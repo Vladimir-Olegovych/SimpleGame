@@ -4,6 +4,7 @@ import alexey.tools.common.level.Chunk
 import com.artemis.World
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.math.Vector2
+import models.TextureType
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
 import org.example.ecs.systems.ChunkSystem
@@ -48,7 +49,8 @@ class ServerWorldGenerator(
         val entityId = artemisWorld.create()
         entitySystem.createEntity(BusEvent.CreateEntity(
             entityId = entityId,
-            entityType = EntityType.GRASS,
+            textureType = TextureType.GRASS,
+            entityType = EntityType.FLOOR,
             isObserver = false,
             isStatic = true,
             isPhysical = false,
@@ -65,7 +67,8 @@ class ServerWorldGenerator(
         val entityId = artemisWorld.create()
         entitySystem.createEntity(BusEvent.CreateEntity(
             entityId = entityId,
-            entityType = EntityType.ENEMY,
+            textureType = TextureType.ZOMBIE,
+            entityType = EntityType.ENTITY,
             isObserver = false,
             isStatic = false,
             isPhysical = true

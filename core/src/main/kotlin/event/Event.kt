@@ -1,6 +1,7 @@
 package event
 
 import models.SendType
+import models.TextureType
 import modificator.SendTypeModificator
 import type.EntityType
 
@@ -14,6 +15,7 @@ sealed class Event {
 
     class Entity(val entityId: Int = 0,
                  val isStatic: Boolean = false,
+                 val textureType: TextureType = TextureType.NULL,
                  val entityType: EntityType = EntityType.NULL): Event()
 
     class Size(val entityId: Int = 0,

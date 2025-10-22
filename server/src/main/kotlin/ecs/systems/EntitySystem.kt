@@ -23,6 +23,7 @@ class EntitySystem: IteratingSystem() {
         entity.isObserver = busEvent.isObserver
         entity.isPhysical = busEvent.isPhysical
         entity.isStatic = busEvent.isStatic
+        entity.textureType = busEvent.textureType
         entity.entityType = busEvent.entityType
 
         val size = sizeMapper.create(busEvent.entityId)

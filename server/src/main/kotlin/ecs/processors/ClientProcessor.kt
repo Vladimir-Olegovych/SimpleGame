@@ -4,6 +4,7 @@ import com.artemis.World
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
+import models.TextureType
 import org.example.core.eventbus.ServerEventBus
 import org.example.core.eventbus.event.BusEvent
 import org.example.ecs.systems.ChunkSystem
@@ -31,7 +32,8 @@ class ClientProcessor(private val serverEventBus: ServerEventBus): GameProcessor
 
         entitySystem.createEntity(BusEvent.CreateEntity(
             entityId = entityId,
-            entityType = EntityType.PLAYER,
+            textureType = TextureType.PLAYER,
+            entityType = EntityType.ENTITY,
             isObserver = true,
             isStatic = false,
             isPhysical = true

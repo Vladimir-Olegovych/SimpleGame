@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.Viewport
 import dagger.Module
 import dagger.Provides
-import eventbus.GameEventBus
+import core.eventbus.GameEventBus
 import kotlinx.coroutines.asCoroutineDispatcher
 import event.GamePacket
 import tools.kyro.client.GameClient
