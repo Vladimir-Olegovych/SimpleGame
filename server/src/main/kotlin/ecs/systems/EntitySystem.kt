@@ -27,9 +27,10 @@ class EntitySystem: IteratingSystem() {
         entity.entityType = busEvent.entityType
 
         val size = sizeMapper.create(busEvent.entityId)
-        size.radius = serverPreference.blockSize / 2F
-        size.halfWidth = serverPreference.blockSize / 2F
-        size.halfHeight = serverPreference.blockSize / 2F
+        val halfSize = serverPreference.blockSize / 2F
+        size.radius = halfSize
+        size.halfWidth = halfSize
+        size.halfHeight = halfSize
 
         if(entity.isPhysical) {
             val move = moveMapper.create(busEvent.entityId)

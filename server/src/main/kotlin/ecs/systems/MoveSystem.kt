@@ -26,13 +26,13 @@ class MoveSystem: IteratingSystem() {
     fun applyForceToBody(busEvent: BusEvent.OnReceiveId<Event.CurrentPlayerVelocity>){
         val move = moveMapper[busEvent.entityId]?: return
         when {
-            busEvent.event.x > 0 -> move.vector.x = serverPreference.maxSpeed
-            busEvent.event.x < 0 -> move.vector.x = -serverPreference.maxSpeed
+            busEvent.event.x > 0 -> move.vector.x = serverPreference.maxPlayerSpeed
+            busEvent.event.x < 0 -> move.vector.x = -serverPreference.maxPlayerSpeed
             else -> move.vector.x = 0F
         }
         when {
-            busEvent.event.y > 0 -> move.vector.y = serverPreference.maxSpeed
-            busEvent.event.y < 0 -> move.vector.y = -serverPreference.maxSpeed
+            busEvent.event.y > 0 -> move.vector.y = serverPreference.maxPlayerSpeed
+            busEvent.event.y < 0 -> move.vector.y = -serverPreference.maxPlayerSpeed
             else -> move.vector.y = 0F
         }
     }

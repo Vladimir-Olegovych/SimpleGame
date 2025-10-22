@@ -6,6 +6,7 @@ import com.artemis.annotations.Wire
 import com.badlogic.gdx.math.Vector2
 import models.TextureType
 import org.example.core.eventbus.event.BusEvent
+import org.example.core.models.BodyType
 import org.example.core.models.ServerPreference
 import org.example.ecs.systems.ChunkSystem
 import org.example.ecs.systems.EntitySystem
@@ -41,8 +42,10 @@ class ServerWorldGenerator(
 
     private fun onCreateEntity(chunk: Chunk, position: Vector2, randInt: Int) {
         onGenerateFloor(position)
-        if (randInt >= 10) return
-        onGenerateEntity(position)
+        when(randInt) {
+            0 -> onGenerateEntity(position)
+            1 -> onGenerateBlock(position)
+        }
     }
 
     private fun onGenerateFloor(position: Vector2){
@@ -77,6 +80,42 @@ class ServerWorldGenerator(
             BusEvent.CreateBody(
                 entityId = entityId,
                 vector2 = position,
+                bodyType = BodyType.CIRCLE,
+                isEnabled = false
+            )
+        )
+        chunkSystem.applyEntityChunk(
+            BusEvent.ApplyEntityToChunk(
+                entityId, position
+            )
+        )
+        physicsSystem.pauseBody(
+            BusEvent.PauseBody(entityId)
+        )
+    }
+    private fun onGenerateBlock(position: Vector2){
+        val entityId = artemisWorld.create()
+        val randTexture = when(Random.nextInt(0, 4)) {
+            0 -> TextureType.LAVA
+            1 -> TextureType.STONE
+            2 -> TextureType.GRASS
+            else -> TextureType.NULL
+        }
+
+        entitySystem.createEntity(BusEvent.CreateEntity(
+            entityId = entityId,
+            textureType = randTexture,
+            entityType = EntityType.WALL,
+            isObserver = false,
+            isStatic = true,
+            isPhysical = true,
+            position = position
+        ))
+        physicsSystem.createBody(
+            BusEvent.CreateBody(
+                entityId = entityId,
+                vector2 = position,
+                bodyType = BodyType.SQUARE,
                 isEnabled = false
             )
         )

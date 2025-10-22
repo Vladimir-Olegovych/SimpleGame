@@ -1,0 +1,7 @@
+entity.png
+size:32,16
+repeat:none
+ic_player_entity
+bounds:2,2,10,10
+ic_zombie_entity
+bounds:14,2,10,10

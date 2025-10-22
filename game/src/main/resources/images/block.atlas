@@ -1,9 +1,9 @@
 block.png
-size:512,128
+size:64,16
 repeat:none
 ic_grass_block
-bounds:104,2,100,100
+bounds:14,2,10,10
 ic_lava_block
-bounds:2,2,100,100
+bounds:2,2,10,10
 ic_stone_block
-bounds:206,2,100,100
+bounds:26,2,10,10

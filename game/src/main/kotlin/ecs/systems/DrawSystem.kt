@@ -6,13 +6,12 @@ import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector3
+import core.getRegion
 import core.textures.SkinID
 import ecs.components.EntityModel
 import ecs.components.EntityPosition
@@ -27,8 +26,6 @@ class DrawSystem : IteratingSystem() {
 
     @Wire
     private lateinit var player: Player
-    @Wire
-    private lateinit var renderer: ShapeRenderer
     @Wire
     private lateinit var camera: OrthographicCamera
     @Wire
@@ -50,10 +47,12 @@ class DrawSystem : IteratingSystem() {
 
     override fun initialize() {
         textureMap = mapOf(
-
-            TextureType.GRASS to assetManager.get<TextureAtlas>(SkinID.BLOCK.atlas).findRegion("ic_grass_block"),
-            TextureType.LAVA to assetManager.get<TextureAtlas>(SkinID.BLOCK.atlas).findRegion("ic_lava_block"),
-            TextureType.STONE to assetManager.get<TextureAtlas>(SkinID.BLOCK.atlas).findRegion("ic_stone_block"),
+            TextureType.NULL to assetManager.getRegion(SkinID.MAIN, "ic_error_texture"),
+            TextureType.GRASS to assetManager.getRegion(SkinID.BLOCK, "ic_grass_block"),
+            TextureType.LAVA to assetManager.getRegion(SkinID.BLOCK, "ic_lava_block"),
+            TextureType.STONE to assetManager.getRegion(SkinID.BLOCK, "ic_stone_block"),
+            TextureType.PLAYER to assetManager.getRegion(SkinID.ENTITY, "ic_player_entity"),
+            TextureType.ZOMBIE to assetManager.getRegion(SkinID.ENTITY, "ic_zombie_entity"),
         )
     }
 
@@ -83,28 +82,19 @@ class DrawSystem : IteratingSystem() {
     private fun drawEntity(entityId: Int){
         val entity = entityMapper[entityId]?: return
         val size = sizeMapper[entityId]?: return
-        val texture = textureMap[entity.textureType]
+        val texture = textureMap[entity.textureType]?: return
         val position = entityPositionMapper[entityId]?.let {
             if (entity.isStatic) it.getServerPosition() else it.getInterpolatedPosition()
         }?: return
-
-        if (entity.entityType == EntityType.FLOOR) {
-            spriteBatch.projectionMatrix = camera.combined
-            spriteBatch.begin()
-            spriteBatch.draw(
-                texture,
-                position.x - size.halfWidth,
-                position.y - size.halfHeight,
-                size.halfWidth * 2 + 0.01F,
-                size.halfHeight * 2 + 0.01F
-            )
-            spriteBatch.end()
-            return
-        }
-        renderer.projectionMatrix = camera.combined
-        renderer.begin(ShapeRenderer.ShapeType.Filled)
-        renderer.color = Color.BLUE
-        renderer.circle(position.x, position.y, size.radius, 36)
-        renderer.end()
+        spriteBatch.projectionMatrix = camera.combined
+        spriteBatch.begin()
+        spriteBatch.draw(
+            texture,
+            position.x - size.halfWidth,
+            position.y - size.halfHeight,
+            size.halfWidth * 2 + 0.01F,
+            size.halfHeight * 2 + 0.01F
+        )
+        spriteBatch.end()
     }
 }

@@ -31,7 +31,6 @@ class GameFragment(
 
     @Inject lateinit var gameClient: GameClient<GamePacket>
     @Inject lateinit var assetManager: AssetManager
-    @Inject lateinit var shapeRenderer: ShapeRenderer
     @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var camera: OrthographicCamera
     @Inject lateinit var viewport: Viewport
@@ -62,7 +61,6 @@ class GameFragment(
             .addSystem(entitySystem)
             .addObject(Player())
             .addObject(gameClient)
-            .addObject(shapeRenderer)
             .addObject(spriteBatch)
             .addObject(camera)
             .addObject(assetManager)

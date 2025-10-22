@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
 import event.Event
 import models.TextureType
+import org.example.core.models.BodyType
 import type.EntityType
 
 sealed class BusEvent {
@@ -29,7 +30,16 @@ sealed class BusEvent {
 
     data class RemoveEntity(val entityId: Int): BusEvent()
 
-    data class CreateBody(val entityId: Int, val isEnabled: Boolean, val vector2: Vector2): BusEvent()
+    data class CreateBody(val entityId: Int,
+                          val isEnabled: Boolean,
+                          val linearDamping: Float = 1F,
+                          val angularDamping: Float = 1F,
+                          val density: Float = 0.2F,
+                          val friction: Float = 1.3F,
+                          val restitution: Float = 1F,
+                          val bodyType: BodyType,
+                          val vector2: Vector2): BusEvent()
+
     data class RemoveBody(val entityId: Int): BusEvent()
     data class PauseBody(val entityId: Int): BusEvent()
     data class ResumeBody(val entityId: Int): BusEvent()

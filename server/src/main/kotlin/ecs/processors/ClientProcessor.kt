@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Connection
 import models.TextureType
 import org.example.core.eventbus.ServerEventBus
 import org.example.core.eventbus.event.BusEvent
+import org.example.core.models.BodyType
 import org.example.ecs.systems.ChunkSystem
 import org.example.ecs.systems.ClientSystem
 import org.example.ecs.systems.EntitySystem
@@ -44,6 +45,7 @@ class ClientProcessor(private val serverEventBus: ServerEventBus): GameProcessor
         physicsSystem.createBody(BusEvent.CreateBody(
             entityId = entityId,
             vector2 = position,
+            bodyType = BodyType.CIRCLE,
             isEnabled = true
         ))
 
