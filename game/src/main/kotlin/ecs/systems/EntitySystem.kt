@@ -4,7 +4,9 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.IntMap
+import ecs.components.EntityAngle
 import ecs.components.EntityModel
 import ecs.components.EntityPosition
 import ecs.components.Player
@@ -16,12 +18,14 @@ import type.EntityType
 class EntitySystem(): IteratingSystem() {
 
     @Wire private lateinit var player: Player
+    @Wire private lateinit var camera: OrthographicCamera
 
     private var maxDistance = Float.MAX_VALUE
     private val entityMap = IntMap<Int>()
     private lateinit var entityMapper: ComponentMapper<EntityModel>
     private lateinit var entityPositionMapper: ComponentMapper<EntityPosition>
     private lateinit var sizeMapper: ComponentMapper<Size>
+    private lateinit var angleMapper: ComponentMapper<EntityAngle>
 
     fun setEntity(event: Event.Entity){
         val entity: EntityModel
@@ -53,6 +57,14 @@ class EntitySystem(): IteratingSystem() {
         size.radius = event.radius
         size.halfWidth = event.halfWidth
         size.halfHeight = event.halfHeight
+        updateEntityTime(entityMap[event.entityId])
+    }
+
+    fun setAngle(event: Event.Angle){
+        val angle = angleMapper[entityMap[event.entityId]]?: run {
+            angleMapper.create(entityMap[event.entityId])
+        }
+        angle.setAngle(event.angle)
         updateEntityTime(entityMap[event.entityId])
     }
 

@@ -10,9 +10,11 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 import core.getRegion
 import core.textures.SkinID
+import ecs.components.EntityAngle
 import ecs.components.EntityModel
 import ecs.components.EntityPosition
 import ecs.components.Player
@@ -35,6 +37,7 @@ class DrawSystem : IteratingSystem() {
     private lateinit var entityMapper: ComponentMapper<EntityModel>
     private lateinit var entityPositionMapper: ComponentMapper<EntityPosition>
     private lateinit var sizeMapper: ComponentMapper<Size>
+    private lateinit var angleMapper: ComponentMapper<EntityAngle>
 
     private lateinit var textureMap: Map<TextureType, TextureAtlas.AtlasRegion>
     private val drawQueue = mapOf(
@@ -83,17 +86,24 @@ class DrawSystem : IteratingSystem() {
         val entity = entityMapper[entityId]?: return
         val size = sizeMapper[entityId]?: return
         val texture = textureMap[entity.textureType]?: return
+        val angle = angleMapper[entityId]?.getServerAngle()?: 0F
         val position = entityPositionMapper[entityId]?.let {
             if (entity.isStatic) it.getServerPosition() else it.getInterpolatedPosition()
         }?: return
+
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
         spriteBatch.draw(
             texture,
             position.x - size.halfWidth,
             position.y - size.halfHeight,
+            size.halfWidth,
+            size.halfHeight,
             size.halfWidth * 2 + 0.01F,
-            size.halfHeight * 2 + 0.01F
+            size.halfHeight * 2 + 0.01F,
+            1f,
+            1f,
+            angle * MathUtils.radiansToDegrees
         )
         spriteBatch.end()
     }

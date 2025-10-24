@@ -35,7 +35,7 @@ class ServerWorldGenerator(
             onCreateEntity(
                 chunk = chunk,
                 position = position,
-                randInt = random.nextInt(0, 30)
+                randInt = random.nextInt(0, 10)
             )
         }
     }
@@ -95,10 +95,9 @@ class ServerWorldGenerator(
     }
     private fun onGenerateBlock(position: Vector2){
         val entityId = artemisWorld.create()
-        val randTexture = when(Random.nextInt(0, 4)) {
+        val randTexture = when(Random.nextInt(0, 3)) {
             0 -> TextureType.LAVA
             1 -> TextureType.STONE
-            2 -> TextureType.GRASS
             else -> TextureType.NULL
         }
 

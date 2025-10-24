@@ -51,8 +51,8 @@ class MainFragment(
             onStart.invoke()
         }
 
-        menuTable.add(play).height(10F).width(30F).row()
-        menuTable.add(Label("World of Fort Ships", skin))
+        menuTable.add(play).height(2F).width(5F).row()
+        //menuTable.add(Label("World of Fort Ships", skin))
 
         stage.addActor(menuTable)
         Gdx.input.inputProcessor = stage

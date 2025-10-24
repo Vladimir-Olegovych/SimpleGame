@@ -33,6 +33,7 @@ class ClientProcessor(
                 is Event.Entity -> entitySystem.setEntity(event = event)
                 is Event.Position -> entitySystem.setPosition(event = event)
                 is Event.Size -> entitySystem.setSize(event = event)
+                is Event.Angle -> entitySystem.setAngle(event = event)
                 is Event.CurrentChunkParams -> entitySystem.setChunkParams(event = event)
                 is Event.Remove -> entitySystem.setRemove(event = event)
                 is Event.CurrentPlayer -> entitySystem.setCurrentPlayer(event = event)

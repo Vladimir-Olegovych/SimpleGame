@@ -29,23 +29,32 @@ class EventSystem: IteratingTaskSystem() {
     override fun process(entityId: Int) {
         val client = clientMapper[entityId]?: return
         for (entityId in client.getEntities()) {
-            client.processEntityPosition(entityId)
+            client.processEntityBody(entityId)
         }
     }
 
-    private fun Client.processEntityPosition(id: Int){
+    private fun Client.processEntityBody(id: Int){
         val physics = physicsMapper[id]?: return
         val entity = entityMapper[id]?: return
         val entityBody = physics.body?: return
 
         if (entity.isStatic) return
         if (!entityBody.isActive) return
+        if (!entityBody.isAwake) return
 
         addEvent(
             Event.Position(
                 entityId = id,
                 x = entityBody.position.x,
                 y = entityBody.position.y
+            ),
+            sendType = SendType.UDP
+        )
+
+        addEvent(
+            Event.Angle(
+                entityId = id,
+                angle = physics.body?.angle?: 0F
             ),
             sendType = SendType.UDP
         )
