@@ -22,7 +22,7 @@ class ClientProcessor(
     }
 
     @EventCallback
-    private fun onGamePaket(busEvent: BusEvent.ProcessorEvent.OnGamePaket){
+    fun onGamePaket(busEvent: BusEvent.ProcessorEvent.OnGamePaket){
         val events = busEvent.paket.events
         for(event in events) {
             when (event){
