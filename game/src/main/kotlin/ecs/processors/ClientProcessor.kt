@@ -1,9 +1,8 @@
 package ecs.processors
 
-import com.artemis.World
+import core.models.eventbus.BusEvent
 import ecs.systems.EntitySystem
 import event.Event
-import core.models.eventbus.BusEvent
 import tools.artemis.processor.GameProcessor
 import tools.eventbus.annotation.EventCallback
 
@@ -12,9 +11,6 @@ class ClientProcessor(
     private val onDisconnect: () -> Unit
 ): GameProcessor {
 
-    override fun create(artemisWorld: World) {
-
-    }
     @EventCallback
     fun onConnected(busEvent: BusEvent.ProcessorEvent.OnConnected){
 

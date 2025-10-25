@@ -13,13 +13,11 @@ import kotlinx.coroutines.*
 import models.SendType
 import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
-import org.example.ecs.processors.ClientProcessor
 
 @All(Client::class)
 class ClientSystem(): IteratingSystem() {
 
     @Wire private lateinit var serverPreference: ServerPreference
-    @Wire private lateinit var clientProcessor: ClientProcessor
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
@@ -58,9 +56,7 @@ class ClientSystem(): IteratingSystem() {
         return playersMap[connection]
     }
 
-    override fun initialize() {
-        clientProcessor.create(world)
-    }
+    override fun initialize() {}
 
     override fun begin() {
         runBlocking {

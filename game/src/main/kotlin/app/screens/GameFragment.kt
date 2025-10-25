@@ -66,8 +66,6 @@ class GameFragment(
             .addObject(assetManager)
             .build()
 
-        clientProcessor.create(artemisWorld)
-
         Gdx.input.inputProcessor = inputProcessor
 
         gameClient.start(

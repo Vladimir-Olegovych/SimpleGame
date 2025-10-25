@@ -1,7 +1,5 @@
 package org.example.ecs.processors
 
-import com.artemis.World
-import com.artemis.annotations.Wire
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
 import models.TextureType
@@ -16,14 +14,13 @@ import tools.artemis.processor.GameProcessor
 import tools.eventbus.annotation.EventCallback
 import type.EntityType
 
-class ClientProcessor(private val serverEventBus: ServerEventBus): GameProcessor {
-
-    @Wire private lateinit var clientSystem: ClientSystem
-    @Wire private lateinit var entitySystem: EntitySystem
-    @Wire private lateinit var physicsSystem: PhysicsSystem
-    @Wire private lateinit var chunkSystem: ChunkSystem
-
-    override fun create(artemisWorld: World) {}
+class ClientProcessor(
+    private val serverEventBus: ServerEventBus,
+    private val clientSystem: ClientSystem,
+    private val entitySystem: EntitySystem,
+    private val physicsSystem: PhysicsSystem,
+    private val chunkSystem: ChunkSystem,
+): GameProcessor {
 
     @EventCallback
     private fun onConnected(busEvent: BusEvent.ProcessorEvent.OnConnected) {

@@ -3,35 +3,21 @@ package org.example.ecs.processors
 import alexey.tools.common.collections.IntCollection
 import alexey.tools.common.level.Chunk
 import alexey.tools.common.level.ChunkManager
-import com.artemis.World
-import com.artemis.annotations.Wire
-import org.example.core.chunks.ServerWorldGenerator
 import org.example.core.eventbus.event.BusEvent
-import org.example.core.models.ServerPreference
+import org.example.core.level.world.ServerWorldGenerator
 import org.example.ecs.systems.EventSystem
 import org.example.ecs.systems.PhysicsSystem
 import tools.artemis.processor.GameProcessor
 
 class ChunkProcessor(
-    private val serverPreferences: ServerPreference
+    private val physicsSystem: PhysicsSystem,
+    private val eventSystem: EventSystem,
+    private val chunkGenerator: ServerWorldGenerator
 ): ChunkManager.Listener, GameProcessor {
 
-    @Wire private lateinit var physicsSystem: PhysicsSystem
-    @Wire private lateinit var eventSystem: EventSystem
-    private lateinit var chunkGenerator: ServerWorldGenerator
-
-    override fun create(artemisWorld: World) {
-        chunkGenerator = ServerWorldGenerator(
-            artemisWorld = artemisWorld,
-            serverPreferences = serverPreferences
-        )
-        artemisWorld.inject(chunkGenerator)
-    }
-
     override fun onCreate(chunk: Chunk) {
-        chunkGenerator.applyChunkCreation(chunk)
+        chunkGenerator.generateChunk(chunk)
     }
-
 
     override fun onEnable(entities: IntCollection, activators: IntCollection, chunk: Chunk, first: Boolean) {
         if(first) for (entityId in entities){
