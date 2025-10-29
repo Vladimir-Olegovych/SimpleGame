@@ -7,28 +7,25 @@ import kotlin.math.exp
 
 class EntityPosition : Component() {
 
-    private var hasPosition = false
     private val serverPosition = Vector2(0f, 0f)
-    private val currentPosition = Vector2(0f, 0f)
-    private val interpolationSpeed = 20.0f
-
-    fun hasPosition(): Boolean = hasPosition
+    private var currentPosition: Vector2? = null
+    private val interpolationSpeed = 23.0f
 
     fun getServerPosition(): Vector2 = serverPosition.cpy()
 
     fun getInterpolatedPosition(): Vector2 {
+        val currentPosition = currentPosition?: serverPosition.cpy()
+
         val weight = 1 - exp(-interpolationSpeed * Gdx.graphics.deltaTime)
         currentPosition.x += (serverPosition.x - currentPosition.x) * weight
         currentPosition.y += (serverPosition.y - currentPosition.y) * weight
+
+        this.currentPosition = currentPosition
         return currentPosition.cpy()
     }
 
     fun setPosition(x: Float, y: Float) {
         serverPosition.x = x
         serverPosition.y = y
-        if (hasPosition) return
-        currentPosition.x = x
-        currentPosition.y = y
-        hasPosition = true
     }
 }
