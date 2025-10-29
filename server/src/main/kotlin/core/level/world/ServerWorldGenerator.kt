@@ -12,7 +12,11 @@ class ServerWorldGenerator(serverPreference: ServerPreference,
     chunkSize = serverPreference.chunkSize,
     blockSize = serverPreference.blockSize
 ){
-    private val seed: Int = Random.nextInt()
+    private val seed: Int = -1449399422 //Random.nextInt()
+
+    init {
+        println("World seed: $seed")
+    }
 
     override fun onGenerateChunk(
         chunk: Chunk,

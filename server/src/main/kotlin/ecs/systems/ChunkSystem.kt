@@ -5,9 +5,9 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import org.example.core.eventbus.event.BusEvent
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Physics
+import org.example.ecs.event.SystemEvent
 
 @All(EntityModel::class)
 class ChunkSystem: IteratingSystem() {
@@ -16,21 +16,21 @@ class ChunkSystem: IteratingSystem() {
     private lateinit var physicsMapper: ComponentMapper<Physics>
     private lateinit var entityMapper: ComponentMapper<EntityModel>
 
-    fun removeEntityChunk(busEvent: BusEvent.RemoveEntityChunk){
-        chunkManager.remove(busEvent.entityId)
+    fun removeEntityChunk(systemEvent: SystemEvent.RemoveEntityChunk){
+        chunkManager.remove(systemEvent.entityId)
     }
 
-    fun applyEntityChunk(busEvent: BusEvent.ApplyEntityToChunk){
-        val chunk = chunkManager.obtainChunk(busEvent.vector2)
-        val entity = entityMapper[busEvent.entityId]
-        chunk.add(busEvent.entityId, entity.isObserver)
+    fun applyEntityChunk(systemEvent: SystemEvent.ApplyEntityToChunk){
+        val chunk = chunkManager.obtainChunk(systemEvent.vector2)
+        val entity = entityMapper[systemEvent.entityId]
+        chunk.add(systemEvent.entityId, entity.isObserver)
     }
 
     override fun process(entityId: Int) {
         val physics = physicsMapper[entityId]?: return
         val body = physics.body?: return
 
-        if (!body.isActive) return
+        if (!body.isActive || !body.isAwake) return
         val currentChunk = chunkManager.getChunk(entityId)?: return
         val nextChunk = chunkManager.obtainChunk(body.position)
         if (nextChunk.getPosition() == currentChunk.getPosition()) return

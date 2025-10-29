@@ -1,29 +1,27 @@
 package ecs.processors
 
-import core.models.eventbus.BusEvent
+import com.esotericsoftware.kryonet.Connection
 import ecs.systems.EntitySystem
 import event.Event
+import event.GamePacket
 import tools.artemis.processor.GameProcessor
-import tools.eventbus.annotation.EventCallback
+import tools.kyro.common.GameNetworkListener
 
 class ClientProcessor(
     private val entitySystem: EntitySystem,
     private val onDisconnect: () -> Unit
-): GameProcessor {
+): GameProcessor, GameNetworkListener<GamePacket> {
 
-    @EventCallback
-    fun onConnected(busEvent: BusEvent.ProcessorEvent.OnConnected){
+    override fun onConnected(connection: Connection) {
 
     }
 
-    @EventCallback
-    fun onDisconnected(busEvent: BusEvent.ProcessorEvent.OnDisconnected){
+    override fun onDisconnected(connection: Connection) {
         onDisconnect.invoke()
     }
 
-    @EventCallback
-    fun onGamePaket(busEvent: BusEvent.ProcessorEvent.OnGamePaket){
-        val events = busEvent.paket.events
+    override fun onReceive(connection: Connection, value: GamePacket) {
+        val events = value.events
         for(event in events) {
             when (event){
                 is Event.Entity -> entitySystem.setEntity(event = event)
@@ -37,4 +35,5 @@ class ClientProcessor(
             }
         }
     }
+
 }

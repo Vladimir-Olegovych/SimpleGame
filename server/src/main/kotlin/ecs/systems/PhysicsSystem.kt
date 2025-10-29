@@ -4,13 +4,13 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.BodyType
 import org.example.core.models.FixtureType
 import org.example.core.models.ServerPreference
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Physics
 import org.example.ecs.components.Size
+import org.example.ecs.event.SystemEvent
 import tools.artemis.systems.BaseTaskSystem
 import tools.physics.setSensorRadius
 
@@ -23,13 +23,13 @@ class PhysicsSystem: BaseTaskSystem() {
     private lateinit var sizeMapper: ComponentMapper<Size>
     private lateinit var physicsMapper: ComponentMapper<Physics>
 
-    fun createBody(busEvent: BusEvent.CreateBody) {
-        val entity = entityMapper[busEvent.entityId]?: return
-        val physics = physicsMapper.get(busEvent.entityId)?: return
-        val size = sizeMapper.get(busEvent.entityId)?: return
+    fun createBody(systemEvent: SystemEvent.CreateBody) {
+        val entity = entityMapper[systemEvent.entityId]?: return
+        val physics = physicsMapper.get(systemEvent.entityId)?: return
+        val size = sizeMapper.get(systemEvent.entityId)?: return
 
         fun getShape(): Shape {
-            return when(busEvent.bodyType){
+            return when(systemEvent.bodyType){
                 BodyType.CIRCLE -> CircleShape().also { it.radius = size.radius }
                 BodyType.SQUARE -> PolygonShape().apply {
                     setAsBox(size.halfWidth, size.halfHeight, Vector2.Zero, 0F)
@@ -40,21 +40,21 @@ class PhysicsSystem: BaseTaskSystem() {
         addTask {
             val bDef =  BodyDef()
             bDef.type = if(entity.isStatic) BodyDef.BodyType.StaticBody else BodyDef.BodyType.DynamicBody
-            bDef.linearDamping = busEvent.linearDamping
-            bDef.angularDamping = busEvent.angularDamping
-            bDef.position.set(busEvent.vector2)
+            bDef.linearDamping = systemEvent.linearDamping
+            bDef.angularDamping = systemEvent.angularDamping
+            bDef.position.set(systemEvent.vector2)
 
             val fixtureDef = FixtureDef()
             fixtureDef.shape = getShape()
-            fixtureDef.density = busEvent.density
-            fixtureDef.friction = busEvent.friction
-            fixtureDef.restitution = busEvent.restitution
+            fixtureDef.density = systemEvent.density
+            fixtureDef.friction = systemEvent.friction
+            fixtureDef.restitution = systemEvent.restitution
 
             val body = box2dWold.createBody(bDef)
-            body.createFixture(fixtureDef).userData = FixtureType.Entity(busEvent.entityId)
-            body.isActive = busEvent.isEnabled
+            body.createFixture(fixtureDef).userData = FixtureType.Entity(systemEvent.entityId)
+            body.isActive = systemEvent.isEnabled
             body.setSensorRadius(
-                userData = FixtureType.Sensor(busEvent.entityId),
+                userData = FixtureType.Sensor(systemEvent.entityId),
                 radius = serverPreference.sensorRadius
             )
 
@@ -62,8 +62,8 @@ class PhysicsSystem: BaseTaskSystem() {
         }
     }
 
-    fun removeBody(busEvent: BusEvent.RemoveBody) {
-        val physics = physicsMapper.get(busEvent.entityId)?: return
+    fun removeBody(systemEvent: SystemEvent.RemoveBody) {
+        val physics = physicsMapper.get(systemEvent.entityId)?: return
         val body = physics.body?: return
 
         addTask {
@@ -71,16 +71,16 @@ class PhysicsSystem: BaseTaskSystem() {
         }
     }
 
-    fun pauseBody(busEvent: BusEvent.PauseBody) {
-        val physics = physicsMapper.get(busEvent.entityId)?: return
+    fun pauseBody(systemEvent: SystemEvent.PauseBody) {
+        val physics = physicsMapper.get(systemEvent.entityId)?: return
         addTask {
             val body = physics.body
             body?.isActive = false
         }
     }
 
-    fun resumeBody(busEvent: BusEvent.ResumeBody) {
-        val physics = physicsMapper.get(busEvent.entityId)?: return
+    fun resumeBody(systemEvent: SystemEvent.ResumeBody) {
+        val physics = physicsMapper.get(systemEvent.entityId)?: return
         addTask {
             val body = physics.body
             body?.isActive = true

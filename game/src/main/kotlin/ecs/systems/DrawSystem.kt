@@ -14,11 +14,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 import core.getRegion
 import core.textures.SkinID
-import ecs.components.EntityAngle
-import ecs.components.EntityModel
-import ecs.components.EntityPosition
-import ecs.components.Player
-import ecs.components.Size
+import ecs.components.*
 import models.TextureType
 import type.EntityType
 import java.util.*
@@ -74,12 +70,15 @@ class DrawSystem : IteratingSystem() {
     }
 
     override fun end() {
+        spriteBatch.projectionMatrix = camera.combined
+        spriteBatch.begin()
         for(list in drawQueue.values){
             for (entityId in list){
                 drawEntity(entityId)
             }
             list.clear()
         }
+        spriteBatch.end()
     }
 
     private fun drawEntity(entityId: Int){
@@ -91,8 +90,6 @@ class DrawSystem : IteratingSystem() {
             if (entity.isStatic) it.getServerPosition() else it.getInterpolatedPosition()
         }?: return
 
-        spriteBatch.projectionMatrix = camera.combined
-        spriteBatch.begin()
         spriteBatch.draw(
             texture,
             position.x - size.halfWidth,
@@ -105,6 +102,5 @@ class DrawSystem : IteratingSystem() {
             1f,
             angle * MathUtils.radiansToDegrees
         )
-        spriteBatch.end()
     }
 }

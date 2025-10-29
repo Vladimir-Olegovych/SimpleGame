@@ -5,11 +5,11 @@ import com.artemis.annotations.All
 import ecs.components.Client
 import event.Event
 import models.SendType
-import org.example.core.eventbus.event.BusEvent
 import org.example.ecs.components.EntityModel
 import org.example.ecs.components.Physics
 import org.example.ecs.components.Size
 import org.example.ecs.components.StaticPosition
+import org.example.ecs.event.SystemEvent
 import tools.artemis.systems.IteratingTaskSystem
 
 @All(Client::class)
@@ -38,9 +38,7 @@ class EventSystem: IteratingTaskSystem() {
         val entity = entityMapper[id]?: return
         val entityBody = physics.body?: return
 
-        if (entity.isStatic) return
-        if (!entityBody.isActive) return
-        if (!entityBody.isAwake) return
+        if (entity.isStatic || !entityBody.isActive || !entityBody.isAwake) return
 
         addEvent(
             Event.Position(
@@ -92,16 +90,16 @@ class EventSystem: IteratingTaskSystem() {
         }
     }
 
-    fun showEntities(busEvent: BusEvent.ShowEntities){
-        val client = clientMapper[busEvent.entityId]?: return
-        client.addEntities(busEvent.entities)
-        for (entityId in busEvent.entities) {
+    fun showEntities(systemEvent: SystemEvent.ShowEntities){
+        val client = clientMapper[systemEvent.entityId]?: return
+        client.addEntities(systemEvent.entities)
+        for (entityId in systemEvent.entities) {
             addTask { client.processEntity(entityId) }
         }
     }
 
-    fun hideEntities(busEvent: BusEvent.HideEntities) {
-        val client = clientMapper[busEvent.entityId] ?: return
-        client.removeEntities(busEvent.entities)
+    fun hideEntities(systemEvent: SystemEvent.HideEntities) {
+        val client = clientMapper[systemEvent.entityId] ?: return
+        client.removeEntities(systemEvent.entities)
     }
 }

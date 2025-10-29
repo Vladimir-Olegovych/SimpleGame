@@ -43,29 +43,32 @@ class EntitySystem(): IteratingSystem() {
     }
 
     fun setPosition(event: Event.Position){
-        val entityPosition = entityPositionMapper[entityMap[event.entityId]]?: run {
-            entityPositionMapper.create(entityMap[event.entityId])
+        val entityId = entityMap[event.entityId]
+        val entityPosition = entityPositionMapper[entityId]?: run {
+            entityPositionMapper.create(entityId)
         }
         entityPosition.setPosition(event.x, event.y)
-        updateEntityTime(entityMap[event.entityId])
+        updateEntityTime(entityId)
     }
 
     fun setSize(event: Event.Size){
-        val size = sizeMapper[entityMap[event.entityId]]?: run {
-            sizeMapper.create(entityMap[event.entityId])
+        val entityId = entityMap[event.entityId]
+        val size = sizeMapper[entityId]?: run {
+            sizeMapper.create(entityId)
         }
         size.radius = event.radius
         size.halfWidth = event.halfWidth
         size.halfHeight = event.halfHeight
-        updateEntityTime(entityMap[event.entityId])
+        updateEntityTime(entityId)
     }
 
     fun setAngle(event: Event.Angle){
-        val angle = angleMapper[entityMap[event.entityId]]?: run {
-            angleMapper.create(entityMap[event.entityId])
+        val entityId = entityMap[event.entityId]
+        val angle = angleMapper[entityId]?: run {
+            angleMapper.create(entityId)
         }
         angle.setAngle(event.angle)
-        updateEntityTime(entityMap[event.entityId])
+        updateEntityTime(entityId)
     }
 
     fun setChunkParams(event: Event.CurrentChunkParams){

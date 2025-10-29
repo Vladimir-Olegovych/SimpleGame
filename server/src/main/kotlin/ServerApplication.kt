@@ -4,7 +4,6 @@ import com.artemis.World
 import di.components.AppComponent
 import di.components.DaggerAppComponent
 import event.Event
-import org.example.core.eventbus.ServerEventBus
 import org.example.ecs.processors.ChunkProcessor
 import org.example.ecs.processors.ClientProcessor
 import org.example.ecs.systems.MoveSystem
@@ -22,7 +21,6 @@ class ServerApplication(
 
     @Inject lateinit var artemisWorld: World
     @Inject lateinit var gameServer: GameServer<Event>
-    @Inject lateinit var serverEventBus: ServerEventBus
     @Inject lateinit var clientProcessor: ClientProcessor
     @Inject lateinit var chunkProcessor: ChunkProcessor
     @Inject lateinit var moveSystem: MoveSystem
@@ -30,12 +28,11 @@ class ServerApplication(
     override fun create() {
         appComponent = DaggerAppComponent.create()
         appComponent.inject(this)
+        appComponent.inject(clientProcessor)
 
-        serverEventBus.addHandler(clientProcessor)
-        serverEventBus.addHandler(chunkProcessor)
-        serverEventBus.addHandler(moveSystem)
+        gameServer.subscribe(clientProcessor)
+        gameServer.subscribe(moveSystem)
 
-        gameServer.subscribe(serverEventBus.getListener())
         gameServer.start(
             port = port,
             bufferSize = 262144,
@@ -55,7 +52,6 @@ class ServerApplication(
     }
 
     override fun dispose() {
-        serverEventBus.clearHandlers()
         gameServer.stop()
         artemisWorld.dispose()
     }

@@ -11,8 +11,8 @@ import event.GamePacket
 import event.SendContainer
 import kotlinx.coroutines.*
 import models.SendType
-import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
+import org.example.ecs.event.SystemEvent
 
 @All(Client::class)
 class ClientSystem(): IteratingSystem() {
@@ -22,22 +22,17 @@ class ClientSystem(): IteratingSystem() {
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private lateinit var clientMapper: ComponentMapper<Client>
-    private val playersMap = HashMap<Connection, Int>()
     private val tasks = ArrayList<Deferred<Any?>>()
 
-    fun removeClient(busEvent: BusEvent.RemoveClient){
-        val entityId = playersMap[busEvent.connection]?: return
-        val client = clientMapper[entityId]
+    fun removeClient(systemEvent: SystemEvent.RemoveClient){
+        val client = clientMapper[systemEvent.entityId]
         client.dispose()
-        clientMapper.remove(entityId)
-        playersMap.remove(busEvent.connection)
+        clientMapper.remove(systemEvent.entityId)
     }
 
-    fun createClient(busEvent: BusEvent.CreateClient) {
-        val entityId = world.create()
-        playersMap[busEvent.connection] = entityId
-        val client = clientMapper.create(entityId)
-        client.connection = busEvent.connection
+    fun createClient(systemEvent: SystemEvent.CreateClient) {
+        val client = clientMapper.create(systemEvent.entityId)
+        client.connection = systemEvent.connection
 
         client.addEvent(
             Event.CurrentChunkParams(
@@ -47,13 +42,9 @@ class ClientSystem(): IteratingSystem() {
         )
         client.addEvent(
             Event.CurrentPlayer(
-                entityId = entityId
+                entityId = systemEvent.entityId
             )
         )
-    }
-
-    fun connectionToId(connection: Connection): Int? {
-        return playersMap[connection]
     }
 
     override fun initialize() {}
@@ -72,8 +63,10 @@ class ClientSystem(): IteratingSystem() {
         val tcpArray = events.filter { it.sendType == SendType.TCP }.map { it.data }.toTypedArray()
         val udpArray = events.filter { it.sendType == SendType.UDP }.map { it.data }.toTypedArray()
 
-        client.sendPaket(SendContainer(GamePacket(tcpArray), SendType.TCP))
-        client.sendPaket(SendContainer(GamePacket(udpArray), SendType.UDP))
+        if(tcpArray.isNotEmpty())
+            client.sendPaket(SendContainer(GamePacket(tcpArray), SendType.TCP))
+        if(udpArray.isNotEmpty())
+            client.sendPaket(SendContainer(GamePacket(udpArray), SendType.UDP))
 
         client.clearEvents()
     }

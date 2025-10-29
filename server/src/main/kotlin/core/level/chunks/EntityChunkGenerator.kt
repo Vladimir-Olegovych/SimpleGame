@@ -4,9 +4,9 @@ import alexey.tools.common.level.Chunk
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2
 import models.TextureType
-import org.example.core.eventbus.event.BusEvent
 import org.example.core.level.chunks.repository.ChunkGenerator
 import org.example.core.models.BodyType
+import org.example.ecs.event.SystemEvent
 import org.example.ecs.systems.ChunkSystem
 import org.example.ecs.systems.EntitySystem
 import org.example.ecs.systems.PhysicsSystem
@@ -23,7 +23,7 @@ class EntityChunkGenerator(
         if (random.nextInt(0, 20) > 2) return
         val entityId = artemisWorld.create()
         entitySystem.createEntity(
-            BusEvent.CreateEntity(
+            SystemEvent.CreateEntity(
                 entityId = entityId,
                 textureType = TextureType.ZOMBIE,
                 entityType = EntityType.ENTITY,
@@ -32,7 +32,7 @@ class EntityChunkGenerator(
                 isPhysical = true
             ))
         physicsSystem.createBody(
-            BusEvent.CreateBody(
+            SystemEvent.CreateBody(
                 entityId = entityId,
                 vector2 = position,
                 bodyType = BodyType.CIRCLE,
@@ -40,12 +40,12 @@ class EntityChunkGenerator(
             )
         )
         chunkSystem.applyEntityChunk(
-            BusEvent.ApplyEntityToChunk(
+            SystemEvent.ApplyEntityToChunk(
                 entityId, position
             )
         )
         physicsSystem.pauseBody(
-            BusEvent.PauseBody(entityId)
+            SystemEvent.PauseBody(entityId)
         )
     }
 

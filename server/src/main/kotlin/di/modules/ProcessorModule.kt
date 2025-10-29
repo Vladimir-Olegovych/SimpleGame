@@ -1,9 +1,9 @@
 package org.example.di.modules
 
 import alexey.tools.server.level.AdvancedChunkManager
+import com.artemis.World
 import dagger.Module
 import dagger.Provides
-import org.example.core.eventbus.ServerEventBus
 import org.example.core.level.world.ServerWorldGenerator
 import org.example.ecs.processors.ChunkProcessor
 import org.example.ecs.processors.ClientProcessor
@@ -16,14 +16,12 @@ class ProcessorModule {
     @Provides
     @Singleton
     fun provideClientProcessor(
-        serverEventBus: ServerEventBus,
         clientSystem: ClientSystem,
         entitySystem: EntitySystem,
         physicsSystem: PhysicsSystem,
         chunkSystem: ChunkSystem,
     ): ClientProcessor {
         return ClientProcessor(
-            serverEventBus = serverEventBus,
             clientSystem = clientSystem,
             entitySystem = entitySystem,
             physicsSystem = physicsSystem,
@@ -47,5 +45,4 @@ class ProcessorModule {
             chunkManager.putListener(this)
         }
     }
-
 }

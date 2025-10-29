@@ -1,15 +1,14 @@
 package org.example.core.level.chunks
 
 import alexey.tools.common.level.Chunk
-import alexey.tools.common.level.ChunkManager
 import alexey.tools.server.level.AdvancedChunkManager
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2
 import models.TextureType
-import org.example.core.eventbus.event.BusEvent
 import org.example.core.level.chunks.repository.ChunkGenerator
 import org.example.core.models.BodyType
 import org.example.core.models.ServerPreference
+import org.example.ecs.event.SystemEvent
 import org.example.ecs.systems.ChunkSystem
 import org.example.ecs.systems.EntitySystem
 import org.example.ecs.systems.PhysicsSystem
@@ -24,9 +23,28 @@ class StructureChunkGenerator(
     private val chunkSystem: ChunkSystem
 ): ChunkGenerator() {
 
+    private val home = getHomeStructure()
+
+    fun getHomeStructure(): Array<Boolean>{
+        val arrayList = ArrayList<Boolean>()
+        val size = serverPreference.chunkSize.toInt()
+        for (x in 0 until size) {
+            for (y in 0 until size) {
+                if (x == 0 || y == 0) {
+                    arrayList.add(true)
+                } else {
+                    arrayList.add(false)
+                }
+            }
+        }
+         return arrayList.toTypedArray()
+    }
+
     override fun onGenerate(chunk: Chunk, positions: Array<Vector2>) {
-        if (random.nextInt(0, 10) > 1) return
-        for (position in positions){
+        if (random.nextInt(0, 10) > 6) return
+        for ((index, position) in positions.withIndex()) {
+            val structureBlockOnPosition = home[index]
+            if(!structureBlockOnPosition) continue
             generateBlock(position)
         }
     }
@@ -35,7 +53,7 @@ class StructureChunkGenerator(
     private fun generateBlock(position: Vector2){
         val entityId = artemisWorld.create()
         entitySystem.createEntity(
-            BusEvent.CreateEntity(
+            SystemEvent.CreateEntity(
                 entityId = entityId,
                 textureType = TextureType.STONE,
                 entityType = EntityType.WALL,
@@ -45,7 +63,7 @@ class StructureChunkGenerator(
                 position = position
             ))
         physicsSystem.createBody(
-            BusEvent.CreateBody(
+            SystemEvent.CreateBody(
                 entityId = entityId,
                 vector2 = position,
                 bodyType = BodyType.SQUARE,
@@ -53,12 +71,12 @@ class StructureChunkGenerator(
             )
         )
         chunkSystem.applyEntityChunk(
-            BusEvent.ApplyEntityToChunk(
+            SystemEvent.ApplyEntityToChunk(
                 entityId, position
             )
         )
         physicsSystem.pauseBody(
-            BusEvent.PauseBody(entityId)
+            SystemEvent.PauseBody(entityId)
         )
     }
 

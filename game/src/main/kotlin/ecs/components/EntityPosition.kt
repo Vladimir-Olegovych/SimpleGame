@@ -1,22 +1,25 @@
 package ecs.components
 
 import com.artemis.Component
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
+import kotlin.math.exp
 
 class EntityPosition : Component() {
 
     private var hasPosition = false
     private val serverPosition = Vector2(0f, 0f)
     private val currentPosition = Vector2(0f, 0f)
-    private val interpolationFactor = 0.3f
+    private val interpolationSpeed = 20.0f
 
     fun hasPosition(): Boolean = hasPosition
 
     fun getServerPosition(): Vector2 = serverPosition.cpy()
 
     fun getInterpolatedPosition(): Vector2 {
-        currentPosition.x += (serverPosition.x - currentPosition.x) * interpolationFactor
-        currentPosition.y += (serverPosition.y - currentPosition.y) * interpolationFactor
+        val weight = 1 - exp(-interpolationSpeed * Gdx.graphics.deltaTime)
+        currentPosition.x += (serverPosition.x - currentPosition.x) * weight
+        currentPosition.y += (serverPosition.y - currentPosition.y) * weight
         return currentPosition.cpy()
     }
 

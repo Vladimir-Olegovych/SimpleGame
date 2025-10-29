@@ -8,17 +8,17 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import core.models.ClientPreference
+import core.textures.SkinID
+import core.values.GameValues
 import di.components.AppComponent
 import di.components.DaggerAppComponent
 import event.GamePacket
-import core.models.ClientPreference
-import core.textures.SkinID
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.screens.navigation.NavHostController
 import tools.graphics.screens.navigation.NavigationListener
 import tools.kyro.client.GameClient
 import tools.preference.JsonPreference
-import core.values.GameValues
 import javax.inject.Inject
 
 class GameApplication: Game() {

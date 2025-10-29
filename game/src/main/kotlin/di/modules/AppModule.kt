@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.Viewport
-import core.eventbus.GameEventBus
 import dagger.Module
 import dagger.Provides
 import event.GamePacket
@@ -29,14 +28,6 @@ class AppModule {
         val executor = Executor { runnable -> Gdx.app.postRunnable(runnable) }
         gameClient.setCustomDispatcher(executor.asCoroutineDispatcher())
         return gameClient
-    }
-
-    @Provides
-    @Singleton
-    fun provideEventBus(gameClient: GameClient<GamePacket>): GameEventBus {
-        val eventBus = GameEventBus()
-        gameClient.subscribe(eventBus.getListener())
-        return eventBus
     }
 
     @Provides

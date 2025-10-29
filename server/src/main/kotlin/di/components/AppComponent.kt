@@ -6,6 +6,7 @@ import org.example.ServerApplication
 import org.example.di.modules.GeneratorModule
 import org.example.di.modules.ProcessorModule
 import org.example.di.modules.SystemModule
+import org.example.ecs.processors.ClientProcessor
 import javax.inject.Singleton
 
 @Singleton
@@ -17,4 +18,5 @@ import javax.inject.Singleton
 ])
 interface AppComponent {
     fun inject(serverApplication: ServerApplication)
+    fun inject(clientProcessor: ClientProcessor)
 }

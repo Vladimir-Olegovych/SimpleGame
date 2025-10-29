@@ -99,7 +99,7 @@ class GeneratorModule {
                 structureChunkGenerator,
                 floorChunkGenerator,
                 entityChunkGenerator,
-                blockChunkGenerator
+                //blockChunkGenerator
             )
         )
     }

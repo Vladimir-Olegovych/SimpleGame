@@ -7,14 +7,12 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.Viewport
 import ecs.components.Player
 import ecs.processors.ClientProcessor
 import ecs.systems.DrawSystem
 import ecs.systems.EntitySystem
 import ecs.systems.InputSystem
-import core.eventbus.GameEventBus
 import event.GamePacket
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.graphics.input.CycleInputProcessor
@@ -34,7 +32,6 @@ class GameFragment(
     @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var camera: OrthographicCamera
     @Inject lateinit var viewport: Viewport
-    @Inject lateinit var eventBus: GameEventBus
 
     private lateinit var artemisWorld: World
     private val inputProcessor = CycleInputProcessor()
@@ -52,7 +49,7 @@ class GameFragment(
         val inputSystem = InputSystem()
         val drawSystem = DrawSystem()
 
-        eventBus.addHandler(clientProcessor)
+        gameClient.subscribe(clientProcessor)
 
         inputProcessor.addProcessor(inputSystem)
         artemisWorld = ArtemisWorldBuilder()
@@ -88,7 +85,7 @@ class GameFragment(
     }
 
     override fun onDestroy() {
-        eventBus.clearHandlers()
+        gameClient.unSubscribeAll()
         Gdx.input.inputProcessor = null
         inputProcessor.clear()
         artemisWorld.dispose()

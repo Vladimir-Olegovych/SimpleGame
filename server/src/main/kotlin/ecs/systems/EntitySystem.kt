@@ -4,9 +4,9 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import org.example.core.eventbus.event.BusEvent
 import org.example.core.models.ServerPreference
 import org.example.ecs.components.*
+import org.example.ecs.event.SystemEvent
 
 @All(EntityModel::class)
 class EntitySystem: IteratingSystem() {
@@ -18,37 +18,37 @@ class EntitySystem: IteratingSystem() {
     private lateinit var sizeMapper: ComponentMapper<Size>
     private lateinit var moveMapper: ComponentMapper<Move>
 
-    fun createEntity(busEvent: BusEvent.CreateEntity){
-        val entity = entityMapper.create(busEvent.entityId)
-        entity.isObserver = busEvent.isObserver
-        entity.isPhysical = busEvent.isPhysical
-        entity.isStatic = busEvent.isStatic
-        entity.textureType = busEvent.textureType
-        entity.entityType = busEvent.entityType
+    fun createEntity(systemEvent: SystemEvent.CreateEntity){
+        val entity = entityMapper.create(systemEvent.entityId)
+        entity.isObserver = systemEvent.isObserver
+        entity.isPhysical = systemEvent.isPhysical
+        entity.isStatic = systemEvent.isStatic
+        entity.textureType = systemEvent.textureType
+        entity.entityType = systemEvent.entityType
 
-        val size = sizeMapper.create(busEvent.entityId)
+        val size = sizeMapper.create(systemEvent.entityId)
         val halfSize = serverPreference.blockSize / 2F
         size.radius = halfSize
         size.halfWidth = halfSize
         size.halfHeight = halfSize
 
         if(entity.isPhysical) {
-            val move = moveMapper.create(busEvent.entityId)
-            physicsMapper.create(busEvent.entityId)
+            val move = moveMapper.create(systemEvent.entityId)
+            physicsMapper.create(systemEvent.entityId)
         }
 
         if (entity.isStatic){
-            val staticPosition = staticPositionMapper.create(busEvent.entityId)
-            staticPosition.position = busEvent.position
+            val staticPosition = staticPositionMapper.create(systemEvent.entityId)
+            staticPosition.position = systemEvent.position
         }
     }
 
-    fun removeEntity(busEvent: BusEvent.RemoveEntity) {
-        entityMapper.remove(busEvent.entityId)
-        staticPositionMapper.remove(busEvent.entityId)
-        physicsMapper.remove(busEvent.entityId)
-        sizeMapper.remove(busEvent.entityId)
-        moveMapper.remove(busEvent.entityId)
+    fun removeEntity(systemEvent: SystemEvent.RemoveEntity) {
+        entityMapper.remove(systemEvent.entityId)
+        staticPositionMapper.remove(systemEvent.entityId)
+        physicsMapper.remove(systemEvent.entityId)
+        sizeMapper.remove(systemEvent.entityId)
+        moveMapper.remove(systemEvent.entityId)
     }
 
 
