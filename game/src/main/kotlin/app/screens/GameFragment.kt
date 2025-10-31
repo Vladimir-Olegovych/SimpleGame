@@ -7,16 +7,19 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.utils.viewport.Viewport
+import com.badlogic.gdx.scenes.scene2d.Stage
 import ecs.components.Player
 import ecs.processors.ClientProcessor
 import ecs.systems.DrawSystem
 import ecs.systems.EntitySystem
 import ecs.systems.InputSystem
+import ecs.systems.UiSystem
 import event.GamePacket
 import tools.artemis.world.ArtemisWorldBuilder
+import tools.eventbus.EventBus
 import tools.graphics.input.CycleInputProcessor
 import tools.graphics.screens.fragment.Fragment
+import tools.graphics.viewport.CycleViewportProcessor
 import tools.kyro.client.GameClient
 import utils.registerAllEvents
 import javax.inject.Inject
@@ -28,42 +31,49 @@ class GameFragment(
 ): Fragment() {
 
     @Inject lateinit var gameClient: GameClient<GamePacket>
+    @Inject lateinit var eventBus: EventBus
     @Inject lateinit var assetManager: AssetManager
     @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var camera: OrthographicCamera
-    @Inject lateinit var viewport: Viewport
+    @Inject lateinit var stage: Stage
+    @Inject lateinit var cycleViewportProcessor: CycleViewportProcessor
 
     private lateinit var artemisWorld: World
     private val inputProcessor = CycleInputProcessor()
 
-
     override fun onCreate(game: Game) {
-
         val entitySystem = EntitySystem()
-
-        val clientProcessor = ClientProcessor(
-            entitySystem = entitySystem,
+        val inputSystem = InputSystem()
+        val drawSystem = DrawSystem()
+        val uiSystem = UiSystem(
             onDisconnect = onDisconnect
         )
 
-        val inputSystem = InputSystem()
-        val drawSystem = DrawSystem()
-
-        gameClient.subscribe(clientProcessor)
-
+        inputProcessor.addProcessor(stage)
         inputProcessor.addProcessor(inputSystem)
+
         artemisWorld = ArtemisWorldBuilder()
             .addSystem(inputSystem)
-            .addSystem(drawSystem)
             .addSystem(entitySystem)
+            .addSystem(drawSystem)
+            .addSystem(uiSystem)
             .addObject(Player())
+            .addObject(stage)
             .addObject(gameClient)
             .addObject(spriteBatch)
             .addObject(camera)
             .addObject(assetManager)
             .build()
 
+        val clientProcessor = ClientProcessor(
+            eventBus = eventBus,
+            onDisconnect = onDisconnect
+        )
+
+        eventBus.registerHandler(entitySystem)
+
         Gdx.input.inputProcessor = inputProcessor
+        gameClient.subscribe(clientProcessor)
 
         gameClient.start(
             address = "127.0.0.1",
@@ -81,13 +91,18 @@ class GameFragment(
     }
 
     override fun onResize(width: Int, height: Int) {
-        viewport.update(width, height)
+        cycleViewportProcessor.update(width, height, true)
     }
 
     override fun onDestroy() {
-        gameClient.unSubscribeAll()
         Gdx.input.inputProcessor = null
+        stage.clear()
+
+        eventBus.clear()
+        gameClient.stop()
+        gameClient.unSubscribeAll()
+
         inputProcessor.clear()
-        artemisWorld.dispose()
+        //artemisWorld.dispose()
     }
 }

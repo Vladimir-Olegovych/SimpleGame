@@ -11,14 +11,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.utils.viewport.Viewport
 import core.textures.SkinID
 import tools.graphics.fillDraw
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.setOnClickListener
+import tools.graphics.viewport.CycleViewportProcessor
 import javax.inject.Inject
 
 class MainFragment(
@@ -27,10 +26,10 @@ class MainFragment(
 ): Fragment() {
 
     @Inject lateinit var stage: Stage
-    @Inject lateinit var viewport: Viewport
     @Inject lateinit var camera: OrthographicCamera
     @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var assetManager: AssetManager
+    @Inject lateinit var cycleViewportProcessor: CycleViewportProcessor
 
     private lateinit var backgroundTexture: TextureRegion
     init { Gdx.gl.glClearColor(255F/255F, 255F/255F, 255/255F, 1F) }
@@ -68,7 +67,7 @@ class MainFragment(
     }
 
     override fun onRender(deltaTime: Float) {
-        stage.act(Gdx.graphics.deltaTime)
+        stage.act(deltaTime)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
@@ -78,6 +77,6 @@ class MainFragment(
     }
 
     override fun onResize(width: Int, height: Int) {
-        viewport.update(width, height, true)
+        cycleViewportProcessor.update(width, height, true)
     }
 }

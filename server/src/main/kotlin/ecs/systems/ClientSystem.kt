@@ -4,7 +4,6 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import com.esotericsoftware.kryonet.Connection
 import ecs.components.Client
 import event.Event
 import event.GamePacket

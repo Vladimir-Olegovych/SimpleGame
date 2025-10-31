@@ -4,29 +4,22 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.utils.IntMap
-import ecs.components.EntityAngle
-import ecs.components.EntityModel
-import ecs.components.EntityPosition
-import ecs.components.Player
-import ecs.components.Size
+import ecs.components.*
 import event.Event
-import type.EntityType
+import tools.eventbus.annotation.BusEvent
 
 @All(EntityModel::class)
 class EntitySystem(): IteratingSystem() {
 
     @Wire private lateinit var player: Player
-    @Wire private lateinit var camera: OrthographicCamera
-
-    private var maxDistance = Float.MAX_VALUE
     private val entityMap = IntMap<Int>()
     private lateinit var entityMapper: ComponentMapper<EntityModel>
     private lateinit var entityPositionMapper: ComponentMapper<EntityPosition>
     private lateinit var sizeMapper: ComponentMapper<Size>
     private lateinit var angleMapper: ComponentMapper<EntityAngle>
 
+    @BusEvent
     fun setEntity(event: Event.Entity){
         val entity: EntityModel
         if (entityMap[event.entityId] == null) {
@@ -42,6 +35,7 @@ class EntitySystem(): IteratingSystem() {
         updateEntityTime(entityMap[event.entityId])
     }
 
+    @BusEvent
     fun setPosition(event: Event.Position){
         val entityId = entityMap[event.entityId]
         val entityPosition = entityPositionMapper[entityId]?: run {
@@ -51,6 +45,7 @@ class EntitySystem(): IteratingSystem() {
         updateEntityTime(entityId)
     }
 
+    @BusEvent
     fun setSize(event: Event.Size){
         val entityId = entityMap[event.entityId]
         val size = sizeMapper[entityId]?: run {
@@ -62,6 +57,7 @@ class EntitySystem(): IteratingSystem() {
         updateEntityTime(entityId)
     }
 
+    @BusEvent
     fun setAngle(event: Event.Angle){
         val entityId = entityMap[event.entityId]
         val angle = angleMapper[entityId]?: run {
@@ -71,15 +67,18 @@ class EntitySystem(): IteratingSystem() {
         updateEntityTime(entityId)
     }
 
+    private var maxDistance = Float.MAX_VALUE
+    @BusEvent
     fun setChunkParams(event: Event.CurrentChunkParams){
         maxDistance = (event.chunkSize * event.chunkRadius) * 2 + event.chunkRadius
     }
 
-
+    @BusEvent
     fun setRemove(event: Event.Remove){
         removeEntity(event.entityId)
     }
 
+    @BusEvent
     fun setCurrentPlayer(event: Event.CurrentPlayer){
         entityMap.put(event.entityId, player.entityId)
     }

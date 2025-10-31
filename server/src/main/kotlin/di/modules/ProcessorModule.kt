@@ -1,7 +1,6 @@
 package org.example.di.modules
 
 import alexey.tools.server.level.AdvancedChunkManager
-import com.artemis.World
 import dagger.Module
 import dagger.Provides
 import org.example.core.level.world.ServerWorldGenerator
