@@ -7,29 +7,33 @@
   BitmapFont: {
     large: {
       file: fonts/bold.fnt,
-      scaledSize: 8
+      scaledSize: 18
     }
     medium: {
       file: fonts/bold.fnt,
-      scaledSize: 6
+      scaledSize: 16
     }
     small: {
       file: fonts/bold.fnt,
-      scaledSize: 4
+      scaledSize: 12
     }
   }
   TextButtonStyle: {
     default: {
-      font: large,
+      font: small,
       fontColor: default
+
+      up: ic_button_off
+      down: ic_button_on
     }
   }
   ImageButtonStyle: {
-    play: {
-      up: ic_play_button,
+    menu: {
+      up: ic_menu_button
     }
     default: {
-      up: ic_play_button
+      up: ic_button_off
+      down: ic_button_on
     }
   }
   LabelStyle: {

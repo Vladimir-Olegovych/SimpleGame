@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 import core.getRegion
 import core.textures.SkinID
+import di.modules.GameViewport
 import ecs.components.*
 import models.TextureType
 import type.EntityType
@@ -28,6 +29,8 @@ class DrawSystem : IteratingSystem() {
     private lateinit var camera: OrthographicCamera
     @Wire
     private lateinit var spriteBatch: SpriteBatch
+    @Wire
+    private lateinit var gameViewport: GameViewport
     @Wire
     private lateinit var assetManager: AssetManager
     private lateinit var entityMapper: ComponentMapper<EntityModel>
@@ -62,6 +65,7 @@ class DrawSystem : IteratingSystem() {
         val position = entityPositionMapper[player.entityId]?.getServerPosition()?: return
         camera.position.lerp(Vector3(position.x, position.y, 0f), 0.1f)
         camera.update()
+        gameViewport.apply()
     }
 
     override fun process(entityId: Int) {
@@ -102,5 +106,10 @@ class DrawSystem : IteratingSystem() {
             1f,
             angle * MathUtils.radiansToDegrees
         )
+    }
+
+    override fun dispose() {
+        camera.position.set(0F, 0F, 0F)
+        camera.update()
     }
 }

@@ -10,14 +10,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import core.textures.SkinID
+import di.modules.GameViewport
+import di.modules.UiViewport
 import tools.graphics.fillDraw
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.setOnClickListener
-import tools.graphics.viewport.CycleViewportProcessor
 import javax.inject.Inject
 
 class MainFragment(
@@ -29,7 +30,8 @@ class MainFragment(
     @Inject lateinit var camera: OrthographicCamera
     @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var assetManager: AssetManager
-    @Inject lateinit var cycleViewportProcessor: CycleViewportProcessor
+    @Inject lateinit var gameViewport: GameViewport
+    @Inject lateinit var uiViewport: UiViewport
 
     private lateinit var backgroundTexture: TextureRegion
     init { Gdx.gl.glClearColor(255F/255F, 255F/255F, 255/255F, 1F) }
@@ -46,11 +48,11 @@ class MainFragment(
             top()
         }
 
-        val play = ImageButton(skin, "play").setOnClickListener {
+        val play = TextButton("play", skin).setOnClickListener {
             onStart.invoke()
         }
 
-        menuTable.add(play).height(2F).width(5F).row()
+        menuTable.add(play).height(40F).width(70F).row()
         //menuTable.add(Label("World of Fort Ships", skin))
 
         stage.addActor(menuTable)
@@ -67,16 +69,19 @@ class MainFragment(
     }
 
     override fun onRender(deltaTime: Float) {
-        stage.act(deltaTime)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        gameViewport.apply()
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
         spriteBatch.fillDraw(backgroundTexture, camera)
         spriteBatch.end()
+        uiViewport.apply()
+        stage.act(deltaTime)
         stage.draw()
     }
 
     override fun onResize(width: Int, height: Int) {
-        cycleViewportProcessor.update(width, height, true)
+        gameViewport.update(width, height, false)
+        uiViewport.update(width, height, true)
     }
 }

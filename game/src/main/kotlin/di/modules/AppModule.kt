@@ -6,16 +6,18 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FillViewport
-import com.badlogic.gdx.utils.viewport.Viewport
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import dagger.Module
 import dagger.Provides
 import event.GamePacket
 import kotlinx.coroutines.asCoroutineDispatcher
 import tools.eventbus.EventBus
-import tools.graphics.viewport.CycleViewportProcessor
 import tools.kyro.client.GameClient
 import java.util.concurrent.Executor
 import javax.inject.Singleton
+
+class GameViewport(camera: OrthographicCamera): FillViewport(30F, 16F, camera)
+class UiViewport(): ScreenViewport()
 
 @Module
 class AppModule {
@@ -40,11 +42,6 @@ class AppModule {
         return gameClient
     }
 
-    @Provides
-    @Singleton
-    fun provideCycleViewportProcessor(): CycleViewportProcessor {
-        return CycleViewportProcessor()
-    }
 
     @Provides
     @Singleton
@@ -52,18 +49,21 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideViewport(cycleViewportProcessor: CycleViewportProcessor, camera: OrthographicCamera): Viewport {
-        val viewport = FillViewport(30F, 16F, camera)
-        cycleViewportProcessor.addViewport(viewport)
+    fun provideGameViewport(camera: OrthographicCamera): GameViewport {
+        val viewport = GameViewport(camera)
         return viewport
     }
 
     @Provides
     @Singleton
-    fun provideStage(cycleViewportProcessor: CycleViewportProcessor): Stage {
-        val camera = OrthographicCamera(30F, 16F)
-        val viewport = FillViewport(30F, 16F, camera)
-        cycleViewportProcessor.addViewport(viewport)
-        return Stage(viewport)
+    fun provideUiViewport(): UiViewport {
+        val viewport = UiViewport()
+        return viewport
+    }
+
+    @Provides
+    @Singleton
+    fun provideStage(uiViewport: UiViewport): Stage {
+        return Stage(uiViewport)
     }
 }

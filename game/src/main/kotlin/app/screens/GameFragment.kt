@@ -8,6 +8,8 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
+import di.modules.GameViewport
+import di.modules.UiViewport
 import ecs.components.Player
 import ecs.processors.ClientProcessor
 import ecs.systems.DrawSystem
@@ -19,7 +21,6 @@ import tools.artemis.world.ArtemisWorldBuilder
 import tools.eventbus.EventBus
 import tools.graphics.input.CycleInputProcessor
 import tools.graphics.screens.fragment.Fragment
-import tools.graphics.viewport.CycleViewportProcessor
 import tools.kyro.client.GameClient
 import utils.registerAllEvents
 import javax.inject.Inject
@@ -36,7 +37,8 @@ class GameFragment(
     @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var camera: OrthographicCamera
     @Inject lateinit var stage: Stage
-    @Inject lateinit var cycleViewportProcessor: CycleViewportProcessor
+    @Inject lateinit var gameViewport: GameViewport
+    @Inject lateinit var uiViewport: UiViewport
 
     private lateinit var artemisWorld: World
     private val inputProcessor = CycleInputProcessor()
@@ -58,6 +60,8 @@ class GameFragment(
             .addSystem(drawSystem)
             .addSystem(uiSystem)
             .addObject(Player())
+            .addObject(gameViewport)
+            .addObject(uiViewport)
             .addObject(stage)
             .addObject(gameClient)
             .addObject(spriteBatch)
@@ -91,7 +95,8 @@ class GameFragment(
     }
 
     override fun onResize(width: Int, height: Int) {
-        cycleViewportProcessor.update(width, height, true)
+        gameViewport.update(width, height, false)
+        uiViewport.update(width, height, true)
     }
 
     override fun onDestroy() {
@@ -103,6 +108,6 @@ class GameFragment(
         gameClient.unSubscribeAll()
 
         inputProcessor.clear()
-        //artemisWorld.dispose()
+        artemisWorld.dispose()
     }
 }
