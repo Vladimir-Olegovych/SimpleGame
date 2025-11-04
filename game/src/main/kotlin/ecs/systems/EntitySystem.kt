@@ -5,16 +5,23 @@ import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.utils.IntMap
+import core.models.ClientPreference
 import ecs.components.*
 import event.Event
 import tools.eventbus.annotation.BusEvent
+import values.ApplicationValues
 
 @All(EntityModel::class)
 class EntitySystem(): IteratingSystem() {
 
-    @Wire private lateinit var player: Player
+    @Wire
+    private lateinit var player: Player
+    @Wire
+    private lateinit var clientPreference: ClientPreference
+
     private val entityMap = IntMap<Int>()
     private lateinit var entityMapper: ComponentMapper<EntityModel>
+    private lateinit var entityStats: ComponentMapper<EntityStats>
     private lateinit var entityPositionMapper: ComponentMapper<EntityPosition>
     private lateinit var sizeMapper: ComponentMapper<Size>
     private lateinit var angleMapper: ComponentMapper<EntityAngle>
@@ -30,6 +37,7 @@ class EntitySystem(): IteratingSystem() {
             entity = entityMapper[entityMap[event.entityId]]
         }
         entity.isStatic = event.isStatic
+        entity.drawStats = event.drawStats
         entity.entityType = event.entityType
         entity.textureType = event.textureType
         updateEntityTime(entityMap[event.entityId])
@@ -41,7 +49,10 @@ class EntitySystem(): IteratingSystem() {
         val entityPosition = entityPositionMapper[entityId]?: run {
             entityPositionMapper.create(entityId)
         }
-        entityPosition.setPosition(event.x, event.y)
+        entityPosition.setPosition(
+            event.x * clientPreference.drawScale,
+            event.y * clientPreference.drawScale
+        )
         updateEntityTime(entityId)
     }
 
@@ -51,9 +62,9 @@ class EntitySystem(): IteratingSystem() {
         val size = sizeMapper[entityId]?: run {
             sizeMapper.create(entityId)
         }
-        size.radius = event.radius
-        size.halfWidth = event.halfWidth
-        size.halfHeight = event.halfHeight
+        size.radius = event.radius * clientPreference.drawScale
+        size.halfWidth = event.halfWidth * clientPreference.drawScale
+        size.halfHeight = event.halfHeight * clientPreference.drawScale
         updateEntityTime(entityId)
     }
 
@@ -67,10 +78,20 @@ class EntitySystem(): IteratingSystem() {
         updateEntityTime(entityId)
     }
 
+    @BusEvent
+    fun setStats(event: Event.Stats){
+        val entityId = entityMap[event.entityId]
+        val stats = entityStats[entityId]?: run {
+            entityStats.create(entityId)
+        }
+        stats.setAllStats(event.stats)
+        updateEntityTime(entityId)
+    }
+
     private var maxDistance = Float.MAX_VALUE
     @BusEvent
     fun setChunkParams(event: Event.CurrentChunkParams){
-        maxDistance = (event.chunkSize * event.chunkRadius) * 2 + event.chunkRadius
+        maxDistance = (event.chunkSize * clientPreference.drawScale * event.chunkRadius) * 2 + event.chunkRadius
     }
 
     @BusEvent

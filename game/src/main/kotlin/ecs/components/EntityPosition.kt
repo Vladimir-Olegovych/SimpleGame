@@ -9,7 +9,7 @@ class EntityPosition : Component() {
 
     private val serverPosition = Vector2(0f, 0f)
     private var currentPosition: Vector2? = null
-    private val interpolationSpeed = 23.0f
+    private val interpolationSpeed = 15.0f
 
     fun getServerPosition(): Vector2 = serverPosition.cpy()
 

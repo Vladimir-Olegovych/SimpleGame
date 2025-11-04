@@ -1,7 +1,9 @@
 package core
 
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import core.textures.SkinID
 
 fun AssetManager.getRegion(skinID: SkinID, name: String): TextureAtlas.AtlasRegion {

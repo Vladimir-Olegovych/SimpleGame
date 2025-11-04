@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import core.models.ClientPreference
 import core.textures.SkinID
-import core.values.GameValues
 import di.components.AppComponent
 import di.components.DaggerAppComponent
 import event.GamePacket
@@ -22,20 +21,22 @@ import tools.preference.JsonPreference
 import javax.inject.Inject
 
 class GameApplication: Game() {
-    private val jsonPreference = JsonPreference("client", ClientPreference())
     private lateinit var appComponent: AppComponent
 
+    @Inject lateinit var jsonPreference: JsonPreference<ClientPreference>
+    @Inject lateinit var clientPreference: ClientPreference
     @Inject lateinit var spriteBatch: SpriteBatch
     @Inject lateinit var stage: Stage
     @Inject lateinit var assetManager: AssetManager
     @Inject lateinit var gameClient: GameClient<GamePacket>
 
     override fun create() {
-        GameValues.setClientPreference(jsonPreference.getPreference())
         appComponent = DaggerAppComponent.create()
         appComponent.inject(this)
 
-        SkinID.entries.forEach { assetManager.load(it.skin, Skin::class.java) }
+        SkinID.entries.forEach {
+            assetManager.load(it.skin, Skin::class.java)
+        }
         //assetManager.load(Textures.FLOOR.path, Texture::class.java)
 
         assetManager.finishLoading()
@@ -73,7 +74,7 @@ class GameApplication: Game() {
     }
 
     override fun dispose() {
-        jsonPreference.setPreference(GameValues.getClientPreference())
+        jsonPreference.setPreference(clientPreference)
 
         gameClient.stop()
         spriteBatch.dispose()

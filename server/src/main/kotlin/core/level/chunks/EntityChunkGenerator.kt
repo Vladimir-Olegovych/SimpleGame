@@ -6,11 +6,14 @@ import com.badlogic.gdx.math.Vector2
 import models.TextureType
 import org.example.core.level.chunks.repository.ChunkGenerator
 import org.example.core.models.BodyType
+import values.ApplicationValues
 import org.example.ecs.event.SystemEvent
 import org.example.ecs.systems.ChunkSystem
 import org.example.ecs.systems.EntitySystem
 import org.example.ecs.systems.PhysicsSystem
 import type.EntityType
+import kotlin.Any
+import kotlin.String
 
 class EntityChunkGenerator(
     private val artemisWorld: World,
@@ -18,6 +21,11 @@ class EntityChunkGenerator(
     private val physicsSystem: PhysicsSystem,
     private val chunkSystem: ChunkSystem
 ): ChunkGenerator() {
+
+    private val entityStats = mapOf<String, Any>(
+        ApplicationValues.Stats.NAME to "Name",
+        ApplicationValues.Stats.HP to 2000
+    )
 
     override fun onGenerate(chunk: Chunk, position: Vector2) {
         if (random.nextInt(0, 20) > 2) return
@@ -28,8 +36,8 @@ class EntityChunkGenerator(
                 textureType = TextureType.ZOMBIE,
                 entityType = EntityType.ENTITY,
                 isObserver = false,
-                isStatic = false,
-                isPhysical = true
+                isPhysical = true,
+                entityStats = entityStats
             ))
         physicsSystem.createBody(
             SystemEvent.CreateBody(

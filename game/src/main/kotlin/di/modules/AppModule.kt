@@ -7,20 +7,37 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import core.models.ClientPreference
 import dagger.Module
 import dagger.Provides
 import event.GamePacket
 import kotlinx.coroutines.asCoroutineDispatcher
 import tools.eventbus.EventBus
 import tools.kyro.client.GameClient
+import tools.preference.JsonPreference
 import java.util.concurrent.Executor
 import javax.inject.Singleton
 
-class GameViewport(camera: OrthographicCamera): FillViewport(30F, 16F, camera)
+class GameViewport(worldWidth: Float,
+                   worldHeight: Float,
+                   camera: OrthographicCamera
+): FillViewport(worldWidth, worldHeight, camera)
 class UiViewport(): ScreenViewport()
 
 @Module
 class AppModule {
+    @Provides
+    @Singleton
+    fun provideJsonPreference(): JsonPreference<ClientPreference> {
+        return JsonPreference("client", ClientPreference())
+    }
+
+    @Provides
+    @Singleton
+    fun provideClientPreference(jsonPreference: JsonPreference<ClientPreference>): ClientPreference {
+        return jsonPreference.getPreference()
+    }
+
     @Provides
     @Singleton
     fun provideSpriteBatch(): SpriteBatch = SpriteBatch()
@@ -45,12 +62,18 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideOrthographicCamera(): OrthographicCamera = OrthographicCamera(30F, 16F)
+    fun provideOrthographicCamera(): OrthographicCamera {
+        return OrthographicCamera()
+    }
 
     @Provides
     @Singleton
-    fun provideGameViewport(camera: OrthographicCamera): GameViewport {
-        val viewport = GameViewport(camera)
+    fun provideGameViewport(clientPreference: ClientPreference, camera: OrthographicCamera): GameViewport {
+        val viewport = GameViewport(
+            worldWidth = 30F * clientPreference.drawScale,
+            worldHeight = 16F * clientPreference.drawScale,
+            camera = camera
+        )
         return viewport
     }
 

@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Connection
 import event.Event
 import models.TextureType
 import org.example.core.models.BodyType
+import values.ApplicationValues
 import org.example.ecs.event.SystemEvent
 import org.example.ecs.systems.ChunkSystem
 import org.example.ecs.systems.ClientSystem
@@ -14,6 +15,7 @@ import org.example.ecs.systems.PhysicsSystem
 import tools.artemis.processor.GameProcessor
 import tools.kyro.common.GameNetworkListener
 import type.EntityType
+import java.util.HashMap
 import javax.inject.Inject
 
 class ClientProcessor(
@@ -26,6 +28,9 @@ class ClientProcessor(
     @Inject lateinit var artemisWorld: World
     private val playersMap = HashMap<Connection, Int>()
 
+    private val playerStats = mapOf<String, Any>(
+        ApplicationValues.Stats.HP to 100
+    )
 
     override fun onConnected(connection: Connection) {
         val entityId = artemisWorld.create()
@@ -41,8 +46,8 @@ class ClientProcessor(
             textureType = TextureType.PLAYER,
             entityType = EntityType.ENTITY,
             isObserver = true,
-            isStatic = false,
-            isPhysical = true
+            isPhysical = true,
+            entityStats = playerStats
         ))
 
         val position = Vector2(0F, 0F)
@@ -51,6 +56,8 @@ class ClientProcessor(
             entityId = entityId,
             vector2 = position,
             bodyType = BodyType.CIRCLE,
+            angularDamping = 10F,
+            linearDamping = 10F,
             isEnabled = true
         ))
 

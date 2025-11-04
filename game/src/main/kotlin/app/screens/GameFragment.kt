@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
+import core.models.ClientPreference
 import di.modules.GameViewport
 import di.modules.UiViewport
 import ecs.components.Player
@@ -31,6 +32,7 @@ class GameFragment(
     private val onDisconnect: () -> Unit
 ): Fragment() {
 
+    @Inject lateinit var clientPreference: ClientPreference
     @Inject lateinit var gameClient: GameClient<GamePacket>
     @Inject lateinit var eventBus: EventBus
     @Inject lateinit var assetManager: AssetManager
@@ -60,6 +62,7 @@ class GameFragment(
             .addSystem(drawSystem)
             .addSystem(uiSystem)
             .addObject(Player())
+            .addObject(clientPreference)
             .addObject(gameViewport)
             .addObject(uiViewport)
             .addObject(stage)

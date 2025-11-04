@@ -13,6 +13,7 @@ class EntitySystem: IteratingSystem() {
 
     @Wire private lateinit var serverPreference: ServerPreference
     private lateinit var entityMapper: ComponentMapper<EntityModel>
+    private lateinit var statsMapper: ComponentMapper<EntityStats>
     private lateinit var staticPositionMapper: ComponentMapper<StaticPosition>
     private lateinit var physicsMapper: ComponentMapper<Physics>
     private lateinit var sizeMapper: ComponentMapper<Size>
@@ -22,7 +23,8 @@ class EntitySystem: IteratingSystem() {
         val entity = entityMapper.create(systemEvent.entityId)
         entity.isObserver = systemEvent.isObserver
         entity.isPhysical = systemEvent.isPhysical
-        entity.isStatic = systemEvent.isStatic
+        entity.isStatic = systemEvent.staticPosition != null
+        entity.drawStats = systemEvent.drawStats
         entity.textureType = systemEvent.textureType
         entity.entityType = systemEvent.entityType
 
@@ -32,6 +34,11 @@ class EntitySystem: IteratingSystem() {
         size.halfWidth = halfSize
         size.halfHeight = halfSize
 
+        if (systemEvent.entityStats != null) {
+            val stats = statsMapper.create(systemEvent.entityId)
+            stats.setAllStats(systemEvent.entityStats)
+        }
+
         if(entity.isPhysical) {
             val move = moveMapper.create(systemEvent.entityId)
             physicsMapper.create(systemEvent.entityId)
@@ -39,7 +46,7 @@ class EntitySystem: IteratingSystem() {
 
         if (entity.isStatic){
             val staticPosition = staticPositionMapper.create(systemEvent.entityId)
-            staticPosition.position = systemEvent.position
+            staticPosition.position = systemEvent.staticPosition
         }
     }
 

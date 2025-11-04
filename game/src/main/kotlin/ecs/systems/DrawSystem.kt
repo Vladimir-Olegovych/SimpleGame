@@ -8,16 +8,20 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import core.getRegion
 import core.textures.SkinID
 import di.modules.GameViewport
 import ecs.components.*
 import models.TextureType
 import type.EntityType
+import values.ApplicationValues
 import java.util.*
 
 @All(EntityModel::class)
@@ -34,11 +38,14 @@ class DrawSystem : IteratingSystem() {
     @Wire
     private lateinit var assetManager: AssetManager
     private lateinit var entityMapper: ComponentMapper<EntityModel>
+    private lateinit var entityStats: ComponentMapper<EntityStats>
     private lateinit var entityPositionMapper: ComponentMapper<EntityPosition>
     private lateinit var sizeMapper: ComponentMapper<Size>
     private lateinit var angleMapper: ComponentMapper<EntityAngle>
 
     private lateinit var textureMap: Map<TextureType, TextureAtlas.AtlasRegion>
+    private lateinit var font: BitmapFont
+
     private val drawQueue = mapOf(
         EntityType.FLOOR to LinkedList<Int>(),
         EntityType.ENTITY to LinkedList<Int>(),
@@ -48,6 +55,9 @@ class DrawSystem : IteratingSystem() {
     )
 
     override fun initialize() {
+        val skin = assetManager.get<Skin>(SkinID.BUTTON.skin)
+        font = skin.getFont("small")
+
         textureMap = mapOf(
             TextureType.NULL to assetManager.getRegion(SkinID.MAIN, "ic_error_texture"),
             TextureType.GRASS to assetManager.getRegion(SkinID.BLOCK, "ic_grass_block"),
@@ -77,22 +87,52 @@ class DrawSystem : IteratingSystem() {
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
         for(list in drawQueue.values){
-            for (entityId in list){
-                drawEntity(entityId)
-            }
+            for (entityId in list){ drawTexture(entityId) }
+            for (entityId in list){   drawStats(entityId) }
             list.clear()
         }
         spriteBatch.end()
     }
 
-    private fun drawEntity(entityId: Int){
+    private fun drawStats(entityId: Int){
         val entity = entityMapper[entityId]?: return
+        if (!entity.drawStats) return
         val size = sizeMapper[entityId]?: return
-        val texture = textureMap[entity.textureType]?: return
-        val angle = angleMapper[entityId]?.getServerAngle()?: 0F
+        val stats = entityStats[entityId]?: return
         val position = entityPositionMapper[entityId]?.let {
             if (entity.isStatic) it.getServerPosition() else it.getInterpolatedPosition()
         }?: return
+
+        stats.getStat<Int>(ApplicationValues.Stats.HP)?.let { value ->
+            val hpText = "$value hp"
+            val glyphLayout = GlyphLayout(font, hpText)
+            font.draw(
+                spriteBatch,
+                hpText,
+                position.x - glyphLayout.width / 2,
+                position.y - size.halfHeight * TEXT_PADDING_SCALER - glyphLayout.height / 2
+            )
+        }
+
+        stats.getStat<String>(ApplicationValues.Stats.NAME)?.let { nameText ->
+            val glyphLayout = GlyphLayout(font, nameText)
+            font.draw(
+                spriteBatch,
+                nameText,
+                position.x - glyphLayout.width / 2,
+                position.y + size.halfHeight * TEXT_PADDING_SCALER + size.halfHeight * 1.5F - glyphLayout.height / 2
+            )
+        }
+    }
+
+    private fun drawTexture(entityId: Int){
+        val entity = entityMapper[entityId]?: return
+        val size = sizeMapper[entityId]?: return
+        val texture = textureMap[entity.textureType]?: return
+        val position = entityPositionMapper[entityId]?.let {
+            if (entity.isStatic) it.getServerPosition() else it.getInterpolatedPosition()
+        }?: return
+        val angle = angleMapper[entityId]?.getServerAngle()?: 0F
 
         spriteBatch.draw(
             texture,
@@ -111,5 +151,9 @@ class DrawSystem : IteratingSystem() {
     override fun dispose() {
         camera.position.set(0F, 0F, 0F)
         camera.update()
+    }
+
+    companion object {
+        const val TEXT_PADDING_SCALER = 1F
     }
 }

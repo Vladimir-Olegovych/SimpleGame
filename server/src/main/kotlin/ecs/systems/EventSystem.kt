@@ -6,11 +6,13 @@ import ecs.components.Client
 import event.Event
 import models.SendType
 import org.example.ecs.components.EntityModel
+import org.example.ecs.components.EntityStats
 import org.example.ecs.components.Physics
 import org.example.ecs.components.Size
 import org.example.ecs.components.StaticPosition
 import org.example.ecs.event.SystemEvent
 import tools.artemis.systems.IteratingTaskSystem
+import values.ApplicationValues
 
 @All(Client::class)
 class EventSystem: IteratingTaskSystem() {
@@ -18,6 +20,7 @@ class EventSystem: IteratingTaskSystem() {
     private lateinit var clientMapper: ComponentMapper<Client>
     private lateinit var staticPositionMapper: ComponentMapper<StaticPosition>
     private lateinit var entityMapper: ComponentMapper<EntityModel>
+    private lateinit var entityStats: ComponentMapper<EntityStats>
     private lateinit var physicsMapper: ComponentMapper<Physics>
     private lateinit var sizeMapper: ComponentMapper<Size>
 
@@ -30,6 +33,7 @@ class EventSystem: IteratingTaskSystem() {
         val client = clientMapper[entityId]?: return
         for (entityId in client.getEntities()) {
             client.processEntityBody(entityId)
+            client.processEntityStats(entityId)
         }
     }
 
@@ -58,11 +62,25 @@ class EventSystem: IteratingTaskSystem() {
         )
     }
 
-    private fun Client.processEntity(id: Int){
+    private fun Client.processEntityStats(id: Int) {
+        entityStats[id]?.let {
+            val stats = it.acceptUpdate()
+            if (stats.isEmpty()) return@let
+            addEvent(
+                Event.Stats(
+                    entityId = id,
+                    stats = stats,
+                )
+            )
+        }
+    }
+
+    private fun Client.processEntityCreation(id: Int){
         val entity = entityMapper[id]?: return
         addEvent(
             Event.Entity(
                 entityId = id,
+                drawStats = entity.drawStats,
                 isStatic = entity.isStatic,
                 textureType = entity.textureType,
                 entityType = entity.entityType
@@ -88,13 +106,24 @@ class EventSystem: IteratingTaskSystem() {
                 )
             )
         }
+
+        entityStats[id]?.let {
+            val stats = it.getArrayStats()
+            if (stats.isEmpty()) return@let
+            addEvent(
+                Event.Stats(
+                    entityId = id,
+                    stats = stats,
+                )
+            )
+        }
     }
 
     fun showEntities(systemEvent: SystemEvent.ShowEntities){
         val client = clientMapper[systemEvent.entityId]?: return
         client.addEntities(systemEvent.entities)
         for (entityId in systemEvent.entities) {
-            addTask { client.processEntity(entityId) }
+            addTask { client.processEntityCreation(entityId) }
         }
     }
 

@@ -4,6 +4,7 @@ import com.artemis.BaseSystem
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -20,19 +21,32 @@ class UiSystem(private val onDisconnect: () -> Unit): BaseSystem() {
     private lateinit var assetManager: AssetManager
 
     override fun initialize() {
-        val skin = assetManager.get<Skin>(SkinID.BUTTON.skin)
+        val skinButton = assetManager.get<Skin>(SkinID.BUTTON.skin)
 
         val gameTable = Table().apply {
             setFillParent(true)
-            top()
-            right()
         }
 
-        val menu = ImageButton(skin, "menu").setOnClickListener {
+        val menu = ImageButton(skinButton, "menu").setOnClickListener {
             onDisconnect.invoke()
         }
 
         gameTable.add(menu).height(70f).width(70f).pad(10f)
+            .top()
+            .right()
+            .expandX()
+            .expandY()
+            .row()
+
+        val inventoryTable = Table()
+
+        for (i in 0 .. 8) {
+            val image = ImageButton(skinButton, "menu")
+            inventoryTable.add(image).height(50f).width(50f)
+        }
+        gameTable.add(inventoryTable).padBottom(10F)
+            .bottom()
+            .expandY()
 
         stage.addActor(gameTable)
     }

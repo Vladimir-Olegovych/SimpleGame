@@ -1,6 +1,6 @@
 {
   "sensorRadius" : 1.0,
-  "maxPlayerSpeed" : 1,
+  "maxPlayerSpeed" : 10,
   "chunkRadius" : 4,
   "blockSize" : 1,
   "chunkSize" : 4

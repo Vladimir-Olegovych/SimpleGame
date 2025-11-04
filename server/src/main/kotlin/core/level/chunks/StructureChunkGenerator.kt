@@ -58,9 +58,8 @@ class StructureChunkGenerator(
                 textureType = TextureType.STONE,
                 entityType = EntityType.WALL,
                 isObserver = false,
-                isStatic = true,
                 isPhysical = true,
-                position = position
+                staticPosition = position
             ))
         physicsSystem.createBody(
             SystemEvent.CreateBody(

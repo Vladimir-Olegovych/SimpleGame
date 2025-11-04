@@ -15,9 +15,10 @@ sealed class SystemEvent {
                             val entityType: EntityType,
                             val textureType: TextureType,
                             val isObserver: Boolean,
-                            val isStatic: Boolean,
                             val isPhysical: Boolean,
-                            val position: Vector2? = null): SystemEvent()
+                            val drawStats: Boolean = true,
+                            val staticPosition: Vector2? = null,
+                            val entityStats: Map<String, Any>? = null): SystemEvent()
 
     data class RemoveEntity(val entityId: Int): SystemEvent()
 

@@ -1,6 +1,7 @@
 package event
 
 import models.SendType
+import models.StatContainer
 import models.TextureType
 import modificator.SendTypeModificator
 import type.EntityType
@@ -14,9 +15,15 @@ class GamePacket(val events: Array<Event> = emptyArray())
 sealed class Event {
 
     class Entity(val entityId: Int = 0,
+                 val drawStats: Boolean = true,
                  val isStatic: Boolean = false,
                  val textureType: TextureType = TextureType.NULL,
                  val entityType: EntityType = EntityType.NULL): Event()
+
+    class Stats(
+        val entityId: Int = 0,
+        val stats: Array<StatContainer> = emptyArray()
+    ): Event()
 
     class Size(val entityId: Int = 0,
                val radius: Float = 0F,

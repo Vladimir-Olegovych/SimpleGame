@@ -27,9 +27,8 @@ class FloorChunkGenerator(
                     textureType = TextureType.GRASS,
                     entityType = EntityType.FLOOR,
                     isObserver = false,
-                    isStatic = true,
                     isPhysical = false,
-                    position = position
+                    staticPosition = position
                 )
             )
             chunkSystem.applyEntityChunk(
