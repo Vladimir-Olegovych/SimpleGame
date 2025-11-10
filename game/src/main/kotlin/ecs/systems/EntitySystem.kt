@@ -86,7 +86,8 @@ class EntitySystem(): IteratingSystem() {
     private var maxDistance = Float.MAX_VALUE
     @BusEvent
     fun setChunkParams(event: Event.CurrentChunkParams){
-        maxDistance = (event.chunkSize * clientPreference.drawScale * event.chunkRadius) * 2 + event.chunkRadius
+        val chunkSize = clientPreference.drawScale * event.chunkSize
+        maxDistance = (chunkSize * 4) * event.chunkRadius
     }
 
     @BusEvent
@@ -132,7 +133,7 @@ class EntitySystem(): IteratingSystem() {
     }
 
     override fun process(entityId: Int) {
-        processRemove(entityId)
+        //processRemove(entityId)
     }
 
 

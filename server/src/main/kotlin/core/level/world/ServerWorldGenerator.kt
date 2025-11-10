@@ -2,13 +2,16 @@ package org.example.core.level.world
 
 import alexey.tools.common.level.Chunk
 import com.badlogic.gdx.math.Vector2
-import org.example.core.level.chunks.repository.ChunkGenerator
+import org.example.core.level.chunks.repository.MultipleChunkGenerator
+import org.example.core.level.chunks.repository.SingleChunkGenerator
 import org.example.core.models.ServerPreference
 import tools.chunk.WorldGenerator
 import kotlin.random.Random
 
 class ServerWorldGenerator(serverPreference: ServerPreference,
-                           private val generators: Array<ChunkGenerator>): WorldGenerator(
+                           private val singleGenerators: Array<SingleChunkGenerator>,
+                           private val multipleGenerators: Array<MultipleChunkGenerator>
+): WorldGenerator(
     chunkSize = serverPreference.chunkSize,
     blockSize = serverPreference.blockSize
 ){
@@ -27,11 +30,25 @@ class ServerWorldGenerator(serverPreference: ServerPreference,
         val seed = (chunkPosition.x.toLong() shl 32) or (chunkPosition.y.toLong() and 0xFFFFFFFF)
         val random = Random(seed + this.seed)
 
-        for (generator in generators) {
-            generator.random = random
+        var busyChunk = false
+        for (generator in multipleGenerators) {
+            if (generator.busyAfterGenerate() && busyChunk) continue
+            generator.begin(chunk, random)
+            val isBusy = generator.generatePositions(positions)
+            if (isBusy) busyChunk = true
+            generator.end()
+        }
+
+        if (busyChunk) return
+        val busyPositions = HashMap<Vector2, Boolean>()
+        for (generator in singleGenerators) {
+            generator.begin(chunk, random)
             for (position in positions) {
-                generator.onGenerate(chunk, position)
+                if (busyPositions[position] == true) continue
+                val isBusy = generator.generatePosition(position)
+                busyPositions[position] = isBusy
             }
+            generator.end()
         }
     }
 }

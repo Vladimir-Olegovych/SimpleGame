@@ -1,10 +1,9 @@
 package org.example.core.level.chunks
 
-import alexey.tools.common.level.Chunk
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2
 import models.TextureType
-import org.example.core.level.chunks.repository.ChunkGenerator
+import org.example.core.level.chunks.repository.MultipleChunkGenerator
 import org.example.ecs.event.SystemEvent
 import org.example.ecs.systems.ChunkSystem
 import org.example.ecs.systems.EntitySystem
@@ -16,24 +15,33 @@ class FloorChunkGenerator(
     private val entitySystem: EntitySystem,
     private val physicsSystem: PhysicsSystem,
     private val chunkSystem: ChunkSystem
-): ChunkGenerator() {
+): MultipleChunkGenerator() {
 
-    override fun onGenerate(chunk: Chunk, position: Vector2) {
-        val entityId = artemisWorld.create()
-        entitySystem.createEntity(
-            SystemEvent.CreateEntity(
-                entityId = entityId,
-                textureType = TextureType.GRASS,
-                entityType = EntityType.FLOOR,
-                isObserver = false,
-                isPhysical = false,
-                staticPosition = position
-            )
-        )
-        chunkSystem.applyEntityChunk(
-            SystemEvent.ApplyEntityToChunk(
-                entityId, position
-            )
-        )
+    override fun busyAfterGenerate(): Boolean {
+        return false
     }
+
+    override fun generatePositions(positions: Array<Vector2>): Boolean {
+        positions.forEach { position ->
+            val entityId = artemisWorld.create()
+            entitySystem.createEntity(
+                SystemEvent.CreateEntity(
+                    entityId = entityId,
+                    textureType = TextureType.GRASS,
+                    entityType = EntityType.FLOOR,
+                    isObserver = false,
+                    isPhysical = false,
+                    staticPosition = position
+                )
+            )
+            chunkSystem.applyEntityChunk(
+                SystemEvent.ApplyEntityToChunk(
+                    entityId, position
+                )
+            )
+        }
+        return false
+    }
+
+
 }

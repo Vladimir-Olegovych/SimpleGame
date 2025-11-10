@@ -95,11 +95,13 @@ class GeneratorModule {
     ): ServerWorldGenerator {
         return ServerWorldGenerator(
             serverPreference = serverPreference,
-            generators = arrayOf(
-                structureChunkGenerator,
-                floorChunkGenerator,
+            singleGenerators = arrayOf(
                 entityChunkGenerator,
-                //blockChunkGenerator
+                blockChunkGenerator
+            ),
+            multipleGenerators = arrayOf(
+                structureChunkGenerator,
+                floorChunkGenerator
             )
         )
     }

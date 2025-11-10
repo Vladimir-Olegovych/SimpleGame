@@ -130,5 +130,8 @@ class EventSystem: IteratingTaskSystem() {
     fun hideEntities(systemEvent: SystemEvent.HideEntities) {
         val client = clientMapper[systemEvent.entityId] ?: return
         client.removeEntities(systemEvent.entities)
+        systemEvent.entities.forEach { entityId ->
+            client.addEvent(Event.Remove(entityId))
+        }
     }
 }

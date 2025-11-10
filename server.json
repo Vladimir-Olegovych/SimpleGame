@@ -1,7 +1,7 @@
 {
   "sensorRadius" : 1.0,
-  "maxPlayerSpeed" : 30,
-  "chunkRadius" : 4,
-  "blockSize" : 1,
-  "chunkSize" : 4
+  "maxPlayerSpeed" : 18.0,
+  "chunkRadius" : 5,
+  "blockSize" : 1.0,
+  "chunkSize" : 4.0
 }

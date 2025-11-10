@@ -1,11 +1,23 @@
 package org.example.core.level.chunks.repository
 
 import alexey.tools.common.level.Chunk
-import com.badlogic.gdx.math.Vector2
 import kotlin.random.Random
 
 open class ChunkGenerator {
-    lateinit var random: Random
+    private var random: Random? = null
+    private var chunk: Chunk? = null
 
-    open fun onGenerate(chunk: Chunk, position: Vector2) {}
+    protected fun getRandom(): Random = random!!
+    protected fun getChunk(): Chunk = chunk!!
+
+    fun begin(chunk: Chunk, random: Random) {
+        this.chunk = chunk
+        this.random = random
+    }
+
+    fun end() {
+        this.chunk = null
+        this.random = null
+    }
+
 }
