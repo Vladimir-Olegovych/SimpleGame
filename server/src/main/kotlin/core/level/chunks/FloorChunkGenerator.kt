@@ -18,24 +18,22 @@ class FloorChunkGenerator(
     private val chunkSystem: ChunkSystem
 ): ChunkGenerator() {
 
-    override fun onGenerate(chunk: Chunk, positions: Array<Vector2>) {
-        for (position in positions) {
-            val entityId = artemisWorld.create()
-            entitySystem.createEntity(
-                SystemEvent.CreateEntity(
-                    entityId = entityId,
-                    textureType = TextureType.GRASS,
-                    entityType = EntityType.FLOOR,
-                    isObserver = false,
-                    isPhysical = false,
-                    staticPosition = position
-                )
+    override fun onGenerate(chunk: Chunk, position: Vector2) {
+        val entityId = artemisWorld.create()
+        entitySystem.createEntity(
+            SystemEvent.CreateEntity(
+                entityId = entityId,
+                textureType = TextureType.GRASS,
+                entityType = EntityType.FLOOR,
+                isObserver = false,
+                isPhysical = false,
+                staticPosition = position
             )
-            chunkSystem.applyEntityChunk(
-                SystemEvent.ApplyEntityToChunk(
-                    entityId, position
-                )
+        )
+        chunkSystem.applyEntityChunk(
+            SystemEvent.ApplyEntityToChunk(
+                entityId, position
             )
-        }
+        )
     }
 }

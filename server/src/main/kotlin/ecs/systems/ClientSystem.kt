@@ -3,7 +3,6 @@ package org.example.ecs.systems
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
-import com.artemis.systems.IteratingSystem
 import ecs.components.Client
 import event.Event
 import event.GamePacket
@@ -12,21 +11,32 @@ import kotlinx.coroutines.*
 import models.SendType
 import org.example.core.models.ServerPreference
 import org.example.ecs.event.SystemEvent
+import tools.artemis.systems.IteratingTaskSystem
 
 @All(Client::class)
-class ClientSystem(): IteratingSystem() {
+class ClientSystem(): IteratingTaskSystem() {
 
     @Wire private lateinit var serverPreference: ServerPreference
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
     private lateinit var clientMapper: ComponentMapper<Client>
-    private val tasks = ArrayList<Deferred<Any?>>()
+    private val sendTasks = ArrayList<Deferred<Any?>>()
 
     fun removeClient(systemEvent: SystemEvent.RemoveClient){
         val client = clientMapper[systemEvent.entityId]
         client.dispose()
         clientMapper.remove(systemEvent.entityId)
+        println("disconnected ${systemEvent.entityId}")
+
+        addTask {
+            for (i in 0 until subscription.entities.size()) {
+                val entityId = subscription.entities[i]
+                val client = clientMapper[entityId] ?: continue
+                println("remove ${systemEvent.entityId} for $entityId")
+                client.addEvent(Event.Remove(systemEvent.entityId))
+            }
+        }
     }
 
     fun createClient(systemEvent: SystemEvent.CreateClient) {
@@ -50,13 +60,16 @@ class ClientSystem(): IteratingSystem() {
 
     override fun begin() {
         runBlocking {
-            tasks.forEach { it.await() }
-            tasks.clear()
+            sendTasks.forEach { it.await() }
+            sendTasks.clear()
         }
+        getAddTasks().forEach { it.invoke() }
+        clearTasks()
     }
 
     override fun process(entityId: Int) {
         val client = clientMapper[entityId]?: return
+
         val events = client.getEvents()
 
         val tcpArray = events.filter { it.sendType == SendType.TCP }.map { it.data }.toTypedArray()
@@ -81,7 +94,7 @@ class ClientSystem(): IteratingSystem() {
                 e.printStackTrace()
             }
         }
-        tasks.add(deferred)
+        sendTasks.add(deferred)
     }
 }
 

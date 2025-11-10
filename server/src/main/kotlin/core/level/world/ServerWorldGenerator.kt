@@ -29,11 +29,8 @@ class ServerWorldGenerator(serverPreference: ServerPreference,
 
         for (generator in generators) {
             generator.random = random
-            generator.onGenerate(chunk, positions)
-        }
-        for (position in positions) {
-            for (generator in generators) {
-               if(random.nextInt(0 ,10) < 1) generator.onGenerate(chunk, position)
+            for (position in positions) {
+                generator.onGenerate(chunk, position)
             }
         }
     }

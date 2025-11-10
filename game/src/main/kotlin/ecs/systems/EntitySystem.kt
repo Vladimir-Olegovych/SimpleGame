@@ -40,7 +40,6 @@ class EntitySystem(): IteratingSystem() {
         entity.drawStats = event.drawStats
         entity.entityType = event.entityType
         entity.textureType = event.textureType
-        updateEntityTime(entityMap[event.entityId])
     }
 
     @BusEvent
@@ -53,7 +52,6 @@ class EntitySystem(): IteratingSystem() {
             event.x * clientPreference.drawScale,
             event.y * clientPreference.drawScale
         )
-        updateEntityTime(entityId)
     }
 
     @BusEvent
@@ -65,7 +63,6 @@ class EntitySystem(): IteratingSystem() {
         size.radius = event.radius * clientPreference.drawScale
         size.halfWidth = event.halfWidth * clientPreference.drawScale
         size.halfHeight = event.halfHeight * clientPreference.drawScale
-        updateEntityTime(entityId)
     }
 
     @BusEvent
@@ -75,7 +72,6 @@ class EntitySystem(): IteratingSystem() {
             angleMapper.create(entityId)
         }
         angle.setAngle(event.angle)
-        updateEntityTime(entityId)
     }
 
     @BusEvent
@@ -85,7 +81,6 @@ class EntitySystem(): IteratingSystem() {
             entityStats.create(entityId)
         }
         stats.setAllStats(event.stats)
-        updateEntityTime(entityId)
     }
 
     private var maxDistance = Float.MAX_VALUE
@@ -96,39 +91,29 @@ class EntitySystem(): IteratingSystem() {
 
     @BusEvent
     fun setRemove(event: Event.Remove){
-        removeEntity(event.entityId)
+        val entityId = entityMap[event.entityId]?: return
+        entityMap.remove(event.entityId)
+        removeEntity(entityId)
     }
 
     @BusEvent
     fun setCurrentPlayer(event: Event.CurrentPlayer){
+        player.serverId = event.entityId
         entityMap.put(event.entityId, player.entityId)
     }
 
-    private fun updateEntityTime(entityId: Int){
-        val entity = entityMapper[entityId]
-        entity.updateTime = System.currentTimeMillis()
-    }
-
-    private fun removeEntity(entityId: Int){
+    private fun removeEntity(entityId: Int) {
         entityMapper.remove(entityId)
+        entityStats.remove(entityId)
         sizeMapper.remove(entityId)
+        angleMapper.remove(entityId)
         entityPositionMapper.remove(entityId)
-        val iterator = entityMap.iterator()
-        for(entry in iterator) {
-            if (entry.value != entityId) continue
-            iterator.remove()
-            return
-        }
     }
 
     private fun processRemove(entityId: Int){
         if (player.entityId == entityId) return
 
         val entity = entityMapper[entityId]?: return
-        if (!entity.isStatic && System.currentTimeMillis() - entity.updateTime > ENTITY_TIMEOUT) {
-            removeEntity(entityId)
-            return
-        }
 
         val entityPosition = entityPositionMapper[entityId]?.getServerPosition()?: return
         val playerPosition = entityPositionMapper[player.entityId]?.getServerPosition()?: return
@@ -154,9 +139,5 @@ class EntitySystem(): IteratingSystem() {
     override fun dispose() {
 
 
-    }
-
-    companion object {
-        const val ENTITY_TIMEOUT = 500L
     }
 }

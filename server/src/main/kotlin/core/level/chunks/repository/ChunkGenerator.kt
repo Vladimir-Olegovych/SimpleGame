@@ -7,6 +7,5 @@ import kotlin.random.Random
 open class ChunkGenerator {
     lateinit var random: Random
 
-    open fun onGenerate(chunk: Chunk, positions: Array<Vector2>) {}
     open fun onGenerate(chunk: Chunk, position: Vector2) {}
 }

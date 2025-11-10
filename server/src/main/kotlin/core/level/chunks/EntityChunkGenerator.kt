@@ -28,7 +28,7 @@ class EntityChunkGenerator(
     )
 
     override fun onGenerate(chunk: Chunk, position: Vector2) {
-        if (random.nextInt(0, 20) > 2) return
+        if (random.nextInt(0, 20) > 1) return
         val entityId = artemisWorld.create()
         entitySystem.createEntity(
             SystemEvent.CreateEntity(

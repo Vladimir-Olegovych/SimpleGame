@@ -39,6 +39,7 @@ class StructureChunkGenerator(
         }
          return arrayList.toTypedArray()
     }
+    /*
 
     override fun onGenerate(chunk: Chunk, positions: Array<Vector2>) {
         if (random.nextInt(0, 10) > 1) return
@@ -48,6 +49,8 @@ class StructureChunkGenerator(
             generateBlock(position)
         }
     }
+
+     */
 
 
     private fun generateBlock(position: Vector2){
