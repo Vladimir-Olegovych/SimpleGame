@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="fix: remove entity" />
+    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="safe artemis world update">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid23225.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid25103.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid26715.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid27308.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid8532.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/hs_err_pid8942.log" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,31 +77,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build Game3D.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build GameJora.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GameJora [:desktop:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GameJora [:server:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GameJora:desktop [:desktop:org.example.GameKt.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GameJora:server [:server:org.example.ServerKt.main()].executor&quot;: &quot;Run&quot;,
-    &quot;JAR Application.desktop-1.0-SNAPSHOT-all.jar.executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.GameKt.executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt (1).executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.ServerKt.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/vladimir/Documents/Projects/Kotlin/Game-v1-library/build/libs/Game-v1-library-1.0-SNAPSHOT-all.jar&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build Game3D.executor": "Run",
+    "Gradle.Build GameJora.executor": "Run",
+    "Gradle.Download Sources.executor": "Run",
+    "Gradle.GameJora [:desktop:shadowJar].executor": "Run",
+    "Gradle.GameJora [:server:shadowJar].executor": "Run",
+    "Gradle.GameJora:desktop [:desktop:org.example.GameKt.main()].executor": "Run",
+    "Gradle.GameJora:server [:server:org.example.ServerKt.main()].executor": "Run",
+    "Gradle.SimpleGame:desktop [:desktop:org.example.GameKt.main()].executor": "Run",
+    "Gradle.SimpleGame:server [:server:org.example.ServerKt.main()].executor": "Run",
+    "JAR Application.desktop-1.0-SNAPSHOT-all.jar.executor": "Run",
+    "Kotlin.GameKt.executor": "Run",
+    "Kotlin.MainKt (1).executor": "Run",
+    "Kotlin.MainKt.executor": "Run",
+    "Kotlin.ServerKt.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/vladimir/Documents/Projects/Kotlin/Game-v1-library/build/libs/Game-v1-library-1.0-SNAPSHOT-all.jar",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/game/src/main/kotlin/ecs/components" />
@@ -124,7 +135,7 @@
       <recent name="org.example.app" />
     </key>
   </component>
-  <component name="RunManager" selected="Kotlin.ServerKt">
+  <component name="RunManager" selected="Kotlin.GameKt">
     <configuration name="GameJora [:desktop:shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -569,7 +580,23 @@
       <option name="project" value="LOCAL" />
       <updated>1762780631191</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="safe artemis world update">
+      <option name="closed" value="true" />
+      <created>1764251852083</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1764251852083</updated>
+    </task>
+    <task id="LOCAL-00046" summary="safe artemis world update">
+      <option name="closed" value="true" />
+      <created>1764251893952</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1764251893952</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -595,7 +622,8 @@
     <MESSAGE value="fix: viewport" />
     <MESSAGE value="feature: stats" />
     <MESSAGE value="fix: remove entity" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: remove entity" />
+    <MESSAGE value="safe artemis world update" />
+    <option name="LAST_COMMIT_MESSAGE" value="safe artemis world update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
