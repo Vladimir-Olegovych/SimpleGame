@@ -1,6 +1,6 @@
 package modificator
 
-import models.SendType
+import models.enums.SendType
 
 interface SendTypeModificator {
     val sendType: SendType

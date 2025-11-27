@@ -1,0 +1,610 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="fix: remove entity" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="GameJora" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Annotation" />
+        <option value="Kotlin Object" />
+        <option value="Kotlin Interface" />
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Vladimir-Olegovych&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Vladimir-Olegovych/SimpleGame.git&quot;,
+    &quot;accountId&quot;: &quot;f769bcd1-0bfd-4b4b-94c5-ff07de89ee11&quot;
+  }
+}</component>
+  <component name="GradleScriptDefinitionsStorage" workingDir="$PROJECT_DIR$" gradleHome="$USER_HOME$/.gradle/wrapper/dists/gradle-8.10-bin/deqhafrv1ntovfmgh0nh3npr9/gradle-8.10" javaHome="/usr/lib/jvm/default" gradleVersion="8.10" />
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2wDGmJ2A8YGQhOjFFzBEjXRuvbr" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build Game3D.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build GameJora.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GameJora [:desktop:shadowJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GameJora [:server:shadowJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GameJora:desktop [:desktop:org.example.GameKt.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GameJora:server [:server:org.example.ServerKt.main()].executor&quot;: &quot;Run&quot;,
+    &quot;JAR Application.desktop-1.0-SNAPSHOT-all.jar.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.GameKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.MainKt (1).executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.ServerKt.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/vladimir/Documents/Projects/Kotlin/Game-v1-library/build/libs/Game-v1-library-1.0-SNAPSHOT-all.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/game/src/main/kotlin/ecs/components" />
+      <recent name="$PROJECT_DIR$/game/src/main/resources/fonts" />
+      <recent name="$PROJECT_DIR$/game/src/main/resources/images" />
+      <recent name="$PROJECT_DIR$/server/src/main/kotlin/di" />
+      <recent name="$PROJECT_DIR$/server/src/main/kotlin/ecs/processors" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="ecs.features" />
+      <recent name="ecs.components" />
+      <recent name="ecs.features.draw" />
+      <recent name="ecs.components.game" />
+      <recent name="model" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="app.ecs.processors" />
+      <recent name="ecs.components" />
+      <recent name="models" />
+      <recent name="core.items.types" />
+      <recent name="core.level.chunks.repository" />
+    </key>
+    <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="app.ecs.processors" />
+      <recent name="app.ecs.models" />
+      <recent name="models.enums" />
+      <recent name="models" />
+      <recent name="org.example.app" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Kotlin.ServerKt">
+    <configuration name="GameJora [:desktop:shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":desktop:shadowJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="GameJora [:server:shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":server:shadowJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="GameKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.GameKt" />
+      <module name="GameJora.desktop.main" />
+      <shortenClasspath name="NONE" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ServerKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.ServerKt" />
+      <module name="GameJora.server.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="GameJora.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="GameJora.main" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.GameJora [:desktop:shadowJar]" />
+      <item itemvalue="Gradle.GameJora [:server:shadowJar]" />
+      <item itemvalue="Kotlin.GameKt" />
+      <item itemvalue="Kotlin.ServerKt" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin.ServerKt" />
+        <item itemvalue="Kotlin.GameKt" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="" />
+      <created>1739022729056</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1739022729056</updated>
+    </task>
+    <task id="LOCAL-00001" summary="best commit">
+      <option name="closed" value="true" />
+      <created>1745999576310</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1745999576310</updated>
+    </task>
+    <task id="LOCAL-00002" summary="best commit">
+      <option name="closed" value="true" />
+      <created>1746006511335</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746006511335</updated>
+    </task>
+    <task id="LOCAL-00003" summary="best commit">
+      <option name="closed" value="true" />
+      <created>1746092477030</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1746092477030</updated>
+    </task>
+    <task id="LOCAL-00004" summary="the wall commit!">
+      <option name="closed" value="true" />
+      <created>1746093825855</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1746093825855</updated>
+    </task>
+    <task id="LOCAL-00005" summary="the wall commit!">
+      <option name="closed" value="true" />
+      <created>1746094854642</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1746094854642</updated>
+    </task>
+    <task id="LOCAL-00006" summary="the commit 2!">
+      <option name="closed" value="true" />
+      <created>1746096823765</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1746096823765</updated>
+    </task>
+    <task id="LOCAL-00007" summary="the best commit 3!">
+      <option name="closed" value="true" />
+      <created>1746210586268</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1746210586268</updated>
+    </task>
+    <task id="LOCAL-00008" summary="the best commit 3!">
+      <option name="closed" value="true" />
+      <created>1746211955620</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1746211955620</updated>
+    </task>
+    <task id="LOCAL-00009" summary="the best commit 3!">
+      <option name="closed" value="true" />
+      <created>1746211973780</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1746211973780</updated>
+    </task>
+    <task id="LOCAL-00010" summary="the best commit 4!!">
+      <option name="closed" value="true" />
+      <created>1746600934736</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1746600934736</updated>
+    </task>
+    <task id="LOCAL-00011" summary="the best commit 5!">
+      <option name="closed" value="true" />
+      <created>1746603052717</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1746603052717</updated>
+    </task>
+    <task id="LOCAL-00012" summary="the best commit 5!">
+      <option name="closed" value="true" />
+      <created>1746605808683</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1746605808683</updated>
+    </task>
+    <task id="LOCAL-00013" summary="the best commit 5!">
+      <option name="closed" value="true" />
+      <created>1746606409216</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1746606409216</updated>
+    </task>
+    <task id="LOCAL-00014" summary="the best commit 5!">
+      <option name="closed" value="true" />
+      <created>1746607178342</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1746607178342</updated>
+    </task>
+    <task id="LOCAL-00015" summary="the best commit 5!">
+      <option name="closed" value="true" />
+      <created>1746607638502</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1746607638502</updated>
+    </task>
+    <task id="LOCAL-00016" summary="the best commit 6 with chunkZZZ!">
+      <option name="closed" value="true" />
+      <created>1748767832690</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1748767832690</updated>
+    </task>
+    <task id="LOCAL-00017" summary="the best commit 6 with chunkZZZ!">
+      <option name="closed" value="true" />
+      <created>1748786179001</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1748786179001</updated>
+    </task>
+    <task id="LOCAL-00018" summary="the best commit 7 with new architecture!">
+      <option name="closed" value="true" />
+      <created>1752230554550</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1752230554550</updated>
+    </task>
+    <task id="LOCAL-00019" summary="the best commit 8 chunks and client!">
+      <option name="closed" value="true" />
+      <created>1752657910077</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1752657910077</updated>
+    </task>
+    <task id="LOCAL-00020" summary="the best commit 9 chunks!">
+      <option name="closed" value="true" />
+      <created>1752753573986</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1752753573986</updated>
+    </task>
+    <task id="LOCAL-00021" summary="the new architecture">
+      <option name="closed" value="true" />
+      <created>1759665791870</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1759665791870</updated>
+    </task>
+    <task id="LOCAL-00022" summary="the new architecture chunks">
+      <option name="closed" value="true" />
+      <created>1759674162379</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1759674162379</updated>
+    </task>
+    <task id="LOCAL-00023" summary="the new architecture chunks">
+      <option name="closed" value="true" />
+      <created>1759823831376</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1759823831376</updated>
+    </task>
+    <task id="LOCAL-00024" summary="the new architecture chunks">
+      <option name="closed" value="true" />
+      <created>1759824407337</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1759824407337</updated>
+    </task>
+    <task id="LOCAL-00025" summary="the new architecture chunks">
+      <option name="closed" value="true" />
+      <created>1759847217653</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1759847217653</updated>
+    </task>
+    <task id="LOCAL-00026" summary="the new architecture chunks">
+      <option name="closed" value="true" />
+      <created>1760104115807</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1760104115807</updated>
+    </task>
+    <task id="LOCAL-00027" summary="the new architecture chunks">
+      <option name="closed" value="true" />
+      <created>1760196899296</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1760196899296</updated>
+    </task>
+    <task id="LOCAL-00028" summary="the new architecture fixed chunks">
+      <option name="closed" value="true" />
+      <created>1760366663102</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1760366663102</updated>
+    </task>
+    <task id="LOCAL-00029" summary="the new architecture fixed chunks">
+      <option name="closed" value="true" />
+      <created>1760546678692</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1760546678692</updated>
+    </task>
+    <task id="LOCAL-00030" summary="feature: sending tcp and udp events">
+      <option name="closed" value="true" />
+      <created>1760642754664</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1760642754664</updated>
+    </task>
+    <task id="LOCAL-00031" summary="feature: sending tcp and udp events">
+      <option name="closed" value="true" />
+      <created>1760644701452</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1760644701452</updated>
+    </task>
+    <task id="LOCAL-00032" summary="feature: sending tcp and udp events">
+      <option name="closed" value="true" />
+      <created>1760979369385</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1760979369385</updated>
+    </task>
+    <task id="LOCAL-00033" summary="feature: interpolation">
+      <option name="closed" value="true" />
+      <created>1761132483285</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1761132483285</updated>
+    </task>
+    <task id="LOCAL-00034" summary="feature: interpolation">
+      <option name="closed" value="true" />
+      <created>1761148359742</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1761148359742</updated>
+    </task>
+    <task id="LOCAL-00035" summary="feature: angle">
+      <option name="closed" value="true" />
+      <created>1761320968706</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1761320968706</updated>
+    </task>
+    <task id="LOCAL-00036" summary="feature: generation + dagger">
+      <option name="closed" value="true" />
+      <created>1761400148071</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1761400148071</updated>
+    </task>
+    <task id="LOCAL-00037" summary="feature: generation + dagger">
+      <option name="closed" value="true" />
+      <created>1761400986319</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1761400986319</updated>
+    </task>
+    <task id="LOCAL-00038" summary="feature: fps &amp; interpolation - fix">
+      <option name="closed" value="true" />
+      <created>1761727193222</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1761727193223</updated>
+    </task>
+    <task id="LOCAL-00039" summary="fix: interpolation">
+      <option name="closed" value="true" />
+      <created>1761727768476</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1761727768477</updated>
+    </task>
+    <task id="LOCAL-00040" summary="fix: interpolation">
+      <option name="closed" value="true" />
+      <created>1761933040345</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1761933040345</updated>
+    </task>
+    <task id="LOCAL-00041" summary="fix: viewport">
+      <option name="closed" value="true" />
+      <created>1762093237831</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1762093237831</updated>
+    </task>
+    <task id="LOCAL-00042" summary="feature: stats">
+      <option name="closed" value="true" />
+      <created>1762269645883</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1762269645883</updated>
+    </task>
+    <task id="LOCAL-00043" summary="fix: remove entity">
+      <option name="closed" value="true" />
+      <created>1762775995138</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1762775995138</updated>
+    </task>
+    <task id="LOCAL-00044" summary="fix: remove entity">
+      <option name="closed" value="true" />
+      <created>1762780631191</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1762780631191</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="best commit" />
+    <MESSAGE value="the wall commit!" />
+    <MESSAGE value="the commit 2!" />
+    <MESSAGE value="the best commit 3!" />
+    <MESSAGE value="the best commit 4!!" />
+    <MESSAGE value="the best commit 5!" />
+    <MESSAGE value="the best commit 6 with chunkZZZ!" />
+    <MESSAGE value="the best commit 7 with new architecture!" />
+    <MESSAGE value="the best commit 8 chunks and client!" />
+    <MESSAGE value="the best commit 9 chunks!" />
+    <MESSAGE value="the new architecture" />
+    <MESSAGE value="the new architecture chunks" />
+    <MESSAGE value="the new architecture fixed chunks" />
+    <MESSAGE value="feature: sending tcp and udp events" />
+    <MESSAGE value="feature: interpolation" />
+    <MESSAGE value="feature: angle" />
+    <MESSAGE value="feature: generation + dagger" />
+    <MESSAGE value="feature: fps &amp; interpolation - fix" />
+    <MESSAGE value="fix: interpolation" />
+    <MESSAGE value="fix: viewport" />
+    <MESSAGE value="feature: stats" />
+    <MESSAGE value="fix: remove entity" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: remove entity" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.IllegalArgumentException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

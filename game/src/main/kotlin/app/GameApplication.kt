@@ -1,17 +1,18 @@
 package app
 
+import app.di.components.AppComponent
+import app.di.components.DaggerAppComponent
 import app.navigation.Navigation
 import app.screens.GameFragment
 import app.screens.MainFragment
+import app.screens.StructureEditorFragment
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import core.models.ClientPreference
+import core.models.settings.ClientPreference
 import core.textures.SkinID
-import di.components.AppComponent
-import di.components.DaggerAppComponent
 import event.GamePacket
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.screens.navigation.NavHostController
@@ -48,6 +49,7 @@ class GameApplication: Game() {
                 when(destination) {
                     is Navigation.Main -> appComponent.inject(fragment as MainFragment)
                     is Navigation.Game -> appComponent.inject(fragment as GameFragment)
+                    is Navigation.StructureEditor -> appComponent.inject(fragment as StructureEditorFragment)
                 }
             }
         })
@@ -55,15 +57,28 @@ class GameApplication: Game() {
             fragment<Navigation.Main> {
                 return@fragment MainFragment(
                     navigation = it,
-                    onStart = {
+                    onStartGame = {
                         navigate(Navigation.Game)
+                    },
+                    onEditor = {
+                        navigate(Navigation.StructureEditor)
                     }
                 )
             }
+
             fragment<Navigation.Game> {
                 return@fragment GameFragment(
                     navigation = it,
-                    onDisconnect = {
+                    onBack = {
+                        navigate(Navigation.Main)
+                    }
+                )
+            }
+
+            fragment<Navigation.StructureEditor> {
+                return@fragment StructureEditorFragment(
+                    navigation = it,
+                    onBack = {
                         navigate(Navigation.Main)
                     }
                 )

@@ -1,5 +1,17 @@
 package app.screens
 
+import app.di.modules.GameViewport
+import app.di.modules.UiViewport
+import app.ecs.processors.MovementInputProcessor
+import app.ecs.models.Player
+import app.ecs.models.SendEvents
+import app.ecs.processors.HotKeysInputProcessor
+import app.ecs.processors.LookInputProcessor
+import app.ecs.processors.ServerInputProcessor
+import app.ecs.systems.DrawSystem
+import app.ecs.systems.EntitySystem
+import app.ecs.systems.ServerSystem
+import app.ecs.systems.UiSystem
 import app.navigation.Navigation
 import com.artemis.World
 import com.badlogic.gdx.Game
@@ -8,15 +20,7 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
-import core.models.ClientPreference
-import di.modules.GameViewport
-import di.modules.UiViewport
-import ecs.components.Player
-import ecs.processors.ClientProcessor
-import ecs.systems.DrawSystem
-import ecs.systems.EntitySystem
-import ecs.systems.InputSystem
-import ecs.systems.UiSystem
+import core.models.settings.ClientPreference
 import event.GamePacket
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.eventbus.EventBus
@@ -29,7 +33,7 @@ import javax.inject.Inject
 
 class GameFragment(
     private val navigation: Navigation.Game,
-    private val onDisconnect: () -> Unit
+    private val onBack: () -> Unit
 ): Fragment() {
 
     @Inject lateinit var clientPreference: ClientPreference
@@ -47,21 +51,21 @@ class GameFragment(
 
     override fun onCreate(game: Game) {
         val entitySystem = EntitySystem()
-        val inputSystem = InputSystem()
-        val drawSystem = DrawSystem()
-        val uiSystem = UiSystem(
-            onDisconnect = onDisconnect
-        )
+        val player = Player()
+        val sendEvents = SendEvents()
 
         inputProcessor.addProcessor(stage)
-        inputProcessor.addProcessor(inputSystem)
+        inputProcessor.addProcessor(MovementInputProcessor(sendEvents))
+        inputProcessor.addProcessor(HotKeysInputProcessor(sendEvents))
+        inputProcessor.addProcessor(LookInputProcessor(sendEvents))
 
         artemisWorld = ArtemisWorldBuilder()
-            .addSystem(inputSystem)
             .addSystem(entitySystem)
-            .addSystem(drawSystem)
-            .addSystem(uiSystem)
-            .addObject(Player())
+            .addSystem(DrawSystem())
+            .addSystem(UiSystem(onBack))
+            .addSystem(ServerSystem())
+            .addObject(player)
+            .addObject(sendEvents)
             .addObject(clientPreference)
             .addObject(gameViewport)
             .addObject(uiViewport)
@@ -72,15 +76,15 @@ class GameFragment(
             .addObject(assetManager)
             .build()
 
-        val clientProcessor = ClientProcessor(
+        val serverInputProcessor = ServerInputProcessor(
             eventBus = eventBus,
-            onDisconnect = onDisconnect
+            onDisconnect = onBack
         )
 
         eventBus.registerHandler(entitySystem)
 
         Gdx.input.inputProcessor = inputProcessor
-        gameClient.subscribe(clientProcessor)
+        gameClient.subscribe(serverInputProcessor)
 
         gameClient.start(
             address = "127.0.0.1",

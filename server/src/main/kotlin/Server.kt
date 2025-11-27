@@ -1,6 +1,7 @@
 package org.example
 
-import org.example.values.Commands
+import org.example.app.ServerApplication
+import org.example.core.values.Commands
 
 fun main() {
     val serverApplication = ServerApplication(port = 5000)

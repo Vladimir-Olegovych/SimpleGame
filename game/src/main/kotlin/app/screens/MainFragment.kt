@@ -1,5 +1,7 @@
 package app.screens
 
+import app.di.modules.GameViewport
+import app.di.modules.UiViewport
 import app.navigation.Navigation
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
@@ -14,8 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import core.textures.SkinID
-import di.modules.GameViewport
-import di.modules.UiViewport
 import tools.graphics.fillDraw
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.setOnClickListener
@@ -23,7 +23,8 @@ import javax.inject.Inject
 
 class MainFragment(
     private val navigation: Navigation.Main,
-    private val onStart: () -> Unit
+    private val onStartGame: () -> Unit,
+    private val onEditor: () -> Unit,
 ): Fragment() {
 
     @Inject lateinit var stage: Stage
@@ -34,7 +35,6 @@ class MainFragment(
     @Inject lateinit var uiViewport: UiViewport
 
     private lateinit var backgroundTexture: TextureRegion
-    init { Gdx.gl.glClearColor(255F/255F, 255F/255F, 255/255F, 1F) }
 
     override fun onCreate(game: Game) {
         backgroundTexture = assetManager
@@ -44,15 +44,18 @@ class MainFragment(
         val skin = assetManager.get<Skin>(SkinID.BUTTON.skin)
         val menuTable = Table().apply {
             setFillParent(true)
-            pad(1F)
             top()
         }
 
-        val play = TextButton("play", skin).setOnClickListener {
-            onStart.invoke()
+        val playButton = TextButton("play", skin).setOnClickListener {
+            onStartGame.invoke()
+        }
+        val editorButton = TextButton("editor", skin).setOnClickListener {
+            onEditor.invoke()
         }
 
-        menuTable.add(play).height(40F).width(70F).row()
+        menuTable.add(playButton).height(40F).width(70F).padTop(8F).row()
+        menuTable.add(editorButton).height(40F).width(70F).padTop(8F).row()
         //menuTable.add(Label("World of Fort Ships", skin))
 
         stage.addActor(menuTable)

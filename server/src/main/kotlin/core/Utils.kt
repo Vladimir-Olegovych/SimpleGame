@@ -2,8 +2,6 @@ package org.example.core
 
 import alexey.tools.common.math.ImmutableIntVector2
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Fixture
-import org.example.core.models.FixtureType
 
 inline fun <reified T> Iterable<*>.getType(): T {
     for (element in this) {
@@ -21,14 +19,6 @@ inline fun <reified T> Array<*>.getType(): T {
         }
     }
     throw NullPointerException("${T::class.java} not found in ${this::class.java}")
-}
-
-fun getFixtureSensor(fixture: Fixture): FixtureType.Sensor? {
-    return fixture.userData as? FixtureType.Sensor
-}
-
-fun getFixtureEntity(fixture: Fixture): FixtureType.Entity? {
-    return fixture.userData as? FixtureType.Entity
 }
 
 fun getWorldPosition(intVector2: ImmutableIntVector2, chunkSize: Float): Vector2 {

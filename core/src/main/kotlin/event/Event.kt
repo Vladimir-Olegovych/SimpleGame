@@ -1,14 +1,14 @@
 package event
 
-import models.SendType
+import models.ItemContainer
 import models.StatContainer
-import models.TextureType
+import models.enums.EntityType
+import models.enums.SendType
+import models.enums.TextureType
 import modificator.SendTypeModificator
-import type.EntityType
 
 
-class SendContainer<T>(val data: T,
-                       override val sendType: SendType): SendTypeModificator
+class SendContainer<T>(val data: T, override val sendType: SendType): SendTypeModificator
 
 class GamePacket(val events: Array<Event> = emptyArray())
 
@@ -16,13 +16,26 @@ sealed class Event {
 
     class Entity(val entityId: Int = 0,
                  val drawStats: Boolean = true,
-                 val isStatic: Boolean = false,
-                 val textureType: TextureType = TextureType.NULL,
-                 val entityType: EntityType = EntityType.NULL): Event()
+                 val isStatic: Boolean = false): Event()
 
     class Stats(
         val entityId: Int = 0,
         val stats: Array<StatContainer> = emptyArray()
+    ): Event()
+
+    class Texture(
+        val entityId: Int = 0,
+        val textureType: TextureType = TextureType.NULL
+    ): Event()
+
+    class EntityTypeEvent(
+        val entityId: Int = 0,
+        val entityType: EntityType = EntityType.NULL
+    ): Event()
+
+    class Inventory(
+        val entityId: Int = 0,
+        val inventory: Array<ItemContainer> = emptyArray()
     ): Event()
 
     class Size(val entityId: Int = 0,
@@ -45,7 +58,13 @@ sealed class Event {
 
     class CurrentPlayer(val entityId: Int = 0): Event()
 
-    class CurrentPlayerVelocity(val x: Float = 0F,
-                                val y: Float = 0F): Event()
+    class CanCollectItems(val value: Boolean = false): Event()
 
+    class LookAt(val angle: Float = 0F): Event()
+
+    class CurrentPlayerVelocity(
+        val x: Float = 0F,
+        val y: Float = 0F
+    ): Event()
+    
 }
