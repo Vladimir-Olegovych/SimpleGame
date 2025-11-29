@@ -13,8 +13,6 @@ class InventoryComponent: CSender<Array<ItemContainer>>, Component() {
     private var hasNewData = false
     private val inventoryQueue = ConcurrentLinkedQueue<WorldItem>()
 
-    val potentialCollectItems = ArrayList<Int>()
-
     fun addItem(worldItem: WorldItem){
         hasNewData = true
         inventoryQueue.add(worldItem)

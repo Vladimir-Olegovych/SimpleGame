@@ -32,7 +32,7 @@ fun World.utCreateEntity(entityId: Int,
     val physicsComponentMapper = this.getMapper(PhysicsComponent::class.java)
     val sizeComponentMapper = this.getMapper(SizeComponent::class.java)
     val inventoryComponentMapper = this.getMapper(InventoryComponent::class.java)
-
+    val contactItemsComponentMapper = this.getMapper(ContactItemsComponent::class.java)
 
     val entity = entityComponentMapper.create(entityId)
     entity.isObserver = isObserver
@@ -76,6 +76,7 @@ fun World.utCreateEntity(entityId: Int,
     }
 
     if (hasInventory || inventoryItems.isNotEmpty()) {
+        contactItemsComponentMapper.create(entityId)
         val inventoryComponent = inventoryComponentMapper.create(entityId)
         inventoryComponent.canCollectItems = canCollectItems
         for (item in inventoryItems) {

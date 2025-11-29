@@ -73,6 +73,7 @@ class ClientSystem: GameNetworkListener<GamePacket>, BaseSystem() {
                 isObserver = true,
                 isPhysical = true,
                 canCollectItems = false,
+                hasInventory = true,
                 entityStats = spawnPlayerStats(),
                 /*
                 inventoryItems = listOf(

@@ -77,5 +77,7 @@ fun World.utRemoveBody(entityId: Int){
         component.body?.let { body ->
             world.destroyBody(body)
         }
+        component.body = null
     }
+    physicsComponentMapper.remove(entityId)
 }
