@@ -30,7 +30,7 @@ class UiSystem(private val onDisconnect: () -> Unit): BaseSystem() {
             onDisconnect.invoke()
         }
 
-        gameTable.add(menu).height(70f).width(70f).pad(10f)
+        gameTable.add(menu).height(50f).width(50f).pad(10f)
             .top()
             .right()
             .expandX()
@@ -41,7 +41,7 @@ class UiSystem(private val onDisconnect: () -> Unit): BaseSystem() {
 
         for (i in 0 .. 8) {
             val image = ImageButton(skinButton, "menu")
-            inventoryTable.add(image).height(50f).width(50f)
+            inventoryTable.add(image).height(40f).width(40f)
         }
         gameTable.add(inventoryTable).padBottom(10F)
             .bottom()

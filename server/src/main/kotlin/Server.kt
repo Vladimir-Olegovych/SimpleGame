@@ -1,6 +1,4 @@
-package org.example
-
-import org.example.app.ServerApplication
+import app.ServerApplication
 import org.example.core.values.Commands
 
 fun main() {
@@ -13,6 +11,5 @@ fun main() {
             Commands.STOP -> process = false
         }
     }
-
     serverApplication.stop()
 }

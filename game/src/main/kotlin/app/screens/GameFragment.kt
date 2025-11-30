@@ -97,6 +97,7 @@ class GameFragment(
     }
 
     override fun onRender(deltaTime: Float) {
+        eventBus.process()
         artemisWorld.delta = deltaTime
         artemisWorld.process()
     }

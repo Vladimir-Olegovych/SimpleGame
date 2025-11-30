@@ -1,5 +1,6 @@
 package org.example.app.ecs.systems
 
+import app.ecs.components.LookAtComponent
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
@@ -39,32 +40,33 @@ class EntitySystem: IteratingSystem() {
     @BusEvent
     @EventType(Event.LookAt::class)
     fun onLookAt(container: EventContainer<Event.LookAt>) {
-        val lookAtComponent = lookAtComponentMapper[container.entityId]?.let {
+        val lookAtComponent = lookAtComponentMapper[container.entityId]?:
             lookAtComponentMapper.create(container.entityId)
-        }
-        lookAtComponent?.lookAt = container.event.angle
+
+        lookAtComponent.lookAt = container.event.angle
     }
 
     @BusEvent
     @EventType(Event.CurrentPlayerVelocity::class)
     fun onCurrentPlayerVelocity(container: EventContainer<Event.CurrentPlayerVelocity>) {
-        val move = moveComponentMapper[container.entityId]?: return
+        val move = moveComponentMapper[container.entityId]?:
+            moveComponentMapper.create(container.entityId)
         val event = container.event
-        val newVector = Vector2(0F, 0F)
-        when {
-            event.x > 0 -> newVector.x = serverPreference.maxPlayerSpeed
-            event.x < 0 -> newVector.x = -serverPreference.maxPlayerSpeed
-            else -> newVector.x = 0F
+
+        move.vector.x = when {
+            event.x > 0 -> serverPreference.maxPlayerSpeed
+            event.x < 0 -> -serverPreference.maxPlayerSpeed
+            else -> 0F
         }
-        when {
-            event.y > 0 -> newVector.y = serverPreference.maxPlayerSpeed
-            event.y < 0 -> newVector.y = -serverPreference.maxPlayerSpeed
-            else -> newVector.y = 0F
+
+        move.vector.y = when {
+            event.y > 0 -> serverPreference.maxPlayerSpeed
+            event.y < 0 -> -serverPreference.maxPlayerSpeed
+            else -> 0F
         }
-        if (newVector.x == 0F && newVector.y == 0F) {
-            move.vector = null
-        } else {
-            move.vector = newVector
+
+        if (move.vector.x == 0F && move.vector.y == 0F) {
+            moveComponentMapper.remove(container.entityId)
         }
     }
 

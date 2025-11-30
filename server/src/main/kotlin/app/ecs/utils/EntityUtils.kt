@@ -24,7 +24,6 @@ fun World.utCreateEntity(entityId: Int,
 
     val textureComponentMapper = this.getMapper(TextureComponent::class.java)
     val entityTypeComponentMapper = this.getMapper(EntityTypeComponent::class.java)
-    val moveComponentMapper = this.getMapper(MoveComponent::class.java)
     val itemComponentMapper = this.getMapper(ItemComponent::class.java)
     val staticPositionComponentMapper = this.getMapper(StaticPositionComponent::class.java)
     val entityComponentMapper = this.getMapper(EntityComponent::class.java)
@@ -55,7 +54,6 @@ fun World.utCreateEntity(entityId: Int,
     }
 
     if (isPhysical) {
-        moveComponentMapper.create(entityId)
         physicsComponentMapper.create(entityId)
     }
 

@@ -1,20 +1,21 @@
 package org.example.app.ecs.systems
 
+import alexey.tools.common.collections.IntCollection
 import alexey.tools.common.level.Chunk
 import alexey.tools.common.level.ChunkManager
 import alexey.tools.server.level.AdvancedChunkManager
+import app.ecs.components.ActiveComponent
+import app.ecs.components.VisibleComponent
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import org.example.app.ecs.components.EntityComponent
 import org.example.app.ecs.components.PhysicsComponent
-import org.example.app.level.chunks.BlockChunkGenerator
 import org.example.app.level.chunks.EntityChunkGenerator
 import org.example.app.level.chunks.FloorChunkGenerator
 import org.example.app.level.generator.ServerWorldGenerator
 import org.example.core.items.manager.ItemsManager
-import org.example.core.level.ChunkGenerator
 import org.example.core.models.settings.ServerPreference
 import tools.chunk.WorldGenerator
 
@@ -26,6 +27,8 @@ class ChunkSystem: ChunkManager.Listener, IteratingSystem() {
     @Wire private lateinit var itemsManager: ItemsManager
 
     private lateinit var physicsComponentMapper: ComponentMapper<PhysicsComponent>
+    private lateinit var activeComponentMapper: ComponentMapper<ActiveComponent>
+    private lateinit var visibleComponentMapper: ComponentMapper<VisibleComponent>
     private lateinit var chunkGenerator: WorldGenerator
 
     override fun initialize() {
@@ -33,7 +36,7 @@ class ChunkSystem: ChunkManager.Listener, IteratingSystem() {
             serverPreference = serverPreference,
             singleGenerators = arrayOf(
                 EntityChunkGenerator(world, chunkManager, itemsManager),
-                BlockChunkGenerator(world, chunkManager)
+                //BlockChunkGenerator(world, chunkManager)
             ),
             multipleGenerators = arrayOf(
                 FloorChunkGenerator(world, chunkManager)
@@ -43,6 +46,34 @@ class ChunkSystem: ChunkManager.Listener, IteratingSystem() {
 
     override fun onCreate(chunk: Chunk) {
         chunkGenerator.generateChunk(chunk)
+    }
+
+    override fun onEnable(entities: IntCollection, activators: IntCollection, chunk: Chunk, first: Boolean) {
+        if(!first) return
+        for (entityId in entities) {
+            activeComponentMapper.create(entityId)
+        }
+    }
+
+    override fun onDisable(entities: IntCollection, activators: IntCollection, chunk: Chunk, last: Boolean) {
+        if(!last) return
+        for (entityId in entities) {
+            activeComponentMapper.remove(entityId)
+        }
+    }
+
+    override fun onShow(entities: IntCollection, activators: IntCollection, chunk: Chunk, first: Boolean) {
+        if(!first) return
+        for (entityId in entities) {
+            visibleComponentMapper.create(entityId)
+        }
+    }
+
+    override fun onHide(entities: IntCollection, activators: IntCollection, chunk: Chunk, last: Boolean) {
+        if(!last) return
+        for (entityId in entities) {
+            visibleComponentMapper.remove(entityId)
+        }
     }
 
     override fun process(entityId: Int) {

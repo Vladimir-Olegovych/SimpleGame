@@ -9,7 +9,7 @@ class ContactItemsComponent: Component() {
 
     fun addItem(entityId: Int) { contactItems.add(entityId) }
 
-    fun removeItem(entityId: Int) { contactItems.add(entityId) }
+    fun removeItem(entityId: Int) { contactItems.remove(entityId) }
 
     fun getItems(): Queue<Int> = contactItems
 

@@ -12,8 +12,6 @@ import models.enums.EntityType
 import models.enums.TextureType
 import org.example.app.ecs.components.EntityComponent
 import org.example.app.ecs.utils.*
-import org.example.app.items.FoodItem
-import org.example.app.items.GunItem
 import org.example.core.items.manager.ItemsManager
 import org.example.core.models.box2d.BodyType
 import org.example.core.models.server.EventContainer
@@ -40,6 +38,10 @@ class ClientSystem: GameNetworkListener<GamePacket>, BaseSystem() {
         ApplicationValues.Stats.HP to 100
     )
 
+    override fun dispose() {
+        eventBus.clear()
+    }
+    
     override fun onReceive(connection: Connection, value: GamePacket) {
         val entityId = playersMap[connection]?: return
         val events = value.events

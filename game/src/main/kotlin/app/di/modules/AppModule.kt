@@ -7,22 +7,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.FillViewport
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.badlogic.gdx.utils.viewport.Viewport
 import core.models.settings.ClientPreference
 import dagger.Module
 import dagger.Provides
 import event.GamePacket
 import kotlinx.coroutines.asCoroutineDispatcher
 import tools.eventbus.EventBus
+import tools.graphics.viewport.FairViewport
+import tools.graphics.viewport.UnfairViewport
 import tools.kyro.client.GameClient
 import tools.preference.JsonPreference
 import java.util.concurrent.Executor
 import javax.inject.Singleton
 
-class GameViewport(worldWidth: Float,
-                   worldHeight: Float,
-                   camera: OrthographicCamera
-): FillViewport(worldWidth, worldHeight, camera)
-class UiViewport(): ScreenViewport()
+class GameViewport(size: Float, camera: OrthographicCamera): FairViewport(size, camera)
+
+class UiViewport(size: Float): UnfairViewport(size)
 
 @Module
 class AppModule {
@@ -70,8 +71,7 @@ class AppModule {
     @Singleton
     fun provideGameViewport(clientPreference: ClientPreference, camera: OrthographicCamera): GameViewport {
         val viewport = GameViewport(
-            worldWidth = 30F * clientPreference.drawScale,
-            worldHeight = 16F * clientPreference.drawScale,
+            size = 30F * clientPreference.drawScale,
             camera = camera
         )
         return viewport
@@ -79,8 +79,10 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideUiViewport(): UiViewport {
-        val viewport = UiViewport()
+    fun provideUiViewport(clientPreference: ClientPreference): UiViewport {
+        val viewport = UiViewport(
+            size = 16F * clientPreference.drawScale,
+        )
         return viewport
     }
 

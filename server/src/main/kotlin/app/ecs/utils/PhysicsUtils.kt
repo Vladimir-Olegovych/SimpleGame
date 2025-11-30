@@ -14,7 +14,7 @@ fun World.utCreateBody(entityId: Int,
                       angularDamping: Float = 1F,
                       density: Float = 0.2F,
                       friction: Float = 1.3F,
-                      restitution: Float = 1F,
+                      restitution: Float = 0.2F,
                       bodyType: BodyType,
                       vector2: Vector2) {
     val world = this
@@ -23,7 +23,6 @@ fun World.utCreateBody(entityId: Int,
 
     val textureComponentMapper = world.getMapper(TextureComponent::class.java)
     val entityTypeComponentMapper = world.getMapper(EntityTypeComponent::class.java)
-    val moveComponentMapper = world.getMapper(MoveComponent::class.java)
     val itemComponentMapper = world.getMapper(ItemComponent::class.java)
     val staticPositionComponentMapper = world.getMapper(StaticPositionComponent::class.java)
     val entityComponentMapper = world.getMapper(EntityComponent::class.java)

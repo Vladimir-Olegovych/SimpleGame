@@ -1,8 +1,8 @@
-package di.components
+package app.di.components
 
 import dagger.Component
 import di.modules.AppModule
-import org.example.app.ServerApplication
+import app.ServerApplication
 import org.example.app.di.modules.ItemModule
 import org.example.app.di.modules.PhysicsModule
 import org.example.app.di.modules.SystemModule

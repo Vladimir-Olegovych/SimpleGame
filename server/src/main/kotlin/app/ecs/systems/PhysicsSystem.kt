@@ -1,58 +1,31 @@
 package org.example.app.ecs.systems
 
-import alexey.tools.common.collections.IntCollection
-import alexey.tools.common.level.Chunk
-import alexey.tools.common.level.ChunkManager
-import com.artemis.BaseSystem
+import app.ecs.components.ActiveComponent
+import com.artemis.BaseEntitySystem
 import com.artemis.ComponentMapper
+import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.physics.box2d.World
 import org.example.app.ecs.components.PhysicsComponent
-import java.util.*
 
-class PhysicsSystem: ChunkManager.Listener, BaseSystem() {
+@All(PhysicsComponent::class, ActiveComponent::class)
+class PhysicsSystem: BaseEntitySystem() {
 
     @Wire private lateinit var box2dWold: World
 
     private lateinit var physicsComponentMapper: ComponentMapper<PhysicsComponent>
 
-    private val entityEnable = LinkedList<IntCollection>()
-    private val entityDisable = LinkedList<IntCollection>()
-
-    override fun onEnable(entities: IntCollection, activators: IntCollection, chunk: Chunk, first: Boolean) {
-        if(!first) return
-        entityEnable.add(entities)
-    }
-
-    override fun onDisable(entities: IntCollection, activators: IntCollection, chunk: Chunk, last: Boolean) {
-        if(!last) return
-        entityDisable.add(entities)
-    }
-
-    override fun begin() {
-        val edIterator = entityDisable.iterator()
-        while (edIterator.hasNext()){
-            val entities = edIterator.next()
-            for (entityId in entities){
-                val physicsComponent = physicsComponentMapper[entityId]?: continue
-                physicsComponent.body?.let {
-                    it.isActive = false
-                }
-            }
-
-            edIterator.remove()
+    override fun inserted(entityId: Int) {
+        val physicsComponent = physicsComponentMapper[entityId]?: return
+        physicsComponent.body?.let { body ->
+            body.isActive = true
         }
-        val eeIterator = entityEnable.iterator()
-        while (eeIterator.hasNext()){
-            val entities = eeIterator.next()
-            for (entityId in entities){
-                val physicsComponent = physicsComponentMapper[entityId]?: continue
-                physicsComponent.body?.let {
-                    it.isActive = true
-                }
-            }
+    }
 
-            eeIterator.remove()
+    override fun removed(entityId: Int) {
+        val physicsComponent = physicsComponentMapper[entityId]?: return
+        physicsComponent.body?.let { body ->
+            body.isActive = false
         }
     }
 
