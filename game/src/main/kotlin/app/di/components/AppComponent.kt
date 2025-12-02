@@ -2,7 +2,7 @@ package app.di.components
 
 import app.GameApplication
 import app.di.modules.AppModule
-import app.screens.GameFragment
+import app.screens.game.screen.GameFragment
 import app.screens.MainFragment
 import app.screens.StructureEditorFragment
 import dagger.Component

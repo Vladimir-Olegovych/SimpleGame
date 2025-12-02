@@ -2,7 +2,6 @@ package app.screens
 
 import app.di.modules.UiViewport
 import app.navigation.Navigation
-import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
@@ -45,7 +44,7 @@ class StructureEditorFragment(
 
     init { Gdx.gl.glClearColor(255F/255F, 255F/255F, 255/255F, 1F) }
 
-    override fun onCreate(game: Game) {
+    override fun onCreate() {
         val skin = assetManager.get<Skin>(SkinID.BUTTON.skin)
 
         cellTexture = assetManager.get<TextureAtlas>(SkinID.BLOCK.atlas).findRegion("ic_stone_block")

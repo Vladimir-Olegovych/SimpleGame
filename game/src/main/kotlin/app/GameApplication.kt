@@ -3,7 +3,7 @@ package app
 import app.di.components.AppComponent
 import app.di.components.DaggerAppComponent
 import app.navigation.Navigation
-import app.screens.GameFragment
+import app.screens.game.screen.GameFragment
 import app.screens.MainFragment
 import app.screens.StructureEditorFragment
 import com.badlogic.gdx.Game

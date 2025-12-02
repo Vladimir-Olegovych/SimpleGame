@@ -5,29 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="safe artemis world update">
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/ActiveComponent.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/VisibleComponent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/dialog/MenuDialog.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/di/modules/AppModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/di/modules/AppModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/EntitySystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/EntitySystem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/GameApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/GameApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/di/components/AppComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/di/components/AppComponent.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/UiSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/UiSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/GameFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/GameFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/Server.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/Server.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ServerApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ServerApplication.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/di/components/AppComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/di/components/AppComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/ContactItemsComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/ContactItemsComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/LookAtComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/LookAtComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/MoveComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/MoveComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ChunkSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ChunkSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ClientSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ClientSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/EntitySystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/EntitySystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/LookAtSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/LookAtSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/MoveSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/MoveSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/PhysicsSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/PhysicsSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EntityUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EntityUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/PhysicsUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/PhysicsUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/core/models/settings/ServerPreference.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/core/models/settings/ServerPreference.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/GameFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/screen/GameFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/MainFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/MainFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/StructureEditorFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/StructureEditorFragment.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,11 +130,11 @@
       <recent name="core.items.types" />
     </key>
     <key name="K2MoveDeclarationsDialog.RECENT_PACKAGE_KEY">
+      <recent name="app.screens.game.screen" />
+      <recent name="app.screens.game" />
       <recent name="app.ecs.processors" />
       <recent name="app.ecs.models" />
       <recent name="models.enums" />
-      <recent name="models" />
-      <recent name="org.example.app" />
     </key>
   </component>
   <component name="RunManager" selected="Kotlin.GameKt">
@@ -630,7 +615,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764408255902</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="safe artemis world update">
+      <option name="closed" value="true" />
+      <created>1764493067723</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1764493067723</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

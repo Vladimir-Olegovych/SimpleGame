@@ -3,7 +3,6 @@ package app.screens
 import app.di.modules.GameViewport
 import app.di.modules.UiViewport
 import app.navigation.Navigation
-import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
@@ -36,7 +35,7 @@ class MainFragment(
 
     private lateinit var backgroundTexture: TextureRegion
 
-    override fun onCreate(game: Game) {
+    override fun onCreate() {
         backgroundTexture = assetManager
             .get<TextureAtlas>(SkinID.BACKGROUND.atlas)
             .findRegion("ic_menu_background")

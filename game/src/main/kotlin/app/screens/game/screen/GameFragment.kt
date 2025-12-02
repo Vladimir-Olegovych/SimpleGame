@@ -1,12 +1,12 @@
-package app.screens
+package app.screens.game.screen
 
 import app.di.modules.GameViewport
 import app.di.modules.UiViewport
-import app.ecs.processors.MovementInputProcessor
 import app.ecs.models.Player
 import app.ecs.models.SendEvents
 import app.ecs.processors.HotKeysInputProcessor
 import app.ecs.processors.LookInputProcessor
+import app.ecs.processors.MovementInputProcessor
 import app.ecs.processors.ServerInputProcessor
 import app.ecs.systems.DrawSystem
 import app.ecs.systems.EntitySystem
@@ -14,7 +14,6 @@ import app.ecs.systems.ServerSystem
 import app.ecs.systems.UiSystem
 import app.navigation.Navigation
 import com.artemis.World
-import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
@@ -30,26 +29,34 @@ import tools.kyro.client.GameClient
 import utils.registerAllEvents
 import javax.inject.Inject
 
-
 class GameFragment(
     private val navigation: Navigation.Game,
     private val onBack: () -> Unit
 ): Fragment() {
 
-    @Inject lateinit var clientPreference: ClientPreference
-    @Inject lateinit var gameClient: GameClient<GamePacket>
-    @Inject lateinit var eventBus: EventBus
-    @Inject lateinit var assetManager: AssetManager
-    @Inject lateinit var spriteBatch: SpriteBatch
-    @Inject lateinit var camera: OrthographicCamera
-    @Inject lateinit var stage: Stage
-    @Inject lateinit var gameViewport: GameViewport
-    @Inject lateinit var uiViewport: UiViewport
+    @Inject
+    lateinit var clientPreference: ClientPreference
+    @Inject
+    lateinit var gameClient: GameClient<GamePacket>
+    @Inject
+    lateinit var eventBus: EventBus
+    @Inject
+    lateinit var assetManager: AssetManager
+    @Inject
+    lateinit var spriteBatch: SpriteBatch
+    @Inject
+    lateinit var camera: OrthographicCamera
+    @Inject
+    lateinit var stage: Stage
+    @Inject
+    lateinit var gameViewport: GameViewport
+    @Inject
+    lateinit var uiViewport: UiViewport
 
     private lateinit var artemisWorld: World
     private val inputProcessor = CycleInputProcessor()
 
-    override fun onCreate(game: Game) {
+    override fun onCreate() {
         val entitySystem = EntitySystem()
         val player = Player()
         val sendEvents = SendEvents()
@@ -66,6 +73,7 @@ class GameFragment(
             .addSystem(ServerSystem())
             .addObject(player)
             .addObject(sendEvents)
+            .addObject(dialogManager)
             .addObject(clientPreference)
             .addObject(gameViewport)
             .addObject(uiViewport)
