@@ -2,6 +2,6 @@ package app.navigation
 
 sealed class Navigation {
     data object Main: Navigation()
-    data object Game : Navigation()
+    data class Game(val address: String = "127.0.0.1", val port: Int = 5000) : Navigation()
     data object StructureEditor : Navigation()
 }

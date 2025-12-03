@@ -4,12 +4,12 @@ import app.di.GameViewport
 import app.di.UiViewport
 import app.ecs.models.Player
 import app.ecs.models.SendEvents
-import app.ecs.processors.ServerInputProcessor
 import app.ecs.systems.*
 import app.navigation.Navigation
 import app.screens.game.dialog.MenuDialog
 import com.artemis.World
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -20,7 +20,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.eventbus.EventBus
-import tools.graphics.input.CycleInputProcessor
 import tools.graphics.screens.fragment.Fragment
 import tools.kyro.client.GameClient
 import utils.registerAllEvents
@@ -41,52 +40,45 @@ class GameFragment(
     private val uiViewport: UiViewport by inject()
 
     private lateinit var artemisWorld: World
-    private val inputProcessor = CycleInputProcessor()
+    private val inputMultiplexer = InputMultiplexer()
 
     override fun onCreate() {
         val entitySystem = EntitySystem()
+        val serverSystem = ServerSystem(onError = onBack, onDisconnect = onBack)
         val player = Player()
         val sendEvents = SendEvents()
 
-        val worldBuilder = ArtemisWorldBuilder()
-
-        val menuDialog = MenuDialog(stage, assetManager, onQuit = onBack)
-
-        worldBuilder
+        artemisWorld = ArtemisWorldBuilder()
+            .addSystem(serverSystem)
             .addSystem(entitySystem)
             .addSystem(DrawSystem())
             .addSystem(InputSystem())
             .addSystem(UiSystem())
-            .addSystem(ServerSystem())
+            .addSystem(SendSystem())
             .addObject(player)
             .addObject(sendEvents)
-            .addObject(menuDialog)
-            .addObject(inputProcessor)
+            .addObject(MenuDialog(onQuit = onBack))
+            .addObject(inputMultiplexer)
             .addObject(dialogManager)
             .addObject(clientPreference)
             .addObject(gameViewport)
             .addObject(uiViewport)
             .addObject(stage)
+            .addObject(eventBus)
             .addObject(gameClient)
             .addObject(spriteBatch)
             .addObject(camera)
             .addObject(assetManager)
-
-        artemisWorld = worldBuilder.build()
-
-        val serverInputProcessor = ServerInputProcessor(
-            eventBus = eventBus,
-            onDisconnect = onBack
-        )
+            .build()
 
         eventBus.registerHandler(entitySystem)
 
-        Gdx.input.inputProcessor = inputProcessor
-        gameClient.subscribe(serverInputProcessor)
+        Gdx.input.inputProcessor = inputMultiplexer
+        gameClient.subscribe(serverSystem)
 
         gameClient.start(
-            address = "127.0.0.1",
-            port = 5000,
+            address = navigation.address,
+            port = navigation.port,
             bufferSize = 262144,
             custom = { kryo ->
                 kryo.registerAllEvents()
@@ -113,11 +105,11 @@ class GameFragment(
         Gdx.input.inputProcessor = null
         stage.clear()
 
-        eventBus.clear()
         gameClient.stop()
+        eventBus.clear()
         gameClient.unSubscribeAll()
 
-        inputProcessor.clear()
+        inputMultiplexer.clear()
         artemisWorld.dispose()
     }
 

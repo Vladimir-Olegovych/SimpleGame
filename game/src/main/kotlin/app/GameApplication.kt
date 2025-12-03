@@ -48,7 +48,7 @@ class GameApplication: KoinComponent, Game() {
                 return@fragment MainFragment(
                     navigation = it,
                     onStartGame = {
-                        navigate(Navigation.Game)
+                        navigate(Navigation.Game())
                     },
                     onEditor = {
                         navigate(Navigation.StructureEditor)

@@ -1,29 +1,30 @@
 package app.screens.game.dialog
 
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import core.textures.SkinID
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import tools.graphics.drawable.ColorDrawable
 import tools.graphics.screens.dialogs.Dialog
 import tools.graphics.setOnClickListener
 
 class MenuDialog(
-    private val stage: Stage,
-    private val assetManager: AssetManager,
     private val onResume: () -> Unit = {},
     private val onSettings: () -> Unit = {},
     private val onQuit: () -> Unit = {}
-): Dialog() {
+): KoinComponent, Dialog() {
 
-    private val texture = assetManager.get<TextureAtlas>(SkinID.BLOCK.atlas).findRegion("ic_stone_block")
+    private val stage: Stage by inject()
+    private val assetManager: AssetManager by inject()
     private val skin = assetManager.get<Skin>(SkinID.BUTTON.skin)
 
     private val fullscreenOverlay = Table().apply {
         setFillParent(true)
-        //background(TextureRegionDrawable(texture))
+        background(ColorDrawable(0f, 0f, 0f, 0.7f))
         add(
             TextButton("resume", this@MenuDialog.skin).setOnClickListener {
                 dismiss()

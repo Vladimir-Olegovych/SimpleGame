@@ -53,9 +53,17 @@ class MainFragment(
         val editorButton = TextButton("editor", skin).setOnClickListener {
             onEditor.invoke()
         }
+        val settingsButton = TextButton("settings", skin).setOnClickListener {
 
-        menuTable.add(playButton).height(40F).width(70F).padTop(8F).row()
-        menuTable.add(editorButton).height(40F).width(70F).padTop(8F).row()
+        }
+        val quitButton = TextButton("quit", skin).setOnClickListener {
+            Gdx.app.exit()
+        }
+
+        menuTable.add(playButton).height(40F).width(200F).padTop(8F).row()
+        menuTable.add(editorButton).height(40F).width(200F).padTop(8F).row()
+        menuTable.add(settingsButton).height(40F).width(200F).padTop(8F).row()
+        menuTable.add(quitButton).height(40F).width(200F).padTop(8F).row()
         //menuTable.add(Label("World of Fort Ships", skin))
 
         stage.addActor(menuTable)

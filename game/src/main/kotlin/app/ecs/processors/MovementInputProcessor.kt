@@ -5,10 +5,11 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
 import core.models.input.KeyInputProcessor
 import event.Event
+import tools.graphics.input.SwitchInputProcessor
 
 class MovementInputProcessor(
     private val sendEvents: SendEvents
-): KeyInputProcessor() {
+): SwitchInputProcessor() {
 
     private val forceVector = Vector2.Zero
 
@@ -18,7 +19,11 @@ class MovementInputProcessor(
         sendEvents.addEvent(Event.CurrentPlayerVelocity(forceVector.x, forceVector.y))
     }
 
-    override fun keyDown(keycode: Int): Boolean {
+    override fun onDisable() {
+        setForceVector(x = 0F, y = 0F)
+    }
+
+    override fun swKeyDown(keycode: Int): Boolean {
         when (keycode) {
             Input.Keys.W -> setForceVector(y = VELOCITY)
             Input.Keys.A -> setForceVector(x = -VELOCITY)
@@ -28,7 +33,7 @@ class MovementInputProcessor(
         return false
     }
 
-    override fun keyUp(keycode: Int): Boolean {
+    override fun swKeyUp(keycode: Int): Boolean {
         when (keycode) {
             Input.Keys.W, Input.Keys.S -> setForceVector(y = 0F)
             Input.Keys.A, Input.Keys.D -> setForceVector(x = 0F)

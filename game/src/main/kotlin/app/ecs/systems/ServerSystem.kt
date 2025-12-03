@@ -1,38 +1,40 @@
 package app.ecs.systems
 
-import app.ecs.models.SendEvents
 import com.artemis.BaseSystem
 import com.artemis.annotations.Wire
+import com.esotericsoftware.kryonet.Connection
 import event.GamePacket
-import event.SendContainer
-import models.enums.SendType
-import tools.kyro.client.GameClient
+import tools.eventbus.EventBus
+import tools.kyro.common.GameNetworkListener
 
-class ServerSystem: BaseSystem() {
+class ServerSystem(
+    private val onError: () -> Unit,
+    private val onDisconnect: () -> Unit
+): GameNetworkListener<GamePacket>, BaseSystem() {
 
     @Wire
-    private lateinit var sendEvents: SendEvents
-    @Wire
-    private  lateinit var gameClient: GameClient<GamePacket>
+    private lateinit var eventBus: EventBus
 
-    override fun processSystem() {
-        val events = sendEvents.getEvents().apply { if (isEmpty()) return@processSystem }
-
-        val tcpArray = events.filter { it.sendType == SendType.TCP }.map { it.data }.toTypedArray()
-        val udpArray = events.filter { it.sendType == SendType.UDP }.map { it.data }.toTypedArray()
-
-        if(tcpArray.isNotEmpty())
-            sendPaket(SendContainer(GamePacket(tcpArray), SendType.TCP))
-        if(udpArray.isNotEmpty())
-            sendPaket(SendContainer(GamePacket(udpArray), SendType.UDP))
-
-        sendEvents.clearEvents()
+    override fun onError(e: Throwable) {
+        onError.invoke()
     }
 
-    private fun sendPaket(paket: SendContainer<GamePacket>){
-        when(paket.sendType) {
-            SendType.TCP -> gameClient.sendTCP(paket.data)
-            SendType.UDP -> gameClient.sendUDP(paket.data)
+    override fun onConnected(connection: Connection) {
+
+    }
+
+    override fun onDisconnected(connection: Connection) {
+        onDisconnect.invoke()
+    }
+
+    override fun onReceive(connection: Connection, value: GamePacket) {
+        val events = value.events
+        for(event in events) {
+            eventBus.sendEvent(event)
         }
+    }
+
+    override fun processSystem() {
+
     }
 }

@@ -5,11 +5,12 @@ import com.badlogic.gdx.Gdx
 import core.models.input.KeyInputProcessor
 import event.Event
 import models.enums.SendType
+import tools.graphics.input.SwitchInputProcessor
 import kotlin.math.atan2
 
 class LookInputProcessor(
     private val sendEvents: SendEvents
-): KeyInputProcessor() {
+): SwitchInputProcessor() {
 
     private fun setAngle(value: Float){
         sendEvents.addDelayedEvent(
@@ -19,7 +20,7 @@ class LookInputProcessor(
         )
     }
 
-    override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
+    override fun swMouseMoved(screenX: Int, screenY: Int): Boolean {
         val centerX = Gdx.graphics.width / 2f
         val centerY = Gdx.graphics.height / 2f
 
