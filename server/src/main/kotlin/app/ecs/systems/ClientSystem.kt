@@ -6,10 +6,11 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.math.Vector2
 import com.esotericsoftware.kryonet.Connection
+import core.models.components.texture.TextureContainer
 import event.Event
 import event.GamePacket
-import models.enums.EntityType
-import models.enums.TextureType
+import models.entity.EntityType
+import models.textures.TextureType
 import org.example.app.ecs.components.EntityComponent
 import org.example.app.ecs.utils.*
 import org.example.core.items.manager.ItemsManager
@@ -70,7 +71,7 @@ class ClientSystem: GameNetworkListener<GamePacket>, BaseSystem() {
             world.utCreateClient(entityId, connection)
             world.utCreateEntity(
                 entityId = entityId,
-                textureType = TextureType.PLAYER,
+                texture = TextureContainer.get(TextureType.ENTITY.PLAYER),
                 entityType = EntityType.ENTITY,
                 isObserver = true,
                 isPhysical = true,

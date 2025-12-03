@@ -1,10 +1,10 @@
 package event
 
-import models.ItemContainer
-import models.StatContainer
-import models.enums.EntityType
-import models.enums.SendType
-import models.enums.TextureType
+import models.items.ItemContainer
+import models.stats.StatContainer
+import models.entity.EntityType
+import models.network.SendType
+import models.textures.SkinID
 import modificator.SendTypeModificator
 
 
@@ -25,7 +25,7 @@ sealed class Event {
 
     class Texture(
         val entityId: Int = 0,
-        val textureType: TextureType = TextureType.NULL
+        val textureId: Int = 0
     ): Event()
 
     class EntityTypeEvent(

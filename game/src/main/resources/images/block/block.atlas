@@ -1,0 +1,13 @@
+block.png
+size:256,128
+repeat:none
+ic_error_texture
+bounds:2,2,10,10
+ic_grass_block
+bounds:104,76,50,50
+ic_lava_block
+bounds:2,14,10,10
+ic_stone_block
+bounds:104,64,10,10
+ic_wood_planks_block
+bounds:2,26,100,100

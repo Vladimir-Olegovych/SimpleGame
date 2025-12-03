@@ -1,7 +1,7 @@
 package org.example.app.ecs.components
 
 import com.artemis.Component
-import models.StatContainer
+import models.stats.StatContainer
 import org.example.app.ecs.components.sender.CSender
 
 class StatsComponent: CSender<Array<StatContainer>>, Component() {

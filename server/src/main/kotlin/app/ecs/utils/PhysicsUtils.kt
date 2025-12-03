@@ -9,14 +9,14 @@ import org.example.core.models.box2d.FixtureType
 import org.example.core.models.settings.ServerPreference
 
 fun World.utCreateBody(entityId: Int,
-                      isEnabled: Boolean = true,
-                      linearDamping: Float = 1F,
-                      angularDamping: Float = 1F,
-                      density: Float = 0.2F,
-                      friction: Float = 1.3F,
-                      restitution: Float = 0.2F,
-                      bodyType: BodyType,
-                      vector2: Vector2) {
+                       isEnabled: Boolean = true,
+                       linearDamping: Float = 1F,
+                       angularDamping: Float = 1F,
+                       density: Float = 0.2F,
+                       friction: Float = 1.3F,
+                       restitution: Float = 0.2F,
+                       bodyType: BodyType,
+                       vector2: Vector2) {
     val world = this
     val box2dWorld = world.getRegistered(com.badlogic.gdx.physics.box2d.World::class.java)
     val serverPreference = world.getRegistered(ServerPreference::class.java)

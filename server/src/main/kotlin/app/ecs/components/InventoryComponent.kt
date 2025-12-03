@@ -1,7 +1,7 @@
 package org.example.app.ecs.components
 
 import com.artemis.Component
-import models.ItemContainer
+import models.items.ItemContainer
 import org.example.app.ecs.components.sender.CSender
 import org.example.core.items.WorldItem
 import java.util.concurrent.ConcurrentLinkedQueue

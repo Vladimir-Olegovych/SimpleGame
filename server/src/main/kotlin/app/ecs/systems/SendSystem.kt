@@ -7,7 +7,7 @@ import ecs.components.ClientComponent
 import event.GamePacket
 import event.SendContainer
 import kotlinx.coroutines.*
-import models.enums.SendType
+import models.network.SendType
 
 @All(ClientComponent::class)
 class SendSystem(): IteratingSystem() {

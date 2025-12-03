@@ -8,7 +8,7 @@ import com.artemis.annotations.All
 import com.artemis.systems.IteratingSystem
 import ecs.components.ClientComponent
 import event.Event
-import models.enums.SendType
+import models.network.SendType
 import org.example.app.ecs.components.*
 
 @All(ClientComponent::class)
@@ -117,10 +117,11 @@ class EventSystem: ChunkManager.Listener, IteratingSystem() {
         }
 
         textureComponentMapper[id]?.let {
+            val textureContainer = it.texture?: return@let
             addEvent(
                 Event.Texture(
                     entityId = id,
-                    textureType = it.textureType
+                    textureId = textureContainer.textureId
                 )
             )
         }

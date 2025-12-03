@@ -1,8 +1,10 @@
 package app.ecs.components
 
 import com.artemis.Component
-import models.enums.TextureType
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 
 class TextureComponent: Component() {
-    var textureType = TextureType.NULL
+    var textureId: Int? = null
+    var textureName: String? = null
+    var textureRegion: TextureRegion? = null
 }

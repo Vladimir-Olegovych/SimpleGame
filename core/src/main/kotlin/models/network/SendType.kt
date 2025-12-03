@@ -1,4 +1,4 @@
-package models.enums
+package models.network
 
 enum class SendType {
     TCP,

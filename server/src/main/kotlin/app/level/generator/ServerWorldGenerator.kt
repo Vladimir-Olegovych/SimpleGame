@@ -1,54 +1,77 @@
-package org.example.app.level.generator
+package app.level.generator
 
 import alexey.tools.common.level.Chunk
+import app.level.biome.Biome
+import com.artemis.ComponentMapper
+import com.artemis.World
 import com.badlogic.gdx.math.Vector2
-import org.example.core.level.MultipleChunkGenerator
-import org.example.core.level.SingleChunkGenerator
+import core.models.components.texture.TextureContainer
+import models.entity.EntityType
+import models.textures.TextureType
+import org.example.app.ecs.components.EntityComponent
+import org.example.app.ecs.utils.utCreateEntity
 import org.example.core.models.settings.ServerPreference
+import org.koin.core.component.KoinComponent
 import tools.chunk.WorldGenerator
+import tools.math.getWorldPosition
+import tools.noice.simplex.SimplexNoise
 import kotlin.random.Random
 
-class ServerWorldGenerator(serverPreference: ServerPreference,
-                           private val singleGenerators: Array<SingleChunkGenerator>,
-                           private val multipleGenerators: Array<MultipleChunkGenerator>
-): WorldGenerator(
+class ServerWorldGenerator(
+    private val artemisWorld: World,
+    private val serverPreference: ServerPreference
+): KoinComponent, WorldGenerator(
     chunkSize = serverPreference.chunkSize,
     blockSize = serverPreference.blockSize
 ){
-    //private val seed: Int = -1449399422
-    private val seed: Int = Random.nextInt()
+    private val seed: Long = Random.nextLong()
+
+    private lateinit var entityComponentMapper: ComponentMapper<EntityComponent>
+
+    private val biomeNoise = SimplexNoise(seed)
 
     init {
         println("World seed: $seed")
+        artemisWorld.inject(this)
     }
 
-    override fun onGenerateChunk(
-        chunk: Chunk,
-        positions: Array<Vector2>
-    ) {
+    override fun onGenerateChunk(chunk: Chunk, positions: Array<Vector2>) {
+        /*
         val chunkPosition = chunk.getPosition()
         val seed = (chunkPosition.x.toLong() shl 32) or (chunkPosition.y.toLong() and 0xFFFFFFFF)
         val random = Random(seed + this.seed)
+         */
 
-        var busyChunk = false
-        for (generator in multipleGenerators) {
-            if (generator.busyAfterGenerate() && busyChunk) continue
-            generator.begin(chunk, random)
-            val isBusy = generator.generatePositions(positions)
-            if (isBusy) busyChunk = true
-            generator.end()
-        }
+        val chunkPosition = chunk.getPosition()
 
-        if (busyChunk) return
-        val busyPositions = HashMap<Vector2, Boolean>()
-        for (generator in singleGenerators) {
-            generator.begin(chunk, random)
-            for (position in positions) {
-                if (busyPositions[position] == true) continue
-                val isBusy = generator.generatePosition(position)
-                busyPositions[position] = isBusy
-            }
-            generator.end()
+        for (position in positions) {
+            val biome = getPositionBiome(position)
+            val entityId = artemisWorld.create()
+            artemisWorld.utCreateEntity(
+                entityId = entityId,
+                texture = TextureContainer.get(biome.block),
+                entityType = EntityType.FLOOR,
+                isObserver = false,
+                isPhysical = false,
+                staticPosition = position
+            )
+            val entityComponent = entityComponentMapper[entityId]
+            chunk.add(entityId, entityComponent.isObserver)
         }
     }
+
+    fun getPositionBiome(position: Vector2): Biome {
+        val scale = 0.003f
+        val noise = biomeNoise.noise2D(position.x, position.y, scale)
+
+        val normalizedNoise = (noise + 1f) / 2f
+
+
+        return when {
+            normalizedNoise < 0.4f -> Biome.OCEAN
+            normalizedNoise > 0.7f -> Biome.DESERT
+            else -> Biome.FOREST
+        }
+    }
+
 }

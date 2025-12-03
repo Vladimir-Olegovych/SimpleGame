@@ -1,9 +1,0 @@
-button.png
-size:256,128
-repeat:none
-ic_button_off
-bounds:104,2,100,50
-ic_button_on
-bounds:104,54,100,50
-ic_menu_button
-bounds:2,4,100,100

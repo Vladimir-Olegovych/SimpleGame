@@ -1,7 +1,7 @@
 package app.ecs.components
 
 import com.artemis.Component
-import models.StatContainer
+import models.stats.StatContainer
 
 class StatsComponent: Component() {
     private val stats = HashMap<String, Any>()

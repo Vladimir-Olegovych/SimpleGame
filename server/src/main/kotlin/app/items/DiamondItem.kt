@@ -1,11 +1,12 @@
-package org.example.app.items
+package app.items
 
 import org.example.core.items.WorldItem
 
-class FoodItem(
+class DiamondItem(
     worldId: Int
 ): WorldItem(worldId) {
-    override val name: String = "Food"
+    
+    override val name: String = "Diamond"
 
     override fun onCreateItem() {
 

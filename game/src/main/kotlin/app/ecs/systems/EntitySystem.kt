@@ -6,9 +6,14 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.IntMap
 import core.models.settings.ClientPreference
 import event.Event
+import models.textures.SkinID
+import models.textures.TextureType
 import tools.eventbus.annotation.BusEvent
 
 @All(EntityComponent::class)
@@ -17,9 +22,13 @@ class EntitySystem(): IteratingSystem() {
     @Wire
     private lateinit var player: Player
     @Wire
+    private lateinit var assetManager: AssetManager
+    @Wire
     private lateinit var clientPreference: ClientPreference
 
+    private val tempTextureMap = IntMap<TextureRegion>()
     private val entityMap = IntMap<Int>()
+
     private lateinit var textureComponentMapper: ComponentMapper<TextureComponent>
     private lateinit var entityTypeComponentMapper: ComponentMapper<EntityTypeComponent>
     private lateinit var entityComponentMapper: ComponentMapper<EntityComponent>
@@ -75,8 +84,19 @@ class EntitySystem(): IteratingSystem() {
     fun setTexture(event: Event.Texture){
         val entityId = entityMap[event.entityId]?: return
         val textureTypeComponent = textureComponentMapper[entityId]?: textureComponentMapper.create(entityId)
+        val textureId = event.textureId
+        val skinID = TextureType.getSkinById(event.textureId)
+        val textureName = TextureType.getNameById(event.textureId)
 
-        textureTypeComponent.textureType = event.textureType
+        val texture = tempTextureMap[textureId]?: let {
+            val texture = assetManager.get<TextureAtlas>(skinID.atlas).findRegion(textureName)
+            tempTextureMap.put(textureId, texture)
+            texture
+        }
+
+        textureTypeComponent.textureId = textureId
+        textureTypeComponent.textureName = textureName
+        textureTypeComponent.textureRegion = texture
     }
 
     @BusEvent
@@ -132,7 +152,6 @@ class EntitySystem(): IteratingSystem() {
 
 
     override fun dispose() {
-
-
+        tempTextureMap.clear()
     }
 }

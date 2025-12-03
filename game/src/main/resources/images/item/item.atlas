@@ -1,0 +1,9 @@
+item.png
+size:512,128
+repeat:none
+ic_diamond_item
+bounds:2,2,100,100
+ic_iron_ingort_item
+bounds:104,2,100,100
+ic_iron_list_item
+bounds:206,2,100,100

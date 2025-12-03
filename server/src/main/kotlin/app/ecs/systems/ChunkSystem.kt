@@ -6,15 +6,13 @@ import alexey.tools.common.level.ChunkManager
 import alexey.tools.server.level.AdvancedChunkManager
 import app.ecs.components.ActiveComponent
 import app.ecs.components.VisibleComponent
+import app.level.generator.ServerWorldGenerator
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import org.example.app.ecs.components.EntityComponent
 import org.example.app.ecs.components.PhysicsComponent
-import org.example.app.level.chunks.EntityChunkGenerator
-import org.example.app.level.chunks.FloorChunkGenerator
-import org.example.app.level.generator.ServerWorldGenerator
 import org.example.core.items.manager.ItemsManager
 import org.example.core.models.settings.ServerPreference
 import tools.chunk.WorldGenerator
@@ -33,14 +31,8 @@ class ChunkSystem: ChunkManager.Listener, IteratingSystem() {
 
     override fun initialize() {
         chunkGenerator = ServerWorldGenerator(
-            serverPreference = serverPreference,
-            singleGenerators = arrayOf(
-                EntityChunkGenerator(world, chunkManager, itemsManager),
-                //BlockChunkGenerator(world, chunkManager)
-            ),
-            multipleGenerators = arrayOf(
-                FloorChunkGenerator(world, chunkManager)
-            ),
+            artemisWorld = world,
+            serverPreference = serverPreference
         )
     }
 

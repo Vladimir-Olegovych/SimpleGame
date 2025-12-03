@@ -2,7 +2,7 @@ package app.ecs.models
 
 import event.Event
 import event.SendContainer
-import models.enums.SendType
+import models.network.SendType
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 

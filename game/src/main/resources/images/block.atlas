@@ -1,9 +1,0 @@
-block.png
-size:64,16
-repeat:none
-ic_grass_block
-bounds:14,2,10,10
-ic_lava_block
-bounds:2,2,10,10
-ic_stone_block
-bounds:26,2,10,10

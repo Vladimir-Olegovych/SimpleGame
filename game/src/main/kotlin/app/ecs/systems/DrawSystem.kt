@@ -14,14 +14,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import core.getRegion
-import core.textures.SkinID
-import models.enums.EntityType
-import models.enums.TextureType
+import models.textures.SkinID
+import models.entity.EntityType
 import values.ApplicationValues
 import java.util.*
 
@@ -47,11 +44,11 @@ class DrawSystem : IteratingSystem() {
     private lateinit var sizeComponentMapper: ComponentMapper<SizeComponent>
     private lateinit var angleComponentMapper: ComponentMapper<AngleComponent>
 
-    private lateinit var textureMap: Map<TextureType, TextureAtlas.AtlasRegion>
     private lateinit var font: BitmapFont
 
     private val drawQueue = mapOf(
         EntityType.FLOOR to LinkedList<Int>(),
+        EntityType.ITEM to LinkedList<Int>(),
         EntityType.ENTITY to LinkedList<Int>(),
         EntityType.WALL to LinkedList<Int>(),
         EntityType.CEILING to LinkedList<Int>(),
@@ -61,15 +58,6 @@ class DrawSystem : IteratingSystem() {
     override fun initialize() {
         val skin = assetManager.get<Skin>(SkinID.BUTTON.skin)
         font = skin.getFont("small")
-
-        textureMap = mapOf(
-            TextureType.NULL to assetManager.getRegion(SkinID.MAIN, "ic_error_texture"),
-            TextureType.GRASS to assetManager.getRegion(SkinID.BLOCK, "ic_grass_block"),
-            TextureType.LAVA to assetManager.getRegion(SkinID.BLOCK, "ic_lava_block"),
-            TextureType.STONE to assetManager.getRegion(SkinID.BLOCK, "ic_stone_block"),
-            TextureType.PLAYER to assetManager.getRegion(SkinID.ENTITY, "ic_player_entity"),
-            TextureType.ZOMBIE to assetManager.getRegion(SkinID.ENTITY, "ic_zombie_entity"),
-        )
     }
 
     override fun begin() {
@@ -132,7 +120,7 @@ class DrawSystem : IteratingSystem() {
     private fun drawTexture(entityId: Int){
         val entity = entityComponentMapper[entityId]?: return
         val size = sizeComponentMapper[entityId]?: return
-        val texture = textureMap[textureComponentMapper[entityId]?.textureType?: return]?: return
+        val texture = textureComponentMapper[entityId]?.textureRegion?: return
         val position = positionComponentMapper[entityId]?.let {
             if (entity.isStatic) it.getServerPosition() else it.getInterpolatedPosition()
         }?: return

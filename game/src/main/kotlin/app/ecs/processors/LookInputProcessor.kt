@@ -4,7 +4,7 @@ import app.ecs.models.SendEvents
 import com.badlogic.gdx.Gdx
 import core.models.input.KeyInputProcessor
 import event.Event
-import models.enums.SendType
+import models.network.SendType
 import tools.graphics.input.SwitchInputProcessor
 import kotlin.math.atan2
 

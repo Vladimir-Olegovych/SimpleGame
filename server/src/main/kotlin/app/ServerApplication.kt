@@ -5,6 +5,7 @@ import app.di.appModule
 import app.di.itemModule
 import app.di.physicsModule
 import app.di.systemModule
+import app.items.register.ItemsRegister
 import app.listeners.contact.ItemContactListener
 import com.artemis.World
 import core.physics.contact.ContactManager
@@ -45,6 +46,8 @@ class ServerApplication(
         startKoin {
             modules(systemModule, itemModule, physicsModule, appModule)
         }
+
+        ItemsRegister.initialize()
 
         gameServer.subscribe(clientSystem)
         eventBus.registerHandler(entitySystem)

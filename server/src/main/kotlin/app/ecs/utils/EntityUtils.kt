@@ -2,15 +2,15 @@ package org.example.app.ecs.utils
 
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2
-import models.enums.EntityType
-import models.enums.TextureType
+import core.models.components.texture.TextureContainer
+import models.entity.EntityType
 import org.example.app.ecs.components.*
 import org.example.core.items.WorldItem
 import org.example.core.models.settings.ServerPreference
 
 fun World.utCreateEntity(entityId: Int,
                          entityType: EntityType? = null,
-                         textureType: TextureType? = null,
+                         texture: TextureContainer? = null,
                          isObserver: Boolean = false,
                          isPhysical: Boolean = false,
                          staticPosition: Vector2? = null,
@@ -42,7 +42,7 @@ fun World.utCreateEntity(entityId: Int,
         etComponent.entityType = entityType
     }
 
-    if (textureType != null) {
+    if (texture != null) {
         val size = sizeComponentMapper.create(entityId)
         val halfSize = serverPreference.blockSize / 2F
         size.radius = halfSize
@@ -50,7 +50,7 @@ fun World.utCreateEntity(entityId: Int,
         size.halfHeight = halfSize
 
         val tComponent = textureComponentMapper.create(entityId)
-        tComponent.textureType = textureType
+        tComponent.texture = texture
     }
 
     if (isPhysical) {

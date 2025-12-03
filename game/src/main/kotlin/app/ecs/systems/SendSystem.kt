@@ -5,7 +5,7 @@ import com.artemis.BaseSystem
 import com.artemis.annotations.Wire
 import event.GamePacket
 import event.SendContainer
-import models.enums.SendType
+import models.network.SendType
 import tools.kyro.client.GameClient
 
 class SendSystem: BaseSystem() {

@@ -4,8 +4,9 @@ import alexey.tools.server.level.AdvancedChunkManager
 import com.artemis.ComponentMapper
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2
-import models.enums.EntityType
-import models.enums.TextureType
+import core.models.components.texture.TextureContainer
+import models.entity.EntityType
+import models.textures.TextureType
 import org.example.app.ecs.components.EntityComponent
 import org.example.app.ecs.utils.utCreateBody
 import org.example.app.ecs.utils.utCreateEntity
@@ -27,7 +28,7 @@ class BlockChunkGenerator(
         val entityId = artemisWorld.create()
         artemisWorld.utCreateEntity(
             entityId = entityId,
-            textureType = TextureType.STONE,
+            texture = TextureContainer.get(TextureType.BLOCK.STONE),
             entityType = EntityType.WALL,
             isObserver = false,
             isPhysical = true,

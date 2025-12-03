@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
-import core.textures.SkinID
+import models.textures.SkinID
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import tools.graphics.screens.fragment.Fragment

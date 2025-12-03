@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import core.textures.SkinID
+import models.textures.SkinID
 import tools.graphics.screens.dialogs.DialogManager
 import tools.graphics.setOnClickListener
 

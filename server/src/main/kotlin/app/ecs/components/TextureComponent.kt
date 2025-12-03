@@ -1,8 +1,8 @@
 package org.example.app.ecs.components
 
 import com.artemis.Component
-import models.enums.TextureType
+import core.models.components.texture.TextureContainer
 
 class TextureComponent: Component() {
-    var textureType = TextureType.NULL
+    var texture: TextureContainer? = null
 }

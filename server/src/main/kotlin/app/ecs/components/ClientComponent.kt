@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Disposable
 import com.esotericsoftware.kryonet.Connection
 import event.Event
 import event.SendContainer
-import models.enums.SendType
+import models.network.SendType
 import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 

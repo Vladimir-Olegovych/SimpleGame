@@ -1,4 +1,4 @@
-package models.enums
+package models.entity
 
 enum class EntityType {
     ENTITY,

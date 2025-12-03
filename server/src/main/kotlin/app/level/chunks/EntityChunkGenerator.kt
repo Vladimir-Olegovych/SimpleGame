@@ -1,16 +1,17 @@
 package org.example.app.level.chunks
 
 import alexey.tools.server.level.AdvancedChunkManager
+import app.items.DiamondItem
 import com.artemis.ComponentMapper
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2
-import models.enums.EntityType
-import models.enums.TextureType
+import core.models.components.texture.TextureContainer
+import models.entity.EntityType
+import models.textures.TextureType
 import org.example.app.ecs.components.EntityComponent
+import org.example.app.ecs.components.SizeComponent
 import org.example.app.ecs.utils.utCreateBody
 import org.example.app.ecs.utils.utCreateEntity
-import org.example.app.items.FoodItem
-import org.example.app.items.GunItem
 import org.example.core.items.manager.ItemsManager
 import org.example.core.level.SingleChunkGenerator
 import org.example.core.models.box2d.BodyType
@@ -22,21 +23,10 @@ class EntityChunkGenerator(
     private val itemsManager: ItemsManager
 ): SingleChunkGenerator() {
 
-    init {
-        itemsManager.apply {
-            registerItem(GunItem::class.java)  {  GunItem(it, artemisWorld) }
-            registerItem(FoodItem::class.java) { FoodItem(it, artemisWorld) }
-        }
-    }
-
     init { artemisWorld.inject(this) }
 
     private lateinit var entityComponentMapper: ComponentMapper<EntityComponent>
-
-    private val entityStats = mapOf<String, Any>(
-        ApplicationValues.Stats.NAME to "Name",
-        ApplicationValues.Stats.HP to 2000
-    )
+    private lateinit var sizeComponentMapper: ComponentMapper<SizeComponent>
 
     override fun generatePosition(position: Vector2): Boolean {
         if (getRandom().nextInt(0, 20) > 2) return false
@@ -44,13 +34,17 @@ class EntityChunkGenerator(
         val entityId = artemisWorld.create()
         artemisWorld.utCreateEntity(
             entityId = entityId,
-            textureType = TextureType.ZOMBIE,
-            entityType = EntityType.ENTITY,
+            texture = TextureContainer.get(TextureType.ITEM.DIAMOND),
+            entityType = EntityType.ITEM,
             isObserver = false,
             isPhysical = true,
-            worldItem = itemsManager.create(FoodItem::class.java),
-            entityStats = entityStats
+            worldItem = itemsManager.create(DiamondItem::class.java),
         )
+        sizeComponentMapper[entityId].let {
+            it.radius = 0.2F
+            it.halfWidth = 0.2F
+            it.halfHeight = 0.2F
+        }
         artemisWorld.utCreateBody(
             entityId = entityId,
             vector2 = position,

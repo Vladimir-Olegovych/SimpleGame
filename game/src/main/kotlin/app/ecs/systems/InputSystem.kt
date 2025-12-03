@@ -21,7 +21,6 @@ class InputSystem: BaseSystem() {
     @Wire
     private lateinit var sendEvents: SendEvents
 
-
     private lateinit var movementInputProcessor: MovementInputProcessor
     private lateinit var lookInputProcessor: LookInputProcessor
     private lateinit var hotKeysInputProcessor: HotKeysInputProcessor

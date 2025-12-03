@@ -3,10 +3,10 @@ package utils
 import com.esotericsoftware.kryo.Kryo
 import event.Event
 import event.GamePacket
-import models.ItemContainer
-import models.StatContainer
-import models.enums.EntityType
-import models.enums.TextureType
+import models.entity.EntityType
+import models.items.ItemContainer
+import models.stats.StatContainer
+import models.textures.SkinID
 
 fun Kryo.registerAllEvents(){
     val kryo = this
@@ -19,7 +19,6 @@ fun Kryo.registerAllEvents(){
     kryo.register(Array<ItemContainer>::class.java)
     kryo.register(GamePacket::class.java)
 
-    kryo.register(TextureType::class.java)
     kryo.register(EntityType::class.java)
 
     kryo.register(Event.Entity::class.java)

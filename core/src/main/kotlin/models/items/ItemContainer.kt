@@ -1,4 +1,4 @@
-package models
+package models.items
 
 class ItemContainer(
     val entityId: Int = 0,
