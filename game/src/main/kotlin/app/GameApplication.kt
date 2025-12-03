@@ -3,9 +3,9 @@ package app
 import app.di.components.AppComponent
 import app.di.components.DaggerAppComponent
 import app.navigation.Navigation
-import app.screens.game.screen.GameFragment
 import app.screens.MainFragment
 import app.screens.StructureEditorFragment
+import app.screens.game.screen.GameFragment
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.SpriteBatch

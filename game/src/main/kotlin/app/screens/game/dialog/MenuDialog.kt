@@ -13,7 +13,9 @@ import tools.graphics.setOnClickListener
 class MenuDialog(
     private val stage: Stage,
     private val assetManager: AssetManager,
-    private val onDisconnect: () -> Unit
+    private val onResume: () -> Unit,
+    private val onSettings: () -> Unit,
+    private val onQuit: () -> Unit,
 ): Dialog() {
 
     private val texture = assetManager.get<TextureAtlas>(SkinID.BLOCK.atlas).findRegion("ic_stone_block")
@@ -23,8 +25,18 @@ class MenuDialog(
         setFillParent(true)
         //background(TextureRegionDrawable(texture))
         add(
+            TextButton("resume", this@MenuDialog.skin).setOnClickListener {
+                dismiss()
+            }
+        ).height(40F).width(70F).row()
+        add(
+            TextButton("settings", this@MenuDialog.skin).setOnClickListener {
+                //dismiss()
+            }
+        ).height(40F).width(70F).padTop(8F).row()
+        add(
             TextButton("quit", this@MenuDialog.skin).setOnClickListener {
-                onDisconnect.invoke()
+                onResume.invoke()
             }
         ).height(40F).width(70F).padTop(8F).row()
     }

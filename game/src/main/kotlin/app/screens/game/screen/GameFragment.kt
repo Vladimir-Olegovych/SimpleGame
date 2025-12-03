@@ -10,9 +10,11 @@ import app.ecs.processors.MovementInputProcessor
 import app.ecs.processors.ServerInputProcessor
 import app.ecs.systems.DrawSystem
 import app.ecs.systems.EntitySystem
+import app.ecs.systems.InputSystem
 import app.ecs.systems.ServerSystem
 import app.ecs.systems.UiSystem
 import app.navigation.Navigation
+import app.screens.game.dialog.MenuDialog
 import com.artemis.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
@@ -61,18 +63,17 @@ class GameFragment(
         val player = Player()
         val sendEvents = SendEvents()
 
-        inputProcessor.addProcessor(stage)
-        inputProcessor.addProcessor(MovementInputProcessor(sendEvents))
-        inputProcessor.addProcessor(HotKeysInputProcessor(sendEvents))
-        inputProcessor.addProcessor(LookInputProcessor(sendEvents))
+        val worldBuilder = ArtemisWorldBuilder()
 
-        artemisWorld = ArtemisWorldBuilder()
+        worldBuilder
             .addSystem(entitySystem)
             .addSystem(DrawSystem())
-            .addSystem(UiSystem(onBack))
+            .addSystem(InputSystem())
+            .addSystem(UiSystem())
             .addSystem(ServerSystem())
             .addObject(player)
             .addObject(sendEvents)
+            .addObject(inputProcessor)
             .addObject(dialogManager)
             .addObject(clientPreference)
             .addObject(gameViewport)
@@ -82,7 +83,8 @@ class GameFragment(
             .addObject(spriteBatch)
             .addObject(camera)
             .addObject(assetManager)
-            .build()
+
+        artemisWorld = worldBuilder.build()
 
         val serverInputProcessor = ServerInputProcessor(
             eventBus = eventBus,
@@ -125,5 +127,9 @@ class GameFragment(
 
         inputProcessor.clear()
         artemisWorld.dispose()
+    }
+
+    protected fun finalize(){
+        println("finalaize")
     }
 }

@@ -10,35 +10,35 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import core.textures.SkinID
+import tools.graphics.input.CycleInputProcessor
 import tools.graphics.screens.dialogs.DialogManager
 import tools.graphics.setOnClickListener
 
-class UiSystem(private val onDisconnect: () -> Unit): BaseSystem() {
+class UiSystem(): BaseSystem() {
+    @Wire
+    private lateinit var menuDialog: MenuDialog
     @Wire
     private lateinit var dialogManager: DialogManager
     @Wire
     private lateinit var stage: Stage
+    @Wire
+    private lateinit var inputProcessor: CycleInputProcessor
     @Wire
     private lateinit var uiViewport: UiViewport
     @Wire
     private lateinit var assetManager: AssetManager
 
     override fun initialize() {
-        val skinButton = assetManager.get<Skin>(SkinID.BUTTON.skin)
+        inputProcessor.addProcessor(stage)
 
-        val menuDialog = MenuDialog(
-            stage = stage,
-            assetManager = assetManager,
-            onDisconnect = onDisconnect
-        )
+        val skinButton = assetManager.get<Skin>(SkinID.BUTTON.skin)
 
         val gameTable = Table().apply {
             setFillParent(true)
         }
 
         val menu = ImageButton(skinButton, "menu").setOnClickListener {
-            if (!menuDialog.isShowed()) menuDialog.show(dialogManager)
-            else menuDialog.dismiss()
+            menuDialog.show(dialogManager)
         }
 
         gameTable.add(menu).height(50f).width(50f).pad(10f)
