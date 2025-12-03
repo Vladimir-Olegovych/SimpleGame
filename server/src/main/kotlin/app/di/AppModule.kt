@@ -1,0 +1,69 @@
+package app.di
+
+import alexey.tools.server.level.AdvancedChunkManager
+import com.badlogic.gdx.physics.box2d.World
+import event.GamePacket
+import org.example.app.ecs.systems.*
+import org.example.core.items.manager.ItemsManager
+import org.example.core.models.settings.ServerPreference
+import org.koin.dsl.module
+import tools.artemis.world.ArtemisWorldBuilder
+import tools.eventbus.EventBus
+import tools.kyro.server.GameServer
+import tools.preference.JsonPreference
+
+val appModule = module {
+    single<ServerPreference> {
+        JsonPreference("server", ServerPreference()).getPreference()
+    }
+
+    single<EventBus> { EventBus() }
+
+    single<GameServer<GamePacket>> { GameServer() }
+
+    single<AdvancedChunkManager> {
+        val serverPreference: ServerPreference = get()
+        AdvancedChunkManager(
+            visibleRadius = serverPreference.chunkRadius,
+            chunkSize = serverPreference.chunkSize
+        )
+    }
+
+    single<com.artemis.World> {
+        val world: World = get()
+        val eventBus: EventBus = get()
+        val itemsManager: ItemsManager = get()
+        val serverPreference: ServerPreference = get()
+        val chunkManager: AdvancedChunkManager = get()
+
+        val chunkSystem: ChunkSystem = get()
+        val clientSystem: ClientSystem = get()
+        val collectItemsSystem: CollectItemsSystem = get()
+        val entitySystem: EntitySystem = get()
+        val eventSystem: EventSystem = get()
+        val lookAtSystem: LookAtSystem = get()
+        val moveSystem: MoveSystem = get()
+        val physicsSystem: PhysicsSystem = get()
+        val sendSystem: SendSystem = get()
+
+        ArtemisWorldBuilder().let {
+            it.addSystem(clientSystem)
+            it.addSystem(chunkSystem)
+            it.addSystem(entitySystem)
+            it.addSystem(moveSystem)
+            it.addSystem(lookAtSystem)
+            it.addSystem(collectItemsSystem)
+            it.addSystem(physicsSystem)
+            it.addSystem(eventSystem)
+            it.addSystem(sendSystem)
+
+            it.addObject(serverPreference)
+            it.addObject(chunkManager)
+            it.addObject(itemsManager)
+            it.addObject(eventBus)
+            it.addObject(world)
+
+            it.build()
+        }
+    }
+}

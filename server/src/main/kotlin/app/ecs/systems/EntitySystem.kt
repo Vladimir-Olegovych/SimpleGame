@@ -5,7 +5,6 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import com.badlogic.gdx.math.Vector2
 import event.Event
 import org.example.app.ecs.components.*
 import org.example.core.models.server.EventContainer

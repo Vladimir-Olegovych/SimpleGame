@@ -1,4 +1,4 @@
-package org.example.app.listeners.contact
+package app.listeners.contact
 
 import com.artemis.ComponentMapper
 import com.artemis.World

@@ -4,7 +4,6 @@ import alexey.tools.common.collections.IntCollection
 import alexey.tools.common.level.Chunk
 import alexey.tools.common.level.ChunkManager
 import com.artemis.ComponentMapper
-import com.artemis.World
 import com.artemis.annotations.All
 import com.artemis.systems.IteratingSystem
 import ecs.components.ClientComponent

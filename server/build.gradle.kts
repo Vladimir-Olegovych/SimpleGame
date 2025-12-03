@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm")
-    id("kotlin-kapt")
     id("com.github.johnrengelman.shadow") version "8.1.1"
 
 }
@@ -44,8 +43,7 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     api("com.esotericsoftware:kryonet:2.22.0-RC1")
 
-    implementation("com.google.dagger:dagger:2.56.2")
-    kapt("com.google.dagger:dagger-compiler:2.56.2")
+    implementation("io.insert-koin:koin-core:3.5.6")
 
     testImplementation(kotlin("test"))
 }

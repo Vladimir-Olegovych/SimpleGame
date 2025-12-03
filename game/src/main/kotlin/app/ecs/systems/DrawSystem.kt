@@ -1,6 +1,6 @@
 package app.ecs.systems
 
-import app.di.modules.GameViewport
+import app.di.GameViewport
 import app.ecs.components.*
 import app.ecs.models.Player
 import com.artemis.ComponentMapper

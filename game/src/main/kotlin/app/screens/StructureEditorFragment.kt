@@ -1,6 +1,6 @@
 package app.screens
 
-import app.di.modules.UiViewport
+import app.di.UiViewport
 import app.navigation.Navigation
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
@@ -17,20 +17,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import core.textures.SkinID
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import tools.graphics.screens.fragment.Fragment
 import tools.graphics.setOnClickListener
-import javax.inject.Inject
 
 class StructureEditorFragment(
     private val navigation: Navigation.StructureEditor,
     private val onBack: () -> Unit
-): Fragment() {
+): KoinComponent, Fragment() {
 
-    @Inject lateinit var stage: Stage
-    @Inject lateinit var camera: OrthographicCamera
-    @Inject lateinit var spriteBatch: SpriteBatch
-    @Inject lateinit var assetManager: AssetManager
-    @Inject lateinit var uiViewport: UiViewport
+    private val stage: Stage by inject()
+    private val camera: OrthographicCamera by inject()
+    private val spriteBatch: SpriteBatch by inject()
+    private val assetManager: AssetManager by inject()
+    private val uiViewport: UiViewport by inject()
 
     private lateinit var cellTexture: TextureRegion
     private lateinit var emptyCellTexture: TextureRegion

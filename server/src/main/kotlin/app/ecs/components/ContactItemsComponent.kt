@@ -1,7 +1,7 @@
 package org.example.app.ecs.components
 
 import com.artemis.Component
-import java.util.Queue
+import java.util.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class ContactItemsComponent: Component() {

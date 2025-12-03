@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm") version "2.1.10"
-    id("kotlin-kapt")
 }
 
 group = "org.example"
@@ -28,8 +27,7 @@ dependencies {
     api("net.onedaybeard.artemis:artemis-odb:2.3.0")
     api("com.esotericsoftware:kryonet:2.22.0-RC1")
 
-    implementation("com.google.dagger:dagger:2.56.2")
-    kapt("com.google.dagger:dagger-compiler:2.56.2")
+    implementation("io.insert-koin:koin-core:3.5.6")
 
     testImplementation(kotlin("test"))
 }

@@ -1,6 +1,6 @@
 package app.ecs.systems
 
-import app.di.modules.UiViewport
+import app.di.UiViewport
 import app.screens.game.dialog.MenuDialog
 import com.artemis.BaseSystem
 import com.artemis.annotations.Wire

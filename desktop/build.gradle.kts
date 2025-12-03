@@ -18,8 +18,10 @@ repositories {
 }
 
 dependencies {
-
     api(project(":game"))
+
+    implementation("io.insert-koin:koin-core:3.5.6")
+
     api("com.badlogicgames.gdx:gdx-box2d-platform:1.13.1:natives-desktop")
     api("com.badlogicgames.gdx:gdx-freetype-platform:1.13.1:natives-desktop")
     api("com.badlogicgames.gdx:gdx-platform:1.13.1:natives-desktop")

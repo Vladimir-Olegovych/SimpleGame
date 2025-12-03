@@ -1,7 +1,6 @@
 package app
 
-import app.di.components.AppComponent
-import app.di.components.DaggerAppComponent
+import app.di.appModule
 import app.navigation.Navigation
 import app.screens.MainFragment
 import app.screens.StructureEditorFragment
@@ -14,26 +13,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import core.models.settings.ClientPreference
 import core.textures.SkinID
 import event.GamePacket
-import tools.graphics.screens.fragment.Fragment
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.context.GlobalContext.startKoin
 import tools.graphics.screens.navigation.NavHostController
-import tools.graphics.screens.navigation.NavigationListener
 import tools.kyro.client.GameClient
 import tools.preference.JsonPreference
-import javax.inject.Inject
 
-class GameApplication: Game() {
-    private lateinit var appComponent: AppComponent
+class GameApplication: KoinComponent, Game() {
 
-    @Inject lateinit var jsonPreference: JsonPreference<ClientPreference>
-    @Inject lateinit var clientPreference: ClientPreference
-    @Inject lateinit var spriteBatch: SpriteBatch
-    @Inject lateinit var stage: Stage
-    @Inject lateinit var assetManager: AssetManager
-    @Inject lateinit var gameClient: GameClient<GamePacket>
+    private val jsonPreference: JsonPreference<ClientPreference> by inject()
+    private val clientPreference: ClientPreference by inject()
+    private val spriteBatch: SpriteBatch by inject()
+    private val stage: Stage by inject()
+    private val assetManager: AssetManager by inject()
+    private val gameClient: GameClient<GamePacket> by inject()
 
     override fun create() {
-        appComponent = DaggerAppComponent.create()
-        appComponent.inject(this)
+        startKoin {
+            modules(appModule)
+        }
 
         SkinID.entries.forEach {
             assetManager.load(it.skin, Skin::class.java)
@@ -44,15 +43,6 @@ class GameApplication: Game() {
 
         val navHostController = NavHostController<Navigation>(this)
 
-        navHostController.setOnNavigationListener(object : NavigationListener<Navigation> {
-            override fun onNavigationSuccess(destination: Navigation, fragment: Fragment) {
-                when(destination) {
-                    is Navigation.Main -> appComponent.inject(fragment as MainFragment)
-                    is Navigation.Game -> appComponent.inject(fragment as GameFragment)
-                    is Navigation.StructureEditor -> appComponent.inject(fragment as StructureEditorFragment)
-                }
-            }
-        })
         navHostController.apply {
             fragment<Navigation.Main> {
                 return@fragment MainFragment(

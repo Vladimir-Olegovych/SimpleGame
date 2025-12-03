@@ -1,9 +1,9 @@
 package org.example.app.ecs.systems
 
+import app.ecs.components.LookAtComponent
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.systems.IteratingSystem
-import app.ecs.components.LookAtComponent
 import org.example.app.ecs.components.PhysicsComponent
 
 @All(PhysicsComponent::class)

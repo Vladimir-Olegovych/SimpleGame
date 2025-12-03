@@ -1,18 +1,11 @@
 package app.screens.game.screen
 
-import app.di.modules.GameViewport
-import app.di.modules.UiViewport
+import app.di.GameViewport
+import app.di.UiViewport
 import app.ecs.models.Player
 import app.ecs.models.SendEvents
-import app.ecs.processors.HotKeysInputProcessor
-import app.ecs.processors.LookInputProcessor
-import app.ecs.processors.MovementInputProcessor
 import app.ecs.processors.ServerInputProcessor
-import app.ecs.systems.DrawSystem
-import app.ecs.systems.EntitySystem
-import app.ecs.systems.InputSystem
-import app.ecs.systems.ServerSystem
-import app.ecs.systems.UiSystem
+import app.ecs.systems.*
 import app.navigation.Navigation
 import app.screens.game.dialog.MenuDialog
 import com.artemis.World
@@ -23,37 +16,29 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import core.models.settings.ClientPreference
 import event.GamePacket
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import tools.artemis.world.ArtemisWorldBuilder
 import tools.eventbus.EventBus
 import tools.graphics.input.CycleInputProcessor
 import tools.graphics.screens.fragment.Fragment
 import tools.kyro.client.GameClient
 import utils.registerAllEvents
-import javax.inject.Inject
 
 class GameFragment(
     private val navigation: Navigation.Game,
     private val onBack: () -> Unit
-): Fragment() {
+): KoinComponent, Fragment() {
 
-    @Inject
-    lateinit var clientPreference: ClientPreference
-    @Inject
-    lateinit var gameClient: GameClient<GamePacket>
-    @Inject
-    lateinit var eventBus: EventBus
-    @Inject
-    lateinit var assetManager: AssetManager
-    @Inject
-    lateinit var spriteBatch: SpriteBatch
-    @Inject
-    lateinit var camera: OrthographicCamera
-    @Inject
-    lateinit var stage: Stage
-    @Inject
-    lateinit var gameViewport: GameViewport
-    @Inject
-    lateinit var uiViewport: UiViewport
+    private val clientPreference: ClientPreference by inject()
+    private val gameClient: GameClient<GamePacket> by inject()
+    private val eventBus: EventBus by inject()
+    private val assetManager: AssetManager by inject()
+    private val spriteBatch: SpriteBatch by inject()
+    private val camera: OrthographicCamera by inject()
+    private val stage: Stage by inject()
+    private val gameViewport: GameViewport by inject()
+    private val uiViewport: UiViewport by inject()
 
     private lateinit var artemisWorld: World
     private val inputProcessor = CycleInputProcessor()
@@ -65,6 +50,8 @@ class GameFragment(
 
         val worldBuilder = ArtemisWorldBuilder()
 
+        val menuDialog = MenuDialog(stage, assetManager, onQuit = onBack)
+
         worldBuilder
             .addSystem(entitySystem)
             .addSystem(DrawSystem())
@@ -73,6 +60,7 @@ class GameFragment(
             .addSystem(ServerSystem())
             .addObject(player)
             .addObject(sendEvents)
+            .addObject(menuDialog)
             .addObject(inputProcessor)
             .addObject(dialogManager)
             .addObject(clientPreference)
@@ -107,9 +95,13 @@ class GameFragment(
     }
 
     override fun onRender(deltaTime: Float) {
-        eventBus.process()
-        artemisWorld.delta = deltaTime
-        artemisWorld.process()
+        try {
+            eventBus.process()
+            artemisWorld.delta = deltaTime
+            artemisWorld.process()
+        } catch (e: Throwable){
+            e.printStackTrace()
+        }
     }
 
     override fun onResize(width: Int, height: Int) {
@@ -129,7 +121,4 @@ class GameFragment(
         artemisWorld.dispose()
     }
 
-    protected fun finalize(){
-        println("finalaize")
-    }
 }

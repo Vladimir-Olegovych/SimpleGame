@@ -1,44 +1,50 @@
 package app
 
 import alexey.tools.server.level.AdvancedChunkManager
+import app.di.appModule
+import app.di.itemModule
+import app.di.physicsModule
+import app.di.systemModule
+import app.listeners.contact.ItemContactListener
 import com.artemis.World
-import app.di.components.AppComponent
-import app.di.components.DaggerAppComponent
+import core.physics.contact.ContactManager
 import event.GamePacket
 import kotlinx.coroutines.Dispatchers
-import org.example.app.ecs.systems.*
-import org.example.app.listeners.contact.ItemContactListener
+import org.example.app.ecs.systems.ChunkSystem
+import org.example.app.ecs.systems.ClientSystem
+import org.example.app.ecs.systems.EntitySystem
+import org.example.app.ecs.systems.EventSystem
 import org.example.core.models.settings.ServerPreference
-import org.example.core.physics.contact.ContactManager
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.context.GlobalContext.startKoin
 import tools.eventbus.EventBus
 import tools.graphics.render.LifecycleUpdater
 import tools.kyro.server.GameServer
 import utils.registerAllEvents
-import javax.inject.Inject
 
 class ServerApplication(
     private val port: Int = 5000
-): LifecycleUpdater(1F / 30F, Dispatchers.IO) {
+): KoinComponent, LifecycleUpdater(1F / 30F, Dispatchers.IO) {
 
-    private lateinit var appComponent: AppComponent
+    private val artemisWorld: World by inject()
 
-    @Inject lateinit var artemisWorld: World
+    private val eventBus: EventBus by inject()
+    private val serverPreference: ServerPreference by inject()
+    private val chunkManager: AdvancedChunkManager by inject()
+    private val contactManager: ContactManager by inject()
+    private val gameServer: GameServer<GamePacket> by inject()
 
-    @Inject lateinit var eventBus: EventBus
-    @Inject lateinit var serverPreference: ServerPreference
-    @Inject lateinit var chunkManager: AdvancedChunkManager
-    @Inject lateinit var contactManager: ContactManager
-    @Inject lateinit var gameServer: GameServer<GamePacket>
-
-    @Inject lateinit var clientSystem: ClientSystem
-    @Inject lateinit var entitySystem: EntitySystem
-    @Inject lateinit var chunkSystem: ChunkSystem
-    @Inject lateinit var eventSystem: EventSystem
-    @Inject lateinit var itemContactListener: ItemContactListener
+    private val clientSystem: ClientSystem by inject()
+    private val entitySystem: EntitySystem by inject()
+    private val chunkSystem: ChunkSystem by inject()
+    private val eventSystem: EventSystem by inject()
+    private val itemContactListener: ItemContactListener by inject()
 
     override fun create() {
-        appComponent = DaggerAppComponent.create()
-        appComponent.inject(this)
+        startKoin {
+            modules(systemModule, itemModule, physicsModule, appModule)
+        }
 
         gameServer.subscribe(clientSystem)
         eventBus.registerHandler(entitySystem)
