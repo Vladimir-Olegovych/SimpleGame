@@ -1,19 +1,23 @@
 package app.level.generator
 
 import alexey.tools.common.level.Chunk
+import app.items.DiamondItem
 import app.level.biome.Biome
 import com.artemis.ComponentMapper
 import com.artemis.World
+import com.artemis.annotations.Wire
 import com.badlogic.gdx.math.Vector2
 import core.models.components.texture.TextureContainer
 import models.entity.EntityType
 import models.textures.TextureType
 import org.example.app.ecs.components.EntityComponent
+import org.example.app.ecs.utils.utCreateBody
 import org.example.app.ecs.utils.utCreateEntity
+import org.example.core.items.manager.ItemsManager
+import org.example.core.models.box2d.BodyType
 import org.example.core.models.settings.ServerPreference
 import org.koin.core.component.KoinComponent
 import tools.chunk.WorldGenerator
-import tools.math.getWorldPosition
 import tools.noice.simplex.SimplexNoise
 import kotlin.random.Random
 
@@ -24,8 +28,9 @@ class ServerWorldGenerator(
     chunkSize = serverPreference.chunkSize,
     blockSize = serverPreference.blockSize
 ){
-    private val seed: Long = Random.nextLong()
+    private val seed = Random.nextLong()
 
+    @Wire private lateinit var itemsManager: ItemsManager
     private lateinit var entityComponentMapper: ComponentMapper<EntityComponent>
 
     private val biomeNoise = SimplexNoise(seed)
@@ -36,13 +41,9 @@ class ServerWorldGenerator(
     }
 
     override fun onGenerateChunk(chunk: Chunk, positions: Array<Vector2>) {
-        /*
         val chunkPosition = chunk.getPosition()
-        val seed = (chunkPosition.x.toLong() shl 32) or (chunkPosition.y.toLong() and 0xFFFFFFFF)
-        val random = Random(seed + this.seed)
-         */
-
-        val chunkPosition = chunk.getPosition()
+        val seed = (chunkPosition.x * 73856093L) xor (chunkPosition.y * 19349663L) xor this.seed
+        val random = Random(seed)
 
         for (position in positions) {
             val biome = getPositionBiome(position)
@@ -57,6 +58,9 @@ class ServerWorldGenerator(
             )
             val entityComponent = entityComponentMapper[entityId]
             chunk.add(entityId, entityComponent.isObserver)
+
+            //if (random.nextInt(0, 20) < 3)
+                createEntity(chunk, position)
         }
     }
 
@@ -72,6 +76,26 @@ class ServerWorldGenerator(
             normalizedNoise > 0.7f -> Biome.DESERT
             else -> Biome.FOREST
         }
+    }
+
+    fun createEntity(chunk: Chunk, position: Vector2){
+        val entityId = artemisWorld.create()
+        artemisWorld.utCreateEntity(
+            entityId = entityId,
+            texture = TextureContainer.get(TextureType.ENTITY.ZOMBIE),
+            entityType = EntityType.ITEM,
+            isObserver = false,
+            isPhysical = true,
+            worldItem = itemsManager.create(DiamondItem::class.java),
+        )
+        artemisWorld.utCreateBody(
+            entityId = entityId,
+            vector2 = position,
+            bodyType = BodyType.CIRCLE,
+            isEnabled = false
+        )
+        val entityComponent = entityComponentMapper[entityId]
+        chunk.add(entityId, entityComponent.isObserver)
     }
 
 }

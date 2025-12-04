@@ -15,7 +15,7 @@ class MoveSystem: IteratingSystem() {
     override fun process(entityId: Int) {
         val physicsComponent = physicsComponentMapper[entityId]?: return
         val moveComponent = moveComponentMapper[entityId]?: return
-        val body = physicsComponent.body?: return
+        val body = physicsComponent.getBody()?: return
         val moveVector = moveComponent.vector
         body.applyForce(moveVector, body.worldCenter, true)
     }

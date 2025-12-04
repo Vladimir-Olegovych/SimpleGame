@@ -64,7 +64,7 @@ fun World.utCreateEntity(entityId: Int,
 
     if (entityStats != null) {
         val statsComponent = statsComponentMapper.create(entityId)
-        statsComponent.setAllStats(entityStats)
+        statsComponent.setStats(entityStats)
     }
 
     if(worldItem != null){

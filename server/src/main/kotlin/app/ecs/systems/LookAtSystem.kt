@@ -16,7 +16,7 @@ class LookAtSystem: IteratingSystem() {
         val physicsComponent = physicsComponentMapper[entityId]?: return
         val lookAtComponent = lookAtComponentMapper[entityId]?: return
         val angle = lookAtComponent.lookAt
-        val body = physicsComponent.body?: return
+        val body = physicsComponent.getBody()?: return
         if (body.angle == angle) return
         body.setTransform(body.position, angle)
     }

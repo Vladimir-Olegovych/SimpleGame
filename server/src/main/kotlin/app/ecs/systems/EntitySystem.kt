@@ -69,5 +69,7 @@ class EntitySystem: IteratingSystem() {
         }
     }
 
-    override fun process(entityId: Int) {}
+    override fun process(entityId: Int) {
+
+    }
 }

@@ -31,7 +31,7 @@ class CollectItemsSystem: IteratingSystem() {
 
     private fun InventoryComponent.collectItem(itemId: Int){
         val item = itemComponentMapper[itemId]?: return
-        this.addItem(item.worldItem?: return)
+        if(!this.addItem(item.worldItem?: return)) return
         world.utRemoveBody(itemId)
         chunkManager.remove(itemId)
     }

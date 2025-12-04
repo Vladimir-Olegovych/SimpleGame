@@ -26,7 +26,7 @@ class ClientComponent: Disposable, Component() {
         )
     }
 
-    fun getEntities(): Iterable<Int> = entities
+    fun getEntities(): Queue<Int> = entities
     fun addEntities(entities: IntCollection) { this.entities.addAll(entities) }
     fun removeEntities(entities: IntCollection) { this.entities.removeAll(entities) }
 

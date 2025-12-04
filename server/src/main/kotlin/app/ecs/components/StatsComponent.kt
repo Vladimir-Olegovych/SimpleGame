@@ -2,25 +2,19 @@ package org.example.app.ecs.components
 
 import com.artemis.Component
 import models.stats.StatContainer
-import org.example.app.ecs.components.sender.CSender
+import app.ecs.components.sender.UpdatableData
 
-class StatsComponent: CSender<Array<StatContainer>>, Component() {
+class StatsComponent: Component() {
 
     private val stats = HashMap<String, Any>()
     private val _tempStats = HashMap<String, Any>()
 
-    fun setAllStats(newStats: Map<String, Any>){
-        stats.clear()
-        stats.putAll(newStats)
+    fun setStats(stats: Map<String, Any>){
+        this@StatsComponent.stats.clear()
+        this@StatsComponent.stats.putAll(stats)
     }
 
     fun getMapStats(): Map<String, Any> = stats
-
-    fun getArrayStatContainer(): Array<StatContainer> {
-        return stats.map { (key, value) ->
-            StatContainer(key, value)
-        }.toTypedArray()
-    }
 
     fun setStat(key: String, value: Any) {
         stats[key] = value
@@ -30,21 +24,38 @@ class StatsComponent: CSender<Array<StatContainer>>, Component() {
         return stats[key] as? T
     }
 
-    override fun fetchSendData(): Array<StatContainer> {
-        val differences = ArrayList<StatContainer>()
-
-        stats.forEach { (key, value) ->
-            if (value != _tempStats[key]) {
-                differences.add(StatContainer(key, value))
+    val statsUpdater = object : UpdatableData<Array<StatContainer>>() {
+        override fun onHasUpdate(): Boolean {
+            stats.forEach { (key, value) ->
+                if (value != _tempStats[key]) {
+                    return true
+                }
             }
+            return false
         }
 
-        if(differences.isNotEmpty()) {
+        override fun onMarkAsUpdated() {
             _tempStats.clear()
             _tempStats.putAll(stats)
         }
 
-        return differences.toTypedArray()
+        override fun getUpdate(): Array<StatContainer> {
+            val differences = ArrayList<StatContainer>()
+
+            stats.forEach { (key, value) ->
+                if (value != _tempStats[key]) {
+                    differences.add(StatContainer(key, value))
+                }
+            }
+
+            return differences.toTypedArray()
+        }
+
+        override fun getAll(): Array<StatContainer> {
+            return stats.map { (key, value) ->
+                StatContainer(key, value)
+            }.toTypedArray()
+        }
     }
 
 }

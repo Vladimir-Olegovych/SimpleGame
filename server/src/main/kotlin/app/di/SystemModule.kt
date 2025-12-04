@@ -4,7 +4,6 @@ import org.example.app.ecs.systems.*
 import org.koin.dsl.module
 
 val systemModule = module {
-    single<EventSystem> { EventSystem() }
     single<LookAtSystem> { LookAtSystem() }
     single<CollectItemsSystem> { CollectItemsSystem() }
     single<SendSystem> { SendSystem() }

@@ -17,14 +17,14 @@ class PhysicsSystem: BaseEntitySystem() {
 
     override fun inserted(entityId: Int) {
         val physicsComponent = physicsComponentMapper[entityId]?: return
-        physicsComponent.body?.let { body ->
+        physicsComponent.getBody()?.let { body ->
             body.isActive = true
         }
     }
 
     override fun removed(entityId: Int) {
         val physicsComponent = physicsComponentMapper[entityId]?: return
-        physicsComponent.body?.let { body ->
+        physicsComponent.getBody()?.let { body ->
             body.isActive = false
         }
     }

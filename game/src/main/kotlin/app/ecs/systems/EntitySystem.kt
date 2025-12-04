@@ -117,7 +117,7 @@ class EntitySystem(): IteratingSystem() {
 
     @BusEvent
     fun setInventory(event: Event.Inventory){
-
+        println("inventory is ${event.inventory.size}")
     }
 
     private var maxDistance = Float.MAX_VALUE

@@ -14,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import org.example.app.ecs.systems.ChunkSystem
 import org.example.app.ecs.systems.ClientSystem
 import org.example.app.ecs.systems.EntitySystem
-import org.example.app.ecs.systems.EventSystem
 import org.example.core.models.settings.ServerPreference
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -39,7 +38,6 @@ class ServerApplication(
     private val clientSystem: ClientSystem by inject()
     private val entitySystem: EntitySystem by inject()
     private val chunkSystem: ChunkSystem by inject()
-    private val eventSystem: EventSystem by inject()
     private val itemContactListener: ItemContactListener by inject()
 
     override fun create() {
@@ -53,7 +51,6 @@ class ServerApplication(
         eventBus.registerHandler(entitySystem)
 
         chunkManager.putListener(chunkSystem)
-        chunkManager.putListener(eventSystem)
         contactManager.addListener(itemContactListener)
 
         println("---------------------")

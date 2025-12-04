@@ -66,17 +66,17 @@ fun World.utCreateBody(entityId: Int,
     body.createFixture(sensorFDef).userData = FixtureType.Sensor(entityId)
 
     body.isActive = isEnabled
-    physics.body = body
+    physics.setBody(body)
 }
 
 fun World.utRemoveBody(entityId: Int){
     val world = this.getRegistered(com.badlogic.gdx.physics.box2d.World::class.java)
     val physicsComponentMapper = this.getMapper(PhysicsComponent::class.java)
     physicsComponentMapper[entityId]?.let { component ->
-        component.body?.let { body ->
+        component.getBody()?.let { body ->
             world.destroyBody(body)
         }
-        component.body = null
+        component.setBody(null)
     }
     physicsComponentMapper.remove(entityId)
 }

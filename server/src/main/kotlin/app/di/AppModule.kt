@@ -40,13 +40,13 @@ val appModule = module {
         val clientSystem: ClientSystem = get()
         val collectItemsSystem: CollectItemsSystem = get()
         val entitySystem: EntitySystem = get()
-        val eventSystem: EventSystem = get()
         val lookAtSystem: LookAtSystem = get()
         val moveSystem: MoveSystem = get()
         val physicsSystem: PhysicsSystem = get()
         val sendSystem: SendSystem = get()
 
         ArtemisWorldBuilder().let {
+            it.addSystem(sendSystem)
             it.addSystem(clientSystem)
             it.addSystem(chunkSystem)
             it.addSystem(entitySystem)
@@ -54,8 +54,6 @@ val appModule = module {
             it.addSystem(lookAtSystem)
             it.addSystem(collectItemsSystem)
             it.addSystem(physicsSystem)
-            it.addSystem(eventSystem)
-            it.addSystem(sendSystem)
 
             it.addObject(serverPreference)
             it.addObject(chunkManager)
