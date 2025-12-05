@@ -18,7 +18,9 @@ import org.example.core.models.box2d.BodyType
 import org.example.core.models.settings.ServerPreference
 import org.koin.core.component.KoinComponent
 import tools.chunk.WorldGenerator
+import tools.noice.simplex.PerlinNoise
 import tools.noice.simplex.SimplexNoise
+import kotlin.math.abs
 import kotlin.random.Random
 
 class ServerWorldGenerator(
@@ -59,21 +61,19 @@ class ServerWorldGenerator(
             val entityComponent = entityComponentMapper[entityId]
             chunk.add(entityId, entityComponent.isObserver)
 
-            //if (random.nextInt(0, 20) < 3)
+            if (random.nextInt(0, 50) < 3)
                 createEntity(chunk, position)
         }
     }
 
     fun getPositionBiome(position: Vector2): Biome {
         val scale = 0.003f
-        val noise = biomeNoise.noise2D(position.x, position.y, scale)
+        val noise = biomeNoise.noise2DScaled(position.x, position.y, scale)
+        val normalizedNoise = abs(noise)
 
-        val normalizedNoise = (noise + 1f) / 2f
-
-
-        return when {
-            normalizedNoise < 0.4f -> Biome.OCEAN
-            normalizedNoise > 0.7f -> Biome.DESERT
+        return when (normalizedNoise) {
+            in 0F .. 0.4f -> Biome.OCEAN
+            in 0.4f .. 0.5f -> Biome.DESERT
             else -> Biome.FOREST
         }
     }
@@ -82,7 +82,7 @@ class ServerWorldGenerator(
         val entityId = artemisWorld.create()
         artemisWorld.utCreateEntity(
             entityId = entityId,
-            texture = TextureContainer.get(TextureType.ENTITY.ZOMBIE),
+            texture = TextureContainer.get(TextureType.ITEM.DIAMOND),
             entityType = EntityType.ITEM,
             isObserver = false,
             isPhysical = true,

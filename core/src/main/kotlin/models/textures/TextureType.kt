@@ -102,3 +102,5 @@ object TextureType {
     }
 
 }
+
+fun String.asTextureId(): Int = TextureType.getIdByName(this)

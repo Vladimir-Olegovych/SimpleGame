@@ -17,6 +17,7 @@ fun Kryo.registerAllEvents(){
     kryo.register(Array<Event>::class.java)
     kryo.register(Array<StatContainer>::class.java)
     kryo.register(Array<ItemContainer>::class.java)
+    kryo.register(Array<Array<ItemContainer>?>::class.java)
     kryo.register(GamePacket::class.java)
 
     kryo.register(EntityType::class.java)

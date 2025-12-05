@@ -31,6 +31,9 @@
     menu: {
       up: ic_menu_button
     }
+    inventory_box: {
+      up: ic_item_box
+    }
     default: {
       up: ic_button_off
       down: ic_button_on
@@ -40,6 +43,17 @@
     default: {
       font: medium,
       fontColor: default
+    }
+    small: {
+      font: small,
+      fontColor: default
+    }
+  }
+
+  WindowStyle: {
+    default: {
+      titleFont: medium,
+      titleFontColor: default
     }
   }
 }

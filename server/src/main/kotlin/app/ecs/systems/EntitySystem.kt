@@ -1,5 +1,6 @@
 package org.example.app.ecs.systems
 
+import app.ecs.components.InventoryComponent
 import app.ecs.components.LookAtComponent
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All

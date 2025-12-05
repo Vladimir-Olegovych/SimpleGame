@@ -6,7 +6,7 @@ import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import org.example.app.ecs.components.ContactItemsComponent
-import org.example.app.ecs.components.InventoryComponent
+import app.ecs.components.InventoryComponent
 import org.example.app.ecs.components.ItemComponent
 import org.example.app.ecs.components.PhysicsComponent
 import org.example.app.ecs.utils.utRemoveBody

@@ -4,9 +4,14 @@ import app.di.GameViewport
 import app.di.UiViewport
 import app.ecs.models.Player
 import app.ecs.models.SendEvents
+import app.ecs.processors.HotKeysInputProcessor
+import app.ecs.processors.LookInputProcessor
+import app.ecs.processors.MovementInputProcessor
 import app.ecs.systems.*
 import app.navigation.Navigation
-import app.screens.game.dialog.MenuDialog
+import app.screens.game.ui.dialog.MenuDialog
+import app.screens.game.ui.inventory.InventoryUI
+import app.screens.game.ui.menu.MenuUI
 import com.artemis.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
@@ -15,6 +20,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.scenes.scene2d.Stage
 import core.models.settings.ClientPreference
+import core.textures.TextureStorage
 import event.GamePacket
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -41,24 +47,29 @@ class GameFragment(
 
     private lateinit var artemisWorld: World
     private val inputMultiplexer = InputMultiplexer()
+    private val textureStorage = TextureStorage(assetManager)
 
     override fun onCreate() {
         val entitySystem = EntitySystem()
+        val uiSystem = UiSystem()
         val serverSystem = ServerSystem(onError = onBack, onDisconnect = onBack)
-        val player = Player()
-        val sendEvents = SendEvents()
+
+        val movementInputProcessor = MovementInputProcessor()
+        val lookInputProcessor = LookInputProcessor()
+        val hotKeysInputProcessor = HotKeysInputProcessor()
 
         artemisWorld = ArtemisWorldBuilder()
             .addSystem(serverSystem)
             .addSystem(entitySystem)
             .addSystem(DrawSystem())
             .addSystem(InputSystem())
-            .addSystem(UiSystem())
+            .addSystem(uiSystem)
             .addSystem(SendSystem())
-            .addObject(player)
-            .addObject(sendEvents)
+
+            .addObject(Player())
+            .addObject(SendEvents())
+            .addObject(textureStorage)
             .addObject(MenuDialog(onQuit = onBack))
-            .addObject(inputMultiplexer)
             .addObject(dialogManager)
             .addObject(clientPreference)
             .addObject(gameViewport)
@@ -69,8 +80,23 @@ class GameFragment(
             .addObject(spriteBatch)
             .addObject(camera)
             .addObject(assetManager)
+            .addObject(InventoryUI())
+            .addObject(MenuUI())
+            .addObject(movementInputProcessor)
+            .addObject(lookInputProcessor)
+            .addObject(hotKeysInputProcessor)
+
+            .addInject(movementInputProcessor)
+            .addInject(lookInputProcessor)
+            .addInject(hotKeysInputProcessor)
             .build()
 
+        inputMultiplexer.addProcessor(stage)
+        inputMultiplexer.addProcessor(movementInputProcessor)
+        inputMultiplexer.addProcessor(lookInputProcessor)
+        inputMultiplexer.addProcessor(hotKeysInputProcessor)
+
+        eventBus.registerHandler(uiSystem)
         eventBus.registerHandler(entitySystem)
 
         Gdx.input.inputProcessor = inputMultiplexer
@@ -109,6 +135,7 @@ class GameFragment(
         eventBus.clear()
         gameClient.unSubscribeAll()
 
+        textureStorage.clear()
         inputMultiplexer.clear()
         artemisWorld.dispose()
     }

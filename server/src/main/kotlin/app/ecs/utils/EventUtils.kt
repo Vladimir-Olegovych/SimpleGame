@@ -1,5 +1,6 @@
 package app.ecs.utils
 
+import app.ecs.components.InventoryComponent
 import com.artemis.World
 import ecs.components.ClientComponent
 import event.Event

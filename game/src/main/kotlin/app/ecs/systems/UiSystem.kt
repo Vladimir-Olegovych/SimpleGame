@@ -1,65 +1,45 @@
 package app.ecs.systems
 
 import app.di.UiViewport
-import app.screens.game.dialog.MenuDialog
+import app.ecs.models.Player
+import app.events.GameEvent
+import app.screens.game.ui.inventory.InventoryUI
+import app.screens.game.ui.menu.MenuUI
 import com.artemis.BaseSystem
 import com.artemis.annotations.Wire
-import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import models.textures.SkinID
-import tools.graphics.screens.dialogs.DialogManager
-import tools.graphics.setOnClickListener
+import tools.eventbus.annotation.BusEvent
 
 class UiSystem(): BaseSystem() {
-    @Wire
-    private lateinit var menuDialog: MenuDialog
-    @Wire
-    private lateinit var dialogManager: DialogManager
-    @Wire
-    private lateinit var stage: Stage
-    @Wire
-    private lateinit var inputMultiplexer: InputMultiplexer
-    @Wire
-    private lateinit var uiViewport: UiViewport
-    @Wire
-    private lateinit var assetManager: AssetManager
+
+    @Wire private lateinit var player: Player
+    @Wire private lateinit var stage: Stage
+    @Wire private lateinit var uiViewport: UiViewport
+
+    @Wire private lateinit var manuUI: MenuUI
+    @Wire private lateinit var inventoryUI: InventoryUI
+
+    @BusEvent
+    fun setInventory(event: GameEvent.UpdateInventory){
+       if (player.entityId != event.entityId) return
+        inventoryUI.updateInventory()
+    }
+
+    @BusEvent
+    fun setInventory(event: GameEvent.OpenInventory){
+        inventoryUI.showInventory(event.entityId)
+    }
 
     override fun initialize() {
-        inputMultiplexer.addProcessor(stage)
+        val table = Table().apply { setFillParent(true) }
 
-        val skinButton = assetManager.get<Skin>(SkinID.BUTTON.skin)
+        manuUI.init(world, table)
+        inventoryUI.init(world, table)
 
-        val gameTable = Table().apply {
-            setFillParent(true)
-        }
+        inventoryUI.currentInventoryId = player.entityId
 
-        val menu = ImageButton(skinButton, "menu").setOnClickListener {
-            if (menuDialog.isShowed()) return@setOnClickListener
-            menuDialog.show(dialogManager)
-        }
-
-        gameTable.add(menu).height(50f).width(50f).pad(10f)
-            .top()
-            .right()
-            .expandX()
-            .expandY()
-            .row()
-
-        val inventoryTable = Table()
-
-        for (i in 0 .. 8) {
-            val image = ImageButton(skinButton, "menu")
-            inventoryTable.add(image).height(40f).width(40f)
-        }
-        gameTable.add(inventoryTable).padBottom(10F)
-            .bottom()
-            .expandY()
-
-        stage.addActor(gameTable)
+        stage.addActor(table)
     }
 
     override fun begin() {
@@ -70,5 +50,4 @@ class UiSystem(): BaseSystem() {
         stage.act(world.delta)
         stage.draw()
     }
-
 }

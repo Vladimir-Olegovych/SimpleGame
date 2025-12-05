@@ -1,6 +1,7 @@
 package app.ecs.processors
 
 import app.ecs.models.SendEvents
+import com.artemis.annotations.Wire
 import com.badlogic.gdx.Gdx
 import core.models.input.KeyInputProcessor
 import event.Event
@@ -8,9 +9,9 @@ import models.network.SendType
 import tools.graphics.input.SwitchInputProcessor
 import kotlin.math.atan2
 
-class LookInputProcessor(
-    private val sendEvents: SendEvents
-): SwitchInputProcessor() {
+class LookInputProcessor: SwitchInputProcessor() {
+
+    @Wire private lateinit var sendEvents: SendEvents
 
     private fun setAngle(value: Float){
         sendEvents.addDelayedEvent(

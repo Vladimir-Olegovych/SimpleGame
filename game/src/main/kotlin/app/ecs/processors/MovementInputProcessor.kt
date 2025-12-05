@@ -1,15 +1,15 @@
 package app.ecs.processors
 
 import app.ecs.models.SendEvents
+import com.artemis.annotations.Wire
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
-import core.models.input.KeyInputProcessor
 import event.Event
 import tools.graphics.input.SwitchInputProcessor
 
-class MovementInputProcessor(
-    private val sendEvents: SendEvents
-): SwitchInputProcessor() {
+class MovementInputProcessor: SwitchInputProcessor() {
+
+    @Wire private lateinit var sendEvents: SendEvents
 
     private val forceVector = Vector2.Zero
 

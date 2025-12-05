@@ -1,4 +1,4 @@
-package app.screens.game.dialog
+package app.screens.game.ui.dialog
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.scenes.scene2d.Stage

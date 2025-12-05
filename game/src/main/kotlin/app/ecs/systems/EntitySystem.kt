@@ -2,18 +2,16 @@ package app.ecs.systems
 
 import app.ecs.components.*
 import app.ecs.models.Player
+import app.events.GameEvent
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.utils.IntMap
 import core.models.settings.ClientPreference
+import core.textures.TextureStorage
 import event.Event
-import models.textures.SkinID
-import models.textures.TextureType
+import tools.eventbus.EventBus
 import tools.eventbus.annotation.BusEvent
 
 @All(EntityComponent::class)
@@ -22,13 +20,15 @@ class EntitySystem(): IteratingSystem() {
     @Wire
     private lateinit var player: Player
     @Wire
-    private lateinit var assetManager: AssetManager
+    private lateinit var eventBus: EventBus
+    @Wire
+    private lateinit var textureStorage: TextureStorage
     @Wire
     private lateinit var clientPreference: ClientPreference
 
-    private val tempTextureMap = IntMap<TextureRegion>()
     private val entityMap = IntMap<Int>()
 
+    private lateinit var inventoryComponentMapper: ComponentMapper<InventoryComponent>
     private lateinit var textureComponentMapper: ComponentMapper<TextureComponent>
     private lateinit var entityTypeComponentMapper: ComponentMapper<EntityTypeComponent>
     private lateinit var entityComponentMapper: ComponentMapper<EntityComponent>
@@ -85,18 +85,9 @@ class EntitySystem(): IteratingSystem() {
         val entityId = entityMap[event.entityId]?: return
         val textureTypeComponent = textureComponentMapper[entityId]?: textureComponentMapper.create(entityId)
         val textureId = event.textureId
-        val skinID = TextureType.getSkinById(event.textureId)
-        val textureName = TextureType.getNameById(event.textureId)
-
-        val texture = tempTextureMap[textureId]?: let {
-            val texture = assetManager.get<TextureAtlas>(skinID.atlas).findRegion(textureName)
-            tempTextureMap.put(textureId, texture)
-            texture
-        }
-
+        val textureRegion = textureStorage.getRegion(textureId)
         textureTypeComponent.textureId = textureId
-        textureTypeComponent.textureName = textureName
-        textureTypeComponent.textureRegion = texture
+        textureTypeComponent.textureRegion = textureRegion
     }
 
     @BusEvent
@@ -117,7 +108,10 @@ class EntitySystem(): IteratingSystem() {
 
     @BusEvent
     fun setInventory(event: Event.Inventory){
-        println("inventory is ${event.inventory.size}")
+        val entityId = entityMap[event.entityId]?: return
+        val inventoryComponent = inventoryComponentMapper[entityId]?: inventoryComponentMapper.create(entityId)
+        inventoryComponent.inventorySlots = event.inventory
+        eventBus.sendEvent(GameEvent.UpdateInventory(entityId))
     }
 
     private var maxDistance = Float.MAX_VALUE
@@ -148,10 +142,5 @@ class EntitySystem(): IteratingSystem() {
 
     override fun process(entityId: Int) {
         //processRemove(entityId)
-    }
-
-
-    override fun dispose() {
-        tempTextureMap.clear()
     }
 }

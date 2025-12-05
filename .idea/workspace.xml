@@ -4,31 +4,42 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="biome generation commit">
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/sender/UpdatableData.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EventUtils.kt" afterDir="false" />
+    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="event bugfix">
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/InventoryComponent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/events/GameEvent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/ui/inventory/InventoryUI.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/ui/menu/MenuUI.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/core/textures/TextureStorage.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/core/ui/UIComponent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/kotlin/event/Event.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/kotlin/event/Event.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/kotlin/models/items/ItemContainer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/kotlin/models/items/ItemContainer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/kotlin/models/textures/TextureType.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/kotlin/models/textures/TextureType.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/main/kotlin/utils/Utils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/kotlin/utils/Utils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/TextureComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/TextureComponent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/processors/HotKeysInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/processors/HotKeysInputProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/processors/LookInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/processors/LookInputProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/processors/MovementInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/processors/MovementInputProcessor.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/EntitySystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/EntitySystem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/InputSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/InputSystem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/UiSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/UiSystem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/dialog/MenuDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/ui/dialog/MenuDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/screen/GameFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/screen/GameFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/resources/images/button/button.skin" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/resources/images/button/button.skin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.json" beforeDir="false" afterPath="$PROJECT_DIR$/server.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ServerApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ServerApplication.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/di/AppModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/di/AppModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/di/SystemModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/di/SystemModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/ClientComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/ClientComponent.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/InventoryComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/InventoryComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/PhysicsComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/PhysicsComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/StatsComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/StatsComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/sender/CSender.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ChunkSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ChunkSystem.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ClientSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ClientSystem.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/CollectItemsSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/CollectItemsSystem.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/EntitySystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/EntitySystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/EventSystem.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/LookAtSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/LookAtSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/MoveSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/MoveSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/PhysicsSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/PhysicsSystem.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EntityUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EntityUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EventUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EventUtils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/PhysicsUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/PhysicsUtils.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/items/DiamondItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/items/DiamondItem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/items/FoodItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/items/IronBarItem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/items/register/ItemsRegister.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/items/register/ItemsRegister.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/generator/ServerWorldGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/level/generator/ServerWorldGenerator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/core/items/WorldItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/core/items/WorldItem.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,35 +105,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Build Game3D.executor": "Run",
-    "Gradle.Build GameJora.executor": "Run",
-    "Gradle.Download Sources.executor": "Run",
-    "Gradle.GameJora [:desktop:shadowJar].executor": "Run",
-    "Gradle.GameJora [:server:shadowJar].executor": "Run",
-    "Gradle.GameJora:desktop [:desktop:org.example.GameKt.main()].executor": "Run",
-    "Gradle.GameJora:server [:server:org.example.ServerKt.main()].executor": "Run",
-    "Gradle.SimpleGame:desktop [:desktop:org.example.GameKt.main()].executor": "Run",
-    "Gradle.SimpleGame:server [:server:ServerKt.main()].executor": "Run",
-    "Gradle.SimpleGame:server [:server:org.example.ServerKt.main()].executor": "Run",
-    "JAR Application.desktop-1.0-SNAPSHOT-all.jar.executor": "Run",
-    "Kotlin.GameKt.executor": "Run",
-    "Kotlin.MainKt (1).executor": "Run",
-    "Kotlin.MainKt.executor": "Run",
-    "Kotlin.ServerKt.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/vladimir/IdeaProjects/SimpleGame/server/src/main/kotlin/app/ecs/utils",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build Game3D.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build GameJora.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GameJora [:desktop:shadowJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GameJora [:server:shadowJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GameJora:desktop [:desktop:org.example.GameKt.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.GameJora:server [:server:org.example.ServerKt.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SimpleGame:desktop [:desktop:org.example.GameKt.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SimpleGame:server [:server:ServerKt.main()].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.SimpleGame:server [:server:org.example.ServerKt.main()].executor&quot;: &quot;Run&quot;,
+    &quot;JAR Application.desktop-1.0-SNAPSHOT-all.jar.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.GameKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.MainKt (1).executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
+    &quot;Kotlin.ServerKt.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/vladimir/IdeaProjects/SimpleGame/server/src/main/kotlin/app/ecs/utils&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils" />
@@ -253,14 +264,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1739022729056</updated>
-    </task>
-    <task id="LOCAL-00006" summary="the commit 2!">
-      <option name="closed" value="true" />
-      <created>1746096823765</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1746096823765</updated>
     </task>
     <task id="LOCAL-00007" summary="the best commit 3!">
       <option name="closed" value="true" />
@@ -646,11 +649,18 @@
       <option name="project" value="LOCAL" />
       <updated>1764776618600</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="event bugfix">
+      <option name="closed" value="true" />
+      <created>1764852093686</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1764852093686</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="the commit 2!" />
     <MESSAGE value="the best commit 3!" />
     <MESSAGE value="the best commit 4!!" />
     <MESSAGE value="the best commit 5!" />
@@ -675,7 +685,8 @@
     <MESSAGE value="di is koin again)))" />
     <MESSAGE value="menu dialog - commit" />
     <MESSAGE value="biome generation commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="biome generation commit" />
+    <MESSAGE value="event bugfix" />
+    <option name="LAST_COMMIT_MESSAGE" value="event bugfix" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

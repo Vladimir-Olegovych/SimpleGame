@@ -35,7 +35,7 @@ sealed class Event {
 
     class Inventory(
         val entityId: Int = 0,
-        val inventory: Array<ItemContainer> = emptyArray()
+        val inventory: Array<Array<ItemContainer>?> = emptyArray()
     ): Event()
 
     class Size(val entityId: Int = 0,
