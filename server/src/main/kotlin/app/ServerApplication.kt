@@ -77,6 +77,7 @@ class ServerApplication(
     }
 
     override fun dispose() {
+        eventBus.clear()
         gameServer.stop()
         artemisWorld.dispose()
     }

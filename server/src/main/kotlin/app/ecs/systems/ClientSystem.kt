@@ -49,10 +49,6 @@ class ClientSystem: GameNetworkListener<GamePacket>, IteratingSystem() {
     private fun spawnPlayerStats() = mapOf<String, Any>(
         ApplicationValues.Stats.HP to 100
     )
-
-    override fun dispose() {
-        eventBus.clear()
-    }
     
     override fun onReceive(connection: Connection, value: GamePacket) {
         val entityId = playersMap[connection]?: return
