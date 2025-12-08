@@ -2,13 +2,14 @@ package app.ecs.systems
 
 import app.di.UiViewport
 import app.ecs.models.Player
-import app.events.GameEvent
+import app.screens.game.ui.dialog.MenuDialog
 import app.screens.game.ui.inventory.InventoryUI
 import app.screens.game.ui.menu.MenuUI
 import com.artemis.BaseSystem
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import event.Event
 import tools.eventbus.annotation.BusEvent
 
 class UiSystem(): BaseSystem() {
@@ -17,18 +18,14 @@ class UiSystem(): BaseSystem() {
     @Wire private lateinit var stage: Stage
     @Wire private lateinit var uiViewport: UiViewport
 
+    @Wire private lateinit var menuDialog: MenuDialog
     @Wire private lateinit var manuUI: MenuUI
     @Wire private lateinit var inventoryUI: InventoryUI
 
     @BusEvent
-    fun setInventory(event: GameEvent.UpdateInventory){
-       if (player.entityId != event.entityId) return
+    fun updateInventory(event: Event.Inventory){
+       if (player.serverId != event.entityId) return
         inventoryUI.updateInventory()
-    }
-
-    @BusEvent
-    fun setInventory(event: GameEvent.OpenInventory){
-        inventoryUI.showInventory(event.entityId)
     }
 
     override fun initialize() {
@@ -40,6 +37,12 @@ class UiSystem(): BaseSystem() {
         inventoryUI.currentInventoryId = player.entityId
 
         stage.addActor(table)
+
+        menuDialog.menuListeners.add(object : MenuDialog.Listener {
+            override fun onCreate() {
+                inventoryUI.hideInventory()
+            }
+        })
     }
 
     override fun begin() {

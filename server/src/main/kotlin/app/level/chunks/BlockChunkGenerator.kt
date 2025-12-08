@@ -29,7 +29,7 @@ class BlockChunkGenerator(
         artemisWorld.utCreateEntity(
             entityId = entityId,
             texture = TextureContainer.get(TextureType.BLOCK.STONE),
-            entityType = EntityType.WALL,
+            entityType = EntityType.STRUCTURE,
             isObserver = false,
             isPhysical = true,
             staticPosition = position

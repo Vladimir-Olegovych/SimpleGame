@@ -1,12 +1,12 @@
 package org.example.app.ecs.systems
 
 import alexey.tools.server.level.AdvancedChunkManager
+import app.ecs.components.InventoryComponent
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import org.example.app.ecs.components.ContactItemsComponent
-import app.ecs.components.InventoryComponent
 import org.example.app.ecs.components.ItemComponent
 import org.example.app.ecs.components.PhysicsComponent
 import org.example.app.ecs.utils.utRemoveBody

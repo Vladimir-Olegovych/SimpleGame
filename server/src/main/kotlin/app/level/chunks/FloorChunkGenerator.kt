@@ -30,7 +30,7 @@ class FloorChunkGenerator(
             artemisWorld.utCreateEntity(
                 entityId = entityId,
                 texture = TextureContainer.get(TextureType.BLOCK.GRASS),
-                entityType = EntityType.FLOOR,
+                entityType = EntityType.BACKGROUND,
                 isObserver = false,
                 isPhysical = false,
                 staticPosition = position

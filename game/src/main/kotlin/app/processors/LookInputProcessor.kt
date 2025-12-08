@@ -1,17 +1,20 @@
-package app.ecs.processors
+package app.processors
 
 import app.ecs.models.SendEvents
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.Gdx
-import core.models.input.KeyInputProcessor
 import event.Event
 import models.network.SendType
-import tools.graphics.input.SwitchInputProcessor
+import tools.graphics.input.GameInputProcessor
 import kotlin.math.atan2
 
-class LookInputProcessor: SwitchInputProcessor() {
+class LookInputProcessor: GameInputProcessor {
 
     @Wire private lateinit var sendEvents: SendEvents
+
+    private var enabled = true
+    override fun onResume() { enabled = true }
+    override fun onPause() { enabled = false }
 
     private fun setAngle(value: Float){
         sendEvents.addDelayedEvent(
@@ -21,7 +24,8 @@ class LookInputProcessor: SwitchInputProcessor() {
         )
     }
 
-    override fun swMouseMoved(screenX: Int, screenY: Int): Boolean {
+    override fun mouseMoved(screenX: Int, screenY: Int): Boolean {
+        if (!enabled) return false
         val centerX = Gdx.graphics.width / 2f
         val centerY = Gdx.graphics.height / 2f
 

@@ -12,6 +12,7 @@ import core.ui.UIComponent
 import models.textures.SkinID
 import models.textures.TextureType
 import models.textures.asTextureId
+import tools.graphics.drawable.ColorDrawable
 import kotlin.math.ceil
 
 class InventoryUI: UIComponent() {
@@ -100,14 +101,16 @@ class InventoryUI: UIComponent() {
 
     private fun initializeInventoryWindow() {
         val itemBoxDrawable = textureStorage.getDrawable(TextureType.BUTTON.ITEM_BOX.asTextureId())
+        val windowDrawable = ColorDrawable(0F, 0F, 0F,1F)
 
         val windowSkin = assetManager.get<Skin>(SkinID.BUTTON.skin)
         inventoryWindow = Window("Inventory", windowSkin).apply {
             isMovable = true
             isResizable = false
+            background(windowDrawable)
             val windowWidth = (BOX_SIZE * INVENTORY_WINDOW_COLS) + (BOX_PADDING * (INVENTORY_WINDOW_COLS - 1)) + 40f
             val rows = ceil(INVENTORY_SIZE.toDouble() / INVENTORY_WINDOW_COLS).toInt()
-            val windowHeight = (BOX_SIZE * rows) + (BOX_PADDING * (rows - 1)) + 60f
+            val windowHeight = (BOX_SIZE * rows) + (BOX_PADDING * (rows - 1)) + 40f
             setSize(windowWidth, windowHeight)
             isVisible = false
         }
@@ -144,17 +147,19 @@ class InventoryUI: UIComponent() {
         inventoryWindow.add(windowInventoryTable).center().pad(10f)
     }
 
-    fun showInventory(inventoryId: Int) {
-        if (inventoryId == currentInventoryId) {
-            if (isWindowVisible) {
-                hideInventory()
-            } else {
-                showInventoryWindow()
-            }
-        } else {
-            currentInventoryId = inventoryId
-            showInventoryWindow()
-        }
+    fun showInventory() {
+        if (isWindowVisible) return
+        showInventoryWindow()
+    }
+
+    fun hideInventory() {
+        if (!isWindowVisible) return
+        inventoryWindow.remove()
+        inventoryWindow.isVisible = false
+        isWindowVisible = false
+
+        bottomInventoryTable.isVisible = true
+        updateBottomInventory()
     }
 
     private fun showInventoryWindow() {
@@ -174,17 +179,6 @@ class InventoryUI: UIComponent() {
 
             updateWindowInventory()
             bottomInventoryTable.isVisible = false
-        }
-    }
-
-    fun hideInventory() {
-        if (isWindowVisible) {
-            inventoryWindow.remove()
-            inventoryWindow.isVisible = false
-            isWindowVisible = false
-
-            bottomInventoryTable.isVisible = true
-            updateBottomInventory()
         }
     }
 

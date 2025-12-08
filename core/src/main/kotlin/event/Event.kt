@@ -1,10 +1,9 @@
 package event
 
-import models.items.ItemContainer
-import models.stats.StatContainer
 import models.entity.EntityType
+import models.items.ItemContainer
 import models.network.SendType
-import models.textures.SkinID
+import models.stats.StatContainer
 import modificator.SendTypeModificator
 
 
@@ -40,8 +39,8 @@ sealed class Event {
 
     class Size(val entityId: Int = 0,
                val radius: Float = 0F,
-               val halfWidth: Float = 0F,
-               val halfHeight: Float = 0F): Event()
+               val width: Float = 0F,
+               val height: Float = 0F): Event()
 
     class Position(val entityId: Int = 0,
                    val x: Float = 0F,

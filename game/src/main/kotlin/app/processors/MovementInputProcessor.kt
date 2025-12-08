@@ -1,17 +1,27 @@
-package app.ecs.processors
+package app.processors
 
 import app.ecs.models.SendEvents
 import com.artemis.annotations.Wire
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
 import event.Event
-import tools.graphics.input.SwitchInputProcessor
+import tools.graphics.input.GameInputProcessor
 
-class MovementInputProcessor: SwitchInputProcessor() {
+class MovementInputProcessor: GameInputProcessor {
 
     @Wire private lateinit var sendEvents: SendEvents
 
     private val forceVector = Vector2.Zero
+
+    private var enabled = true
+
+    override fun onResume() {
+        enabled = true
+    }
+    override fun onPause() {
+        enabled = false
+        setForceVector(x = 0F, y = 0F)
+    }
 
     private fun setForceVector(x: Float? = null, y: Float? = null){
         forceVector.x = x?: forceVector.x
@@ -19,11 +29,9 @@ class MovementInputProcessor: SwitchInputProcessor() {
         sendEvents.addEvent(Event.CurrentPlayerVelocity(forceVector.x, forceVector.y))
     }
 
-    override fun onDisable() {
-        setForceVector(x = 0F, y = 0F)
-    }
 
-    override fun swKeyDown(keycode: Int): Boolean {
+    override fun keyDown(keycode: Int): Boolean {
+        if (!enabled) return false
         when (keycode) {
             Input.Keys.W -> setForceVector(y = VELOCITY)
             Input.Keys.A -> setForceVector(x = -VELOCITY)
@@ -33,7 +41,8 @@ class MovementInputProcessor: SwitchInputProcessor() {
         return false
     }
 
-    override fun swKeyUp(keycode: Int): Boolean {
+    override fun keyUp(keycode: Int): Boolean {
+        if (!enabled) return false
         when (keycode) {
             Input.Keys.W, Input.Keys.S -> setForceVector(y = 0F)
             Input.Keys.A, Input.Keys.D -> setForceVector(x = 0F)

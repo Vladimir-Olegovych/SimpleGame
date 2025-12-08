@@ -22,12 +22,12 @@ class PhysicsComponent: Component() {
         latestAngle = body?.angle
     }
 
-    val positionUpdater = object : UpdatableData<Vector2>() {
-        override fun onHasUpdate(): Boolean {
+    val positionUpdater = object : UpdatableData<Vector2> {
+        override fun hasUpdate(): Boolean {
             return (latestPositionX != body?.position?.x) ||
                     (latestPositionY != body?.position?.y)
         }
-        override fun onMarkAsUpdated() {
+        override fun markAsUpdated() {
             latestPositionX = body?.position?.x
             latestPositionY = body?.position?.y
         }
@@ -35,9 +35,9 @@ class PhysicsComponent: Component() {
         override fun getAll(): Vector2 { return body?.position?: Vector2.Zero }
     }
 
-    val angleUpdater = object : UpdatableData<Float>() {
-        override fun onHasUpdate(): Boolean { return latestAngle != body?.angle }
-        override fun onMarkAsUpdated() { latestAngle = body?.angle }
+    val angleUpdater = object : UpdatableData<Float> {
+        override fun hasUpdate(): Boolean { return latestAngle != body?.angle }
+        override fun markAsUpdated() { latestAngle = body?.angle }
         override fun getUpdate(): Float { return body?.angle?: 0F }
         override fun getAll(): Float { return body?.angle?: 0F }
     }

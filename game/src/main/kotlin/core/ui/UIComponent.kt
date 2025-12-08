@@ -8,7 +8,6 @@ abstract class UIComponent {
     private var table: Table? = null
     private var world: World? = null
 
-
     fun getTable(): Table = table!!
     fun getWorld(): World = world!!
 

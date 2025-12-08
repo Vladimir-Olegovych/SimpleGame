@@ -45,10 +45,9 @@ fun World.utCreateEntity(entityId: Int,
 
     if (texture != null) {
         val size = sizeComponentMapper.create(entityId)
-        val halfSize = serverPreference.blockSize / 2F
-        size.radius = halfSize
-        size.halfWidth = halfSize
-        size.halfHeight = halfSize
+        size.radius = serverPreference.blockSize / 2F
+        size.width = serverPreference.blockSize
+        size.height = serverPreference.blockSize
 
         val tComponent = textureComponentMapper.create(entityId)
         tComponent.texture = texture

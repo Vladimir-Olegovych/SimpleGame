@@ -15,7 +15,6 @@ import org.example.app.ecs.utils.utCreateEntity
 import org.example.core.items.manager.ItemsManager
 import org.example.core.level.SingleChunkGenerator
 import org.example.core.models.box2d.BodyType
-import values.ApplicationValues
 
 class EntityChunkGenerator(
     private val artemisWorld: World,
@@ -35,15 +34,15 @@ class EntityChunkGenerator(
         artemisWorld.utCreateEntity(
             entityId = entityId,
             texture = TextureContainer.get(TextureType.ITEM.DIAMOND),
-            entityType = EntityType.ITEM,
+            entityType = EntityType.ENTITY,
             isObserver = false,
             isPhysical = true,
             worldItem = itemsManager.create(DiamondItem::class.java),
         )
         sizeComponentMapper[entityId].let {
             it.radius = 0.2F
-            it.halfWidth = 0.2F
-            it.halfHeight = 0.2F
+            it.width = 0.2F
+            it.height = 0.2F
         }
         artemisWorld.utCreateBody(
             entityId = entityId,

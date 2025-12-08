@@ -6,7 +6,6 @@ import event.GamePacket
 import models.entity.EntityType
 import models.items.ItemContainer
 import models.stats.StatContainer
-import models.textures.SkinID
 
 fun Kryo.registerAllEvents(){
     val kryo = this

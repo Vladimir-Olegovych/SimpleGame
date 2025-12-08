@@ -9,7 +9,7 @@ class PositionComponent : Component() {
 
     private val serverPosition = Vector2(0f, 0f)
     private var currentPosition: Vector2? = null
-    private val interpolationSpeed = 15.0f
+    private var interpolationSpeed = 12.0f
 
     fun getServerPosition(): Vector2 = serverPosition.cpy()
 

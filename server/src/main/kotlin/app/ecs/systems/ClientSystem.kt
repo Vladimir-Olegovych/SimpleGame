@@ -15,7 +15,10 @@ import event.GamePacket
 import models.entity.EntityType
 import models.network.SendType
 import models.textures.TextureType
-import org.example.app.ecs.components.*
+import org.example.app.ecs.components.EntityComponent
+import org.example.app.ecs.components.PhysicsComponent
+import org.example.app.ecs.components.StaticPositionComponent
+import org.example.app.ecs.components.StatsComponent
 import org.example.app.ecs.utils.*
 import org.example.core.models.box2d.BodyType
 import org.example.core.models.server.EventContainer
@@ -137,25 +140,20 @@ class ClientSystem: GameNetworkListener<GamePacket>, IteratingSystem() {
                         ),
                         sendType = SendType.UDP
                     )
-                    it.positionUpdater.markAsUpdated()
                 }
 
-                if (it.angleUpdater.hasUpdate()) {
-                    client.addEvent(
-                        Event.Angle(
-                            entityId = entityId,
-                            angle = it.angleUpdater.getUpdate()
-                        ),
-                        sendType = SendType.UDP
-                    )
-                    it.angleUpdater.markAsUpdated()
-                }
+                if (it.angleUpdater.hasUpdate()) client.addEvent(
+                    Event.Angle(
+                        entityId = entityId,
+                        angle = it.angleUpdater.getUpdate()
+                    ),
+                    sendType = SendType.UDP
+                )
             }
 
             if (entityId == clientId) statsComponentMapper[entityId]?.let {
                 if (!it.statsUpdater.hasUpdate()) return@let
                 val stats = it.statsUpdater.getUpdate()
-                it.statsUpdater.markAsUpdated()
                 if (stats.isEmpty()) return@let
                 client.addEvent(
                     Event.Stats(
@@ -168,7 +166,6 @@ class ClientSystem: GameNetworkListener<GamePacket>, IteratingSystem() {
             if (entityId == clientId) inventoryComponentMapper[entityId]?.let {
                 if (!it.inventoryUpdater.hasUpdate()) return@let
                 val inventory = it.inventoryUpdater.getUpdate()
-                it.inventoryUpdater.markAsUpdated()
                 if (inventory.isEmpty()) return@let
                 client.addEvent(
                     Event.Inventory(
@@ -188,11 +185,11 @@ class ClientSystem: GameNetworkListener<GamePacket>, IteratingSystem() {
 
             fun finishProcess(entityId: Int) {
                 physicsComponentMapper[entityId]?.let {
-                    it.positionUpdater.finishUpdate()
-                    it.angleUpdater.finishUpdate()
+                    it.positionUpdater.markAsUpdated()
+                    it.angleUpdater.markAsUpdated()
                 }
-                statsComponentMapper[entityId]?.statsUpdater?.finishUpdate()
-                inventoryComponentMapper[entityId]?.inventoryUpdater?.finishUpdate()
+                statsComponentMapper[entityId]?.statsUpdater?.markAsUpdated()
+                inventoryComponentMapper[entityId]?.inventoryUpdater?.markAsUpdated()
             }
 
             entities.forEach { finishProcess(it) }

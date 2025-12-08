@@ -55,8 +55,8 @@ fun World.utProcessCreationEvents(clientId: Int, entityId: Int) {
             Event.Size(
                 entityId = entityId,
                 radius = it.radius,
-                halfHeight = it.halfHeight,
-                halfWidth = it.halfWidth
+                height = it.height,
+                width = it.width
             )
         )
     }

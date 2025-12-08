@@ -11,6 +11,7 @@ import core.models.components.texture.TextureContainer
 import models.entity.EntityType
 import models.textures.TextureType
 import org.example.app.ecs.components.EntityComponent
+import org.example.app.ecs.components.SizeComponent
 import org.example.app.ecs.utils.utCreateBody
 import org.example.app.ecs.utils.utCreateEntity
 import org.example.core.items.manager.ItemsManager
@@ -18,7 +19,6 @@ import org.example.core.models.box2d.BodyType
 import org.example.core.models.settings.ServerPreference
 import org.koin.core.component.KoinComponent
 import tools.chunk.WorldGenerator
-import tools.noice.simplex.PerlinNoise
 import tools.noice.simplex.SimplexNoise
 import kotlin.math.abs
 import kotlin.random.Random
@@ -34,6 +34,7 @@ class ServerWorldGenerator(
 
     @Wire private lateinit var itemsManager: ItemsManager
     private lateinit var entityComponentMapper: ComponentMapper<EntityComponent>
+    private lateinit var sizeComponentMapper: ComponentMapper<SizeComponent>
 
     private val biomeNoise = SimplexNoise(seed)
 
@@ -53,7 +54,7 @@ class ServerWorldGenerator(
             artemisWorld.utCreateEntity(
                 entityId = entityId,
                 texture = TextureContainer.get(biome.block),
-                entityType = EntityType.FLOOR,
+                entityType = EntityType.BACKGROUND,
                 isObserver = false,
                 isPhysical = false,
                 staticPosition = position
@@ -61,7 +62,7 @@ class ServerWorldGenerator(
             val entityComponent = entityComponentMapper[entityId]
             chunk.add(entityId, entityComponent.isObserver)
 
-            if (random.nextInt(0, 50) < 3)
+            //if (random.nextInt(0, 50) < 3)
                 createEntity(chunk, position)
         }
     }
@@ -83,11 +84,13 @@ class ServerWorldGenerator(
         artemisWorld.utCreateEntity(
             entityId = entityId,
             texture = TextureContainer.get(TextureType.ITEM.DIAMOND),
-            entityType = EntityType.ITEM,
+            entityType = EntityType.ENTITY,
             isObserver = false,
             isPhysical = true,
             worldItem = itemsManager.create(DiamondItem::class.java),
         )
+        val size = sizeComponentMapper[entityId]
+        //size.height = 3F
         artemisWorld.utCreateBody(
             entityId = entityId,
             vector2 = position,

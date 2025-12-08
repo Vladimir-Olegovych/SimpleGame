@@ -41,7 +41,7 @@ fun World.utCreateBody(entityId: Int,
         return when(bodyType){
             BodyType.CIRCLE -> CircleShape().also { it.radius = size.radius }
             BodyType.SQUARE -> PolygonShape().apply {
-                setAsBox(size.halfWidth, size.halfHeight, Vector2.Zero, 0F)
+                setAsBox(size.width / 2, size.height / 2, Vector2.Zero, 0F)
             }
         }
     }

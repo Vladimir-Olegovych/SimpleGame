@@ -59,12 +59,12 @@ class InventoryComponent: Component() {
         return true
     }
 
-    val inventoryUpdater = object : UpdatableData<Array<Array<ItemContainer>?>>() {
-        override fun onHasUpdate(): Boolean {
+    val inventoryUpdater = object : UpdatableData<Array<Array<ItemContainer>?>> {
+        override fun hasUpdate(): Boolean {
             return hasUpdate
         }
 
-        override fun onMarkAsUpdated() {
+        override fun markAsUpdated() {
             hasUpdate = false
         }
 

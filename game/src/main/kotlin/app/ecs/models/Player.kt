@@ -1,6 +1,6 @@
 package app.ecs.models
 
-class Player {
+class Player() {
     var entityId = -1
     var serverId = -1
 }

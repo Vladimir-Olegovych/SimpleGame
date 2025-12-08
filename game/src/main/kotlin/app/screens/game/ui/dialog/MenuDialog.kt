@@ -12,11 +12,8 @@ import tools.graphics.drawable.ColorDrawable
 import tools.graphics.screens.dialogs.Dialog
 import tools.graphics.setOnClickListener
 
-class MenuDialog(
-    private val onResume: () -> Unit = {},
-    private val onSettings: () -> Unit = {},
-    private val onQuit: () -> Unit = {}
-): KoinComponent, Dialog() {
+class MenuDialog: KoinComponent, Dialog() {
+    val menuListeners = ArrayList<Listener>()
 
     private val stage: Stage by inject()
     private val assetManager: AssetManager by inject()
@@ -28,28 +25,38 @@ class MenuDialog(
         add(
             TextButton("resume", this@MenuDialog.skin).setOnClickListener {
                 dismiss()
-                onResume.invoke()
+                menuListeners.forEach { it.onResume() }
             }
         ).height(40F).width(70F).row()
         add(
             TextButton("settings", this@MenuDialog.skin).setOnClickListener {
                 dismiss()
-                onSettings.invoke()
+                menuListeners.forEach { it.onSettings() }
             }
         ).height(40F).width(70F).padTop(8F).row()
         add(
             TextButton("quit", this@MenuDialog.skin).setOnClickListener {
                 dismiss()
-                onQuit.invoke()
+                menuListeners.forEach { it.onQuit() }
             }
         ).height(40F).width(70F).padTop(8F).row()
     }
 
     override fun onCreate() {
+        menuListeners.forEach { it.onCreate() }
         stage.addActor(fullscreenOverlay)
     }
 
     override fun onDestroy() {
+        menuListeners.forEach { it.onDestroy() }
         fullscreenOverlay.remove()
+    }
+
+    interface Listener {
+        fun onCreate() {}
+        fun onDestroy() {}
+        fun onResume() {}
+        fun onSettings() {}
+        fun onQuit() {}
     }
 }

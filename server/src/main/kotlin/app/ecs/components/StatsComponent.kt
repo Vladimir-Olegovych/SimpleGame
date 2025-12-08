@@ -1,8 +1,8 @@
 package org.example.app.ecs.components
 
+import app.ecs.components.sender.UpdatableData
 import com.artemis.Component
 import models.stats.StatContainer
-import app.ecs.components.sender.UpdatableData
 
 class StatsComponent: Component() {
 
@@ -24,8 +24,8 @@ class StatsComponent: Component() {
         return stats[key] as? T
     }
 
-    val statsUpdater = object : UpdatableData<Array<StatContainer>>() {
-        override fun onHasUpdate(): Boolean {
+    val statsUpdater = object : UpdatableData<Array<StatContainer>> {
+        override fun hasUpdate(): Boolean {
             stats.forEach { (key, value) ->
                 if (value != _tempStats[key]) {
                     return true
@@ -34,7 +34,7 @@ class StatsComponent: Component() {
             return false
         }
 
-        override fun onMarkAsUpdated() {
+        override fun markAsUpdated() {
             _tempStats.clear()
             _tempStats.putAll(stats)
         }
