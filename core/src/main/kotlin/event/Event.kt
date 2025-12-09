@@ -13,9 +13,7 @@ class GamePacket(val events: Array<Event> = emptyArray())
 
 sealed class Event {
 
-    class Entity(val entityId: Int = 0,
-                 val drawStats: Boolean = true,
-                 val isStatic: Boolean = false): Event()
+    class Entity(val entityId: Int = 0): Event()
 
     class Stats(
         val entityId: Int = 0,
@@ -46,8 +44,16 @@ sealed class Event {
                    val x: Float = 0F,
                    val y: Float = 0F): Event()
 
+    class StaticPosition(val entityId: Int = 0,
+                         val x: Float = 0F,
+                         val y: Float = 0F): Event()
+
+
     class Angle(val entityId: Int = 0,
                 val angle: Float = 0F): Event()
+
+    class StaticAngle(val entityId: Int = 0,
+                      val angle: Float = 0F): Event()
 
     class Remove(val entityId: Int = 0): Event()
 

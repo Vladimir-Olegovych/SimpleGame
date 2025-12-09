@@ -14,7 +14,7 @@ import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import ecs.components.ClientComponent
 import event.Event
-import org.example.app.ecs.components.EntityComponent
+import app.ecs.components.EntityComponent
 import org.example.app.ecs.components.PhysicsComponent
 import org.example.core.models.settings.ServerPreference
 import tools.chunk.WorldGenerator

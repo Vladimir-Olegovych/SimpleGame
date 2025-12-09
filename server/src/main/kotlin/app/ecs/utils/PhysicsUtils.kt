@@ -1,5 +1,6 @@
 package org.example.app.ecs.utils
 
+import app.ecs.components.EntityComponent
 import app.ecs.components.InventoryComponent
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2

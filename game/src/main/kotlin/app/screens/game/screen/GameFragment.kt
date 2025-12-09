@@ -2,6 +2,7 @@ package app.screens.game.screen
 
 import app.di.GameViewport
 import app.di.UiViewport
+import app.ecs.models.GlobalAngle
 import app.ecs.models.Player
 import app.ecs.models.SendEvents
 import app.ecs.systems.*
@@ -58,10 +59,12 @@ class GameFragment(
             .addSystem(EntitySystem())
             .addSystem(serverSystem)
             .addSystem(DrawSystem())
+            .addSystem(CameraSystem())
             .addSystem(uiSystem)
             .addSystem(inputSystem)
             .addSystem(SendSystem())
             .addObject(Player())
+            .addObject(GlobalAngle())
             .addObject(SendEvents())
             .addObject(textureStorage)
             .addObject(dialogManager)

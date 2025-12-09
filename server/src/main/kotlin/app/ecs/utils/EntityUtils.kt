@@ -1,6 +1,8 @@
 package org.example.app.ecs.utils
 
+import app.ecs.components.EntityComponent
 import app.ecs.components.InventoryComponent
+import app.ecs.components.ObserverComponent
 import com.artemis.World
 import com.badlogic.gdx.math.Vector2
 import core.models.components.texture.TextureContainer
@@ -15,18 +17,20 @@ fun World.utCreateEntity(entityId: Int,
                          isObserver: Boolean = false,
                          isPhysical: Boolean = false,
                          staticPosition: Vector2? = null,
+                         staticAngle: Float? = null,
                          worldItem: WorldItem? = null,
-                         drawStats: Boolean = true,
                          canCollectItems: Boolean = true,
                          entityStats: Map<String, Any>? = null,
                          hasInventory: Boolean = false,
                          inventoryItems: List<WorldItem> = listOf()) {
     val serverPreference = this.getRegistered(ServerPreference::class.java)
 
+    val observerComponentMapper = this.getMapper(ObserverComponent::class.java)
     val textureComponentMapper = this.getMapper(TextureComponent::class.java)
     val entityTypeComponentMapper = this.getMapper(EntityTypeComponent::class.java)
     val itemComponentMapper = this.getMapper(ItemComponent::class.java)
     val staticPositionComponentMapper = this.getMapper(StaticPositionComponent::class.java)
+    val staticAngleComponentMapper = this.getMapper(StaticAngleComponent::class.java)
     val entityComponentMapper = this.getMapper(EntityComponent::class.java)
     val statsComponentMapper = this.getMapper(StatsComponent::class.java)
     val physicsComponentMapper = this.getMapper(PhysicsComponent::class.java)
@@ -35,8 +39,8 @@ fun World.utCreateEntity(entityId: Int,
     val contactItemsComponentMapper = this.getMapper(ContactItemsComponent::class.java)
 
     val entity = entityComponentMapper.create(entityId)
-    entity.isObserver = isObserver
-    entity.drawStats = drawStats
+
+    if (isObserver) observerComponentMapper.create(entityId)
 
     if (entityType != null) {
         val etComponent = entityTypeComponentMapper.create(entityId)
@@ -53,13 +57,17 @@ fun World.utCreateEntity(entityId: Int,
         tComponent.texture = texture
     }
 
-    if (isPhysical) {
-        physicsComponentMapper.create(entityId)
-    }
+    if (isPhysical) physicsComponentMapper.create(entityId)
 
     if (staticPosition != null) {
         val staticPositionComponent = staticPositionComponentMapper.create(entityId)
-        staticPositionComponent.position = staticPosition
+        staticPositionComponent.position.x = staticPosition.x
+        staticPositionComponent.position.y = staticPosition.y
+    }
+
+    if (staticAngle != null) {
+        val staticAngleComponent = staticAngleComponentMapper.create(entityId)
+        staticAngleComponent.angle = staticAngle
     }
 
     if (entityStats != null) {

@@ -1,5 +1,6 @@
 package org.example.app.ecs.systems
 
+import app.ecs.components.EntityComponent
 import app.ecs.components.InventoryComponent
 import app.ecs.components.LookAtComponent
 import com.artemis.ComponentMapper
@@ -52,19 +53,10 @@ class EntitySystem: IteratingSystem() {
         val move = moveComponentMapper[container.entityId]?:
             moveComponentMapper.create(container.entityId)
         val event = container.event
-
-        move.vector.x = when {
-            event.x > 0 -> serverPreference.maxPlayerSpeed
-            event.x < 0 -> -serverPreference.maxPlayerSpeed
-            else -> 0F
-        }
-
-        move.vector.y = when {
-            event.y > 0 -> serverPreference.maxPlayerSpeed
-            event.y < 0 -> -serverPreference.maxPlayerSpeed
-            else -> 0F
-        }
-
+        move.vector.x = event.x * serverPreference.maxPlayerSpeed
+        move.vector.y = event.y * serverPreference.maxPlayerSpeed
+        if (move.vector.x > serverPreference.maxPlayerSpeed) return
+        if (move.vector.y > serverPreference.maxPlayerSpeed) return
         if (move.vector.x == 0F && move.vector.y == 0F) {
             moveComponentMapper.remove(container.entityId)
         }

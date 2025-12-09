@@ -15,8 +15,10 @@ import event.GamePacket
 import models.entity.EntityType
 import models.network.SendType
 import models.textures.TextureType
-import org.example.app.ecs.components.EntityComponent
+import app.ecs.components.EntityComponent
+import app.ecs.components.ObserverComponent
 import org.example.app.ecs.components.PhysicsComponent
+import org.example.app.ecs.components.StaticAngleComponent
 import org.example.app.ecs.components.StaticPositionComponent
 import org.example.app.ecs.components.StatsComponent
 import org.example.app.ecs.utils.*
@@ -35,11 +37,13 @@ class ClientSystem: GameNetworkListener<GamePacket>, IteratingSystem() {
     @Wire private lateinit var eventBus: EventBus
 
     private lateinit var staticPositionComponentMapper: ComponentMapper<StaticPositionComponent>
+    private lateinit var staticAngleComponentMapper: ComponentMapper<StaticAngleComponent>
     private lateinit var statsComponentMapper: ComponentMapper<StatsComponent>
     private lateinit var physicsComponentMapper: ComponentMapper<PhysicsComponent>
     private lateinit var inventoryComponentMapper: ComponentMapper<InventoryComponent>
     private lateinit var clientComponentMapper: ComponentMapper<ClientComponent>
     private lateinit var entityComponentMapper: ComponentMapper<EntityComponent>
+    private lateinit var observerComponentMapper: ComponentMapper<ObserverComponent>
 
     private val playersMap = HashMap<Connection, Int>()
     private val connectedUsers = LinkedList<Connection>()
@@ -96,8 +100,9 @@ class ClientSystem: GameNetworkListener<GamePacket>, IteratingSystem() {
             )
 
             val chunk = chunkManager.obtainChunk(worldSpawnPoint)
-            val entityComponent = entityComponentMapper[entityId]
-            chunk.add(entityId, entityComponent.isObserver)
+            val observerComponent = observerComponentMapper[entityId]
+
+            chunk.add(entityId, observerComponent != null)
 
             cuIterator.remove()
         }
@@ -138,13 +143,15 @@ class ClientSystem: GameNetworkListener<GamePacket>, IteratingSystem() {
                     )
                 }
 
-                if (it.angleUpdater.hasUpdate()) client.addEvent(
-                    Event.Angle(
-                        entityId = entityId,
-                        angle = it.angleUpdater.getUpdate()
-                    ),
-                    sendType = SendType.UDP
-                )
+                if (staticAngleComponentMapper[entityId] == null && it.angleUpdater.hasUpdate()) {
+                    client.addEvent(
+                        Event.Angle(
+                            entityId = entityId,
+                            angle = it.angleUpdater.getUpdate()
+                        ),
+                        sendType = SendType.UDP
+                    )
+                }
             }
 
             if (entityId == clientId) statsComponentMapper[entityId]?.let {

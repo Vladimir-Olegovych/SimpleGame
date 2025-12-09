@@ -1,5 +1,6 @@
 package app.processors
 
+import app.ecs.models.GlobalAngle
 import app.ecs.models.Player
 import app.ecs.models.SendEvents
 import app.screens.game.ui.dialog.MenuDialog
@@ -17,6 +18,7 @@ class HotKeysInputProcessor: GameInputProcessor {
     @Wire private lateinit var sendEvents: SendEvents
     @Wire private lateinit var menuDialog: MenuDialog
     @Wire private lateinit var inventoryUI: InventoryUI
+    @Wire private lateinit var globalAngle: GlobalAngle
 
     private var enabled = true
     override fun onResume() {
@@ -48,10 +50,8 @@ class HotKeysInputProcessor: GameInputProcessor {
 
         when (keycode) {
             Input.Keys.SPACE -> setCollectItems(false)
-            Input.Keys.E -> {
-                if (!inventoryUI.isInventoryWindowVisible()) inventoryUI.showInventory()
-                else inventoryUI.hideInventory()
-            }
+            Input.Keys.Q -> globalAngle.rotateLeft()
+            Input.Keys.E -> globalAngle.rotateRight()
         }
         return false
     }

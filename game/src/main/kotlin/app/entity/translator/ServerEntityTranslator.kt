@@ -37,50 +37,67 @@ class ServerEntityTranslator() {
     private lateinit var positionComponentMapper: ComponentMapper<PositionComponent>
     private lateinit var sizeComponentMapper: ComponentMapper<SizeComponent>
     private lateinit var angleComponentMapper: ComponentMapper<AngleComponent>
+    private lateinit var staticAngleComponent: ComponentMapper<StaticAngleComponent>
+    private lateinit var staticPositionComponent: ComponentMapper<StaticPositionComponent>
 
     @BusEvent
     fun setEntity(event: Event.Entity){
-        val entity: EntityComponent
+        val entityComponent: EntityComponent
         if (entityMap[event.entityId] == null) {
             val newId = world.create()
-            entity = entityComponentMapper.create(newId)
+            entityComponent = entityComponentMapper.create(newId)
             entityMap.put(event.entityId, newId)
         } else {
-            entity = entityComponentMapper[entityMap[event.entityId]]
+            entityComponent = entityComponentMapper[entityMap[event.entityId]]
         }
-        entity.isStatic = event.isStatic
-        entity.drawStats = event.drawStats
     }
 
     @BusEvent
     fun setPosition(event: Event.Position){
         val entityId = entityMap[event.entityId]?: return
-        val entityPosition = positionComponentMapper[entityId]?: positionComponentMapper.create(entityId)
+        val positionComponent = positionComponentMapper[entityId]?: positionComponentMapper.create(entityId)
 
-        entityPosition.setPosition(
+        positionComponent.setPosition(
             event.x * clientPreference.drawScale,
             event.y * clientPreference.drawScale
         )
     }
 
     @BusEvent
-    fun setSize(event: Event.Size){
+    fun setStaticPosition(event: Event.StaticPosition){
         val entityId = entityMap[event.entityId]?: return
-        val size = sizeComponentMapper[entityId]?: sizeComponentMapper.create(entityId)
+        val positionComponent = staticPositionComponent[entityId]?: staticPositionComponent.create(entityId)
 
-        size.radius = event.radius * clientPreference.drawScale
-        size.width = event.width * clientPreference.drawScale
-        size.height = event.height * clientPreference.drawScale
-        size.halfWidth = size.width / 2
-        size.halfHeight = size.height / 2
+        positionComponent.position.x = event.x * clientPreference.drawScale
+        positionComponent.position.y = event.y * clientPreference.drawScale
     }
 
     @BusEvent
     fun setAngle(event: Event.Angle){
         val entityId = entityMap[event.entityId]?: return
-        val angle = angleComponentMapper[entityId]?: angleComponentMapper.create(entityId)
+        val angleComponent = angleComponentMapper[entityId]?: angleComponentMapper.create(entityId)
 
-        angle.setAngle(event.angle)
+        angleComponent.setAngle(event.angle)
+    }
+
+    @BusEvent
+    fun setStaticAngle(event: Event.StaticAngle){
+        val entityId = entityMap[event.entityId]?: return
+        val angleComponent = staticAngleComponent[entityId]?: staticAngleComponent.create(entityId)
+
+        angleComponent.angle = event.angle
+    }
+
+    @BusEvent
+    fun setSize(event: Event.Size){
+        val entityId = entityMap[event.entityId]?: return
+        val sizeComponent = sizeComponentMapper[entityId]?: sizeComponentMapper.create(entityId)
+
+        sizeComponent.radius = event.radius * clientPreference.drawScale
+        sizeComponent.width = event.width * clientPreference.drawScale
+        sizeComponent.height = event.height * clientPreference.drawScale
+        sizeComponent.halfWidth = sizeComponent.width / 2
+        sizeComponent.halfHeight = sizeComponent.height / 2
     }
 
     @BusEvent
@@ -104,9 +121,9 @@ class ServerEntityTranslator() {
     @BusEvent
     fun setStats(event: Event.Stats){
         val entityId = entityMap[event.entityId]?: return
-        val stats = statsComponentMapper[entityId]?: statsComponentMapper.create(entityId)
+        val statsComponent = statsComponentMapper[entityId]?: statsComponentMapper.create(entityId)
 
-        stats.setAllStats(event.stats)
+        statsComponent.setAllStats(event.stats)
     }
 
     @BusEvent
@@ -116,11 +133,9 @@ class ServerEntityTranslator() {
         inventoryComponent.inventorySlots = event.inventory
     }
 
-    private var maxDistance = Float.MAX_VALUE
     @BusEvent
     fun setChunkParams(event: Event.CurrentChunkParams){
-        val chunkSize = clientPreference.drawScale * event.chunkSize
-        maxDistance = (chunkSize * 4) * event.chunkRadius
+
     }
 
     @BusEvent

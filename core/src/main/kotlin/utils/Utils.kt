@@ -24,6 +24,8 @@ fun Kryo.registerAllEvents(){
     kryo.register(Event.Entity::class.java)
 
     kryo.register(Event.Stats::class.java)
+    kryo.register(Event.StaticPosition::class.java)
+    kryo.register(Event.StaticAngle::class.java)
 
     kryo.register(Event.Size::class.java)
     kryo.register(Event.Angle::class.java)

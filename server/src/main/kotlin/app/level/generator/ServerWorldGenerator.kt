@@ -10,7 +10,8 @@ import com.badlogic.gdx.math.Vector2
 import core.models.components.texture.TextureContainer
 import models.entity.EntityType
 import models.textures.TextureType
-import org.example.app.ecs.components.EntityComponent
+import app.ecs.components.EntityComponent
+import app.ecs.components.ObserverComponent
 import org.example.app.ecs.components.SizeComponent
 import org.example.app.ecs.utils.utCreateBody
 import org.example.app.ecs.utils.utCreateEntity
@@ -34,6 +35,7 @@ class ServerWorldGenerator(
 
     @Wire private lateinit var itemsManager: ItemsManager
     private lateinit var entityComponentMapper: ComponentMapper<EntityComponent>
+    private lateinit var observerComponentMapper: ComponentMapper<ObserverComponent>
     private lateinit var sizeComponentMapper: ComponentMapper<SizeComponent>
 
     private val biomeNoise = SimplexNoise(seed)
@@ -55,12 +57,11 @@ class ServerWorldGenerator(
                 entityId = entityId,
                 texture = TextureContainer.get(biome.block),
                 entityType = EntityType.BACKGROUND,
-                isObserver = false,
-                isPhysical = false,
                 staticPosition = position
             )
-            val entityComponent = entityComponentMapper[entityId]
-            chunk.add(entityId, entityComponent.isObserver)
+
+            val observerComponent = observerComponentMapper[entityId]
+            chunk.add(entityId, observerComponent != null)
 
             //if (random.nextInt(0, 50) < 3)
                 createEntity(chunk, position)
@@ -87,18 +88,19 @@ class ServerWorldGenerator(
             entityType = EntityType.ENTITY,
             isObserver = false,
             isPhysical = true,
+            staticAngle = 0F,
             worldItem = itemsManager.create(DiamondItem::class.java),
         )
         val size = sizeComponentMapper[entityId]
-        //size.height = 3F
+        size.height = 3F
         artemisWorld.utCreateBody(
             entityId = entityId,
             vector2 = position,
             bodyType = BodyType.CIRCLE,
             isEnabled = false
         )
-        val entityComponent = entityComponentMapper[entityId]
-        chunk.add(entityId, entityComponent.isObserver)
+        val observerComponent = observerComponentMapper[entityId]
+        chunk.add(entityId, observerComponent != null)
     }
 
 }

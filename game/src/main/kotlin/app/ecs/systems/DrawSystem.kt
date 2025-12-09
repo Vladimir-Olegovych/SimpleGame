@@ -2,6 +2,7 @@ package app.ecs.systems
 
 import app.di.GameViewport
 import app.ecs.components.*
+import app.ecs.models.GlobalAngle
 import app.ecs.models.Player
 import app.entity.draw.DrawableEntity
 import com.artemis.ComponentMapper
@@ -9,58 +10,59 @@ import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Vector3
 import java.util.*
 
 @All(EntityComponent::class)
 class DrawSystem : IteratingSystem() {
 
     @Wire
-    private lateinit var player: Player
+    private lateinit var globalAngle: GlobalAngle
     @Wire
     private lateinit var camera: OrthographicCamera
     @Wire
     private lateinit var spriteBatch: SpriteBatch
     @Wire
     private lateinit var gameViewport: GameViewport
-    @Wire
-    private lateinit var assetManager: AssetManager
 
     private lateinit var textureComponentMapper: ComponentMapper<TextureComponent>
     private lateinit var entityTypeComponentMapper: ComponentMapper<EntityTypeComponent>
-    private lateinit var entityComponentMapper: ComponentMapper<EntityComponent>
     private lateinit var positionComponentMapper: ComponentMapper<PositionComponent>
     private lateinit var sizeComponentMapper: ComponentMapper<SizeComponent>
     private lateinit var angleComponentMapper: ComponentMapper<AngleComponent>
+    private lateinit var staticAngleComponentMapper: ComponentMapper<StaticAngleComponent>
+    private lateinit var staticPositionComponentMapper: ComponentMapper<StaticPositionComponent>
 
     private val drawQueue = PriorityQueue<DrawableEntity>()
 
     override fun begin() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         Gdx.gl.glClearColor(255F/255F, 255F/255F, 255F/255F, 1F)
-
-        val position = positionComponentMapper[player.entityId]?.getServerPosition() ?: return
-
-        camera.position.lerp(Vector3(position.x, position.y, 0f), 0.1f)
-        camera.update()
         gameViewport.apply()
-
         drawQueue.clear()
     }
 
 
     override fun process(entityId: Int) {
-        val position = positionComponentMapper[entityId]?.getInterpolatedPosition() ?: return
         val entityType = entityTypeComponentMapper[entityId]?.entityType ?: return
+        val position = positionComponentMapper[entityId]?.getInterpolatedPosition()?: staticPositionComponentMapper[entityId]?.position?: return
+
+        val dx = position.x
+        val dy = position.y
+
+        val cosAngle = MathUtils.cos(globalAngle.angle)
+        val sinAngle = MathUtils.sin(globalAngle.angle)
+
+        val rotatedX = dx * cosAngle - dy * sinAngle
+        val rotatedY = dx * sinAngle + dy * cosAngle
 
         drawQueue.add(DrawableEntity(
             entityId = entityId,
-            yPosition = position.y,
+            xPosition = rotatedX,
+            yPosition = rotatedY,
             entityType = entityType
         ))
     }
@@ -72,32 +74,33 @@ class DrawSystem : IteratingSystem() {
 
         while (drawQueue.isNotEmpty()) {
             val drawable = drawQueue.poll()
-            drawTexture(drawable.entityId)
+            drawTexture(drawable)
         }
         spriteBatch.end()
     }
 
-    private fun drawTexture(entityId: Int) {
-        val entity = entityComponentMapper[entityId] ?: return
+    private fun drawTexture(drawable: DrawableEntity) {
+        val entityId = drawable.entityId
+        val isStaticAngle = staticAngleComponentMapper[entityId] != null
+
+        val angle = angleComponentMapper[entityId]?.getInterpolatedAngle()?: staticAngleComponentMapper[entityId]?.angle?: 0F
         val size = sizeComponentMapper[entityId] ?: return
         val texture = textureComponentMapper[entityId]?.textureRegion ?: return
-        val position = positionComponentMapper[entityId]?.let {
-            if (entity.isStatic) it.getServerPosition() else it.getInterpolatedPosition()
-        } ?: return
-        val angle = angleComponentMapper[entityId]?.getInterpolatedAngle() ?: 0F
+
         val epsilon = 0.01f
+        val totalAngle = if (!isStaticAngle) angle + globalAngle.angle else angle
 
         spriteBatch.draw(
             texture,
-            position.x - size.halfWidth,
-            position.y,
+            drawable.xPosition - size.halfWidth,
+            drawable.yPosition,
             size.halfWidth,
             size.halfHeight,
             size.width + epsilon,
             size.height + epsilon,
             1f,
             1f,
-            angle * MathUtils.radiansToDegrees
+            totalAngle * MathUtils.radiansToDegrees
         )
     }
 

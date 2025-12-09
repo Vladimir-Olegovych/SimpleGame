@@ -4,43 +4,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="inventory update">
-      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/entity/draw/DrawableEntity.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/entity/translator/ServerEntityTranslator.kt" afterDir="false" />
+    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="draw optimization commit">
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/StaticAngleComponent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/StaticPositionComponent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/models/GlobalAngle.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/CameraSystem.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/ObserverComponent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/StaticAngleComponent.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/src/main/kotlin/event/Event.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/kotlin/event/Event.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/kotlin/models/entity/EntityType.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/kotlin/models/entity/EntityType.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/src/main/kotlin/utils/Utils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/kotlin/utils/Utils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/GameApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/GameApplication.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/PositionComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/PositionComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/SizeComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/SizeComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/models/Player.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/models/Player.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/processors/HotKeysInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/HotKeysInputProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/processors/LookInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/LookInputProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/processors/MovementInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/MovementInputProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/EntityComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/components/EntityComponent.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/DrawSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/DrawSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/EntitySystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/EntitySystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/InputSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/InputSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/UiSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/UiSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/events/GameEvent.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/entity/draw/DrawableEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/entity/draw/DrawableEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/entity/translator/ServerEntityTranslator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/entity/translator/ServerEntityTranslator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/HotKeysInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/HotKeysInputProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/LookInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/LookInputProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/MovementInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/MovementInputProcessor.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/screen/GameFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/screen/GameFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/ui/dialog/MenuDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/ui/dialog/MenuDialog.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/ui/inventory/InventoryUI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/ui/inventory/InventoryUI.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/ui/menu/MenuUI.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/ui/menu/MenuUI.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/core/ui/UIComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/core/ui/UIComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/InventoryComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/InventoryComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/PhysicsComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/PhysicsComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/SizeComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/SizeComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/StatsComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/StatsComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/sender/UpdatableData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/sender/UpdatableData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/EntityComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/EntityComponent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/StaticPositionComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/StaticPositionComponent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ChunkSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ChunkSystem.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ClientSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ClientSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/CollectItemsSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/CollectItemsSystem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/EntitySystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/EntitySystem.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EntityUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EntityUtils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EventUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EventUtils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/PhysicsUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/PhysicsUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/BlockChunkGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/BlockChunkGenerator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/EntityChunkGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/EntityChunkGenerator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/FloorChunkGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/FloorChunkGenerator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/BlockChunkGenerator.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/EntityChunkGenerator.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/FloorChunkGenerator.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/chunks/StructureChunkGenerator.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/generator/ServerWorldGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/level/generator/ServerWorldGenerator.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -266,22 +259,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1739022729056</updated>
-    </task>
-    <task id="LOCAL-00008" summary="the best commit 3!">
-      <option name="closed" value="true" />
-      <created>1746211955620</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1746211955620</updated>
-    </task>
-    <task id="LOCAL-00009" summary="the best commit 3!">
-      <option name="closed" value="true" />
-      <created>1746211973780</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1746211973780</updated>
     </task>
     <task id="LOCAL-00010" summary="the best commit 4!!">
       <option name="closed" value="true" />
@@ -659,11 +636,26 @@
       <option name="project" value="LOCAL" />
       <updated>1764936863742</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="draw optimization commit">
+      <option name="closed" value="true" />
+      <created>1765210316308</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1765210316308</updated>
+    </task>
+    <task id="LOCAL-00058" summary="draw optimization commit">
+      <option name="closed" value="true" />
+      <created>1765210962152</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1765210962152</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="the best commit 4!!" />
     <MESSAGE value="the best commit 5!" />
     <MESSAGE value="the best commit 6 with chunkZZZ!" />
     <MESSAGE value="the best commit 7 with new architecture!" />
@@ -688,7 +680,8 @@
     <MESSAGE value="biome generation commit" />
     <MESSAGE value="event bugfix" />
     <MESSAGE value="inventory update" />
-    <option name="LAST_COMMIT_MESSAGE" value="inventory update" />
+    <MESSAGE value="draw optimization commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="draw optimization commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

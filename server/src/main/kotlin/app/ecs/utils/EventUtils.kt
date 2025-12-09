@@ -1,5 +1,6 @@
 package app.ecs.utils
 
+import app.ecs.components.EntityComponent
 import app.ecs.components.InventoryComponent
 import com.artemis.World
 import ecs.components.ClientComponent
@@ -10,6 +11,7 @@ fun World.utProcessCreationEvents(clientId: Int, entityId: Int) {
     val textureComponentMapper = this.getMapper(TextureComponent::class.java)
     val entityTypeComponentMapper = this.getMapper(EntityTypeComponent::class.java)
     val staticPositionComponentMapper = this.getMapper(StaticPositionComponent::class.java)
+    val staticAngleComponentMapper = this.getMapper(StaticAngleComponent::class.java)
     val entityComponentMapper = this.getMapper(EntityComponent::class.java)
     val statsComponentMapper = this.getMapper(StatsComponent::class.java)
     val inventoryComponentMapper = this.getMapper(InventoryComponent::class.java)
@@ -20,15 +22,7 @@ fun World.utProcessCreationEvents(clientId: Int, entityId: Int) {
     val client = clientComponentMapper[clientId]?: return
     val entity = entityComponentMapper[entityId]?: return
 
-    val staticPositionComponent = staticPositionComponentMapper[entityId]
-
-    client.addEvent(
-        Event.Entity(
-            entityId = entityId,
-            drawStats = entity.drawStats,
-            isStatic = staticPositionComponent != null
-        )
-    )
+    client.addEvent(Event.Entity(entityId = entityId))
 
     entityTypeComponentMapper[entityId]?.let {
         client.addEvent(
@@ -62,10 +56,18 @@ fun World.utProcessCreationEvents(clientId: Int, entityId: Int) {
     }
     staticPositionComponentMapper[entityId]?.position?.let {
         client.addEvent(
-            Event.Position(
+            Event.StaticPosition(
                 entityId = entityId,
                 x = it.x,
                 y = it.y,
+            )
+        )
+    }
+    staticAngleComponentMapper[entityId]?.angle?.let {
+        client.addEvent(
+            Event.StaticAngle(
+                entityId = entityId,
+                angle = it
             )
         )
     }
@@ -82,14 +84,15 @@ fun World.utProcessCreationEvents(clientId: Int, entityId: Int) {
             )
             it.positionUpdater.markAsUpdated()
         }
-
-        client.addEvent(
-            Event.Angle(
-                entityId = entityId,
-                angle = it.angleUpdater.getAll()
+        if (staticAngleComponentMapper[entityId] == null) {
+            client.addEvent(
+                Event.Angle(
+                    entityId = entityId,
+                    angle = it.angleUpdater.getAll()
+                )
             )
-        )
-        it.angleUpdater.markAsUpdated()
+            it.angleUpdater.markAsUpdated()
+        }
     }
 
     if (entityId == clientId) statsComponentMapper[entityId]?.let {

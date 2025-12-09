@@ -1,8 +1,5 @@
-package org.example.app.ecs.components
+package app.ecs.components
 
 import com.artemis.Component
 
-class EntityComponent: Component() {
-    var drawStats = false
-    var isObserver = false
-}
+class EntityComponent: Component()

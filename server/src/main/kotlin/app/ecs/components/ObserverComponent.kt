@@ -2,4 +2,4 @@ package app.ecs.components
 
 import com.artemis.Component
 
-class EntityComponent: Component()
+class ObserverComponent: Component()

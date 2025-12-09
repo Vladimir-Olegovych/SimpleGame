@@ -4,6 +4,7 @@ import models.entity.EntityType
 
 data class DrawableEntity(
     val entityId: Int,
+    val xPosition: Float,
     val yPosition: Float,
     val entityType: EntityType
 ) : Comparable<DrawableEntity> {
