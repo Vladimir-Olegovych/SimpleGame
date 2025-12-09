@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2
 import event.Event
 import tools.graphics.input.GameInputProcessor
 
-class MovementInputProcessor: GameInputProcessor {
+class MovementInputProcessor: GlobalAngle.Listener, GameInputProcessor {
 
     @Wire private lateinit var sendEvents: SendEvents
     @Wire private lateinit var globalAngle: GlobalAngle
@@ -27,6 +27,10 @@ class MovementInputProcessor: GameInputProcessor {
     }
 
     private val inputVector = Vector2()
+
+    override fun onRotate(angle: Float) {
+        setForceVector(inputVector.x, inputVector.y)
+    }
 
     private fun transformInputWithCameraAngle(inputX: Float, inputY: Float): Pair<Float, Float> {
         if (globalAngle.angle == 0f) return Pair(inputX, inputY)
@@ -50,9 +54,11 @@ class MovementInputProcessor: GameInputProcessor {
         forceVector.x = worldX
         forceVector.y = worldY
 
-        sendEvents.addEvent(Event.CurrentPlayerVelocity(forceVector.x, forceVector.y))
+        sendEvents.addDelayedEvent(
+            delay = SEND_DELAY,
+            event = Event.CurrentPlayerVelocity(forceVector.x, forceVector.y)
+        )
     }
-
 
     override fun keyDown(keycode: Int): Boolean {
         if (!enabled) return false
@@ -75,6 +81,7 @@ class MovementInputProcessor: GameInputProcessor {
     }
 
     companion object {
+        const val SEND_DELAY = 50L
         const val VELOCITY = 1F
     }
 }

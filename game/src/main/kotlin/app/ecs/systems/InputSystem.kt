@@ -1,5 +1,6 @@
 package app.ecs.systems
 
+import app.ecs.models.GlobalAngle
 import app.processors.HotKeysInputProcessor
 import app.processors.LookInputProcessor
 import app.processors.MovementInputProcessor
@@ -9,18 +10,20 @@ import com.artemis.annotations.Wire
 import com.badlogic.gdx.InputProcessor
 import tools.graphics.input.GameInputProcessor
 
-class InputSystem(private val onQuit: () -> Unit,): InputProcessor, BaseSystem() {
+class InputSystem(private val onQuit: () -> Unit): InputProcessor, BaseSystem() {
 
     @Wire
     private lateinit var menuDialog: MenuDialog
+    @Wire
+    private lateinit var globalAngle: GlobalAngle
 
     private lateinit var inputProcessors: Array<GameInputProcessor>
 
 
     override fun initialize() {
         inputProcessors = arrayOf(
-            MovementInputProcessor(),
-            LookInputProcessor(),
+            MovementInputProcessor().apply { globalAngle.addListener(this@apply) },
+            LookInputProcessor().apply { globalAngle.addListener(this@apply) },
             HotKeysInputProcessor()
         )
         inputProcessors.forEach { world.inject(it) }

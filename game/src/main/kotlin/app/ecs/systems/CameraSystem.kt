@@ -1,6 +1,7 @@
 package app.ecs.systems
 
 import app.ecs.components.PositionComponent
+import app.ecs.components.SizeComponent
 import app.ecs.models.GlobalAngle
 import app.ecs.models.Player
 import com.artemis.BaseSystem
@@ -10,40 +11,53 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector3
 
-class CameraSystem: BaseSystem() {
+
+class CameraSystem: GlobalAngle.Listener, BaseSystem() {
+
     @Wire private lateinit var player: Player
     @Wire private lateinit var camera: OrthographicCamera
     @Wire private lateinit var globalAngle: GlobalAngle
 
     private lateinit var positionComponentMapper: ComponentMapper<PositionComponent>
+    private lateinit var sizeComponentMapper: ComponentMapper<SizeComponent>
 
-    private var lastAngle = 0F
 
     override fun initialize() {
-        lastAngle = globalAngle.angle
+        globalAngle.addListener(this)
     }
 
-    override fun begin() {
-        globalAngle.deltaTime = world.delta
-        globalAngle.process()
-    }
-    
-    override fun processSystem() {
-        val position = positionComponentMapper[player.entityId]?.getInterpolatedPosition() ?: return
-        val cosAngle = MathUtils.cos(globalAngle.angle)
-        val sinAngle = MathUtils.sin(globalAngle.angle)
+    private fun getEntityPosition(angle: Float, entityId: Int): Pair<Float, Float>? {
+        val position = positionComponentMapper[entityId]?.getInterpolatedPosition() ?: return null
+        val size = sizeComponentMapper[player.entityId]?: return null
+        val cosAngle = MathUtils.cos(angle)
+        val sinAngle = MathUtils.sin(angle)
 
         val rotatedX = position.x * cosAngle - position.y * sinAngle
-        val rotatedY = position.x * sinAngle + position.y * cosAngle
+        val rotatedY = (position.x * sinAngle + position.y * cosAngle) + size.halfHeight
+        return Pair(rotatedX, rotatedY)
+    }
 
-        if (lastAngle != globalAngle.angle) {
-            camera.position.set(Vector3(rotatedX, rotatedY, 0f))
-            lastAngle = globalAngle.angle
-        } else {
-            camera.position.lerp(Vector3(rotatedX, rotatedY, 0f), 0.1f)
-        }
+    override fun onRotationStart(currentAngle: Float, startAngle: Float) {}
+
+    override fun onRotate(angle: Float) {
+        val position = getEntityPosition(globalAngle.angle, player.entityId)?: return
+        val x = position.first
+        val y = position.second
+        camera.position.set(Vector3(x, y, 0f))
         camera.update()
     }
 
+    override fun onRotationEnd(finalAngle: Float, startAngle: Float) {}
+
+    override fun processSystem() {
+        if (globalAngle.isRotating()) return
+        val position = getEntityPosition(globalAngle.angle, player.entityId)?: return
+        val x = position.first
+        val y = position.second
+        camera.position.lerp(Vector3(x, y, 0f), 0.5f)
+        camera.update()
+    }
+
+    override fun end() { globalAngle.process(world.delta) }
 
 }

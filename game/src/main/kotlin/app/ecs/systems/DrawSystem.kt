@@ -3,7 +3,6 @@ package app.ecs.systems
 import app.di.GameViewport
 import app.ecs.components.*
 import app.ecs.models.GlobalAngle
-import app.ecs.models.Player
 import app.entity.draw.DrawableEntity
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
@@ -111,35 +110,35 @@ class DrawSystem : IteratingSystem() {
     }
 }
 
-    /*
-    private fun drawStats(entityId: Int){
-        val entity = entityComponentMapper[entityId]?: return
-        if (!entity.drawStats) return
-        val size = sizeComponentMapper[entityId]?: return
-        val stats = statsComponentMapper[entityId]?: return
-        val position = positionComponentMapper[entityId]?.let {
-            if (entity.isStatic) it.getServerPosition() else it.getInterpolatedPosition()
-        }?: return
+/*
+private fun drawStats(entityId: Int){
+    val entity = entityComponentMapper[entityId]?: return
+    if (!entity.drawStats) return
+    val size = sizeComponentMapper[entityId]?: return
+    val stats = statsComponentMapper[entityId]?: return
+    val position = positionComponentMapper[entityId]?.let {
+        if (entity.isStatic) it.getServerPosition() else it.getInterpolatedPosition()
+    }?: return
 
-        stats.getStat<Int>(ApplicationValues.Stats.HP)?.let { value ->
-            val hpText = "$value hp"
-            val glyphLayout = GlyphLayout(font, hpText)
-            font.draw(
-                spriteBatch,
-                hpText,
-                position.x - glyphLayout.width / 2,
-                position.y - size.halfHeight * TEXT_PADDING_SCALER - glyphLayout.height / 2
-            )
-        }
-
-        stats.getStat<String>(ApplicationValues.Stats.NAME)?.let { nameText ->
-            val glyphLayout = GlyphLayout(font, nameText)
-            font.draw(
-                spriteBatch,
-                nameText,
-                position.x - glyphLayout.width / 2,
-                position.y + size.halfHeight * TEXT_PADDING_SCALER + size.halfHeight * 1.5F - glyphLayout.height / 2
-            )
-        }
+    stats.getStat<Int>(ApplicationValues.Stats.HP)?.let { value ->
+        val hpText = "$value hp"
+        val glyphLayout = GlyphLayout(font, hpText)
+        font.draw(
+            spriteBatch,
+            hpText,
+            position.x - glyphLayout.width / 2,
+            position.y - size.halfHeight * TEXT_PADDING_SCALER - glyphLayout.height / 2
+        )
     }
-     */
+
+    stats.getStat<String>(ApplicationValues.Stats.NAME)?.let { nameText ->
+        val glyphLayout = GlyphLayout(font, nameText)
+        font.draw(
+            spriteBatch,
+            nameText,
+            position.x - glyphLayout.width / 2,
+            position.y + size.halfHeight * TEXT_PADDING_SCALER + size.halfHeight * 1.5F - glyphLayout.height / 2
+        )
+    }
+}
+ */

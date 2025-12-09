@@ -63,7 +63,7 @@ class ServerWorldGenerator(
             val observerComponent = observerComponentMapper[entityId]
             chunk.add(entityId, observerComponent != null)
 
-            //if (random.nextInt(0, 50) < 3)
+            if (random.nextInt(0, 50) < 3)
                 createEntity(chunk, position)
         }
     }
