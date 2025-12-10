@@ -17,6 +17,7 @@ import models.network.SendType
 import models.textures.TextureType
 import app.ecs.components.EntityComponent
 import app.ecs.components.ObserverComponent
+import app.ecs.components.models.ServerTime
 import org.example.app.ecs.components.PhysicsComponent
 import org.example.app.ecs.components.StaticAngleComponent
 import org.example.app.ecs.components.StaticPositionComponent
@@ -35,6 +36,7 @@ class ClientSystem: GameNetworkListener<GamePacket>, IteratingSystem() {
 
     @Wire private lateinit var chunkManager: AdvancedChunkManager
     @Wire private lateinit var eventBus: EventBus
+    @Wire private lateinit var serverTime: ServerTime
 
     private lateinit var staticPositionComponentMapper: ComponentMapper<StaticPositionComponent>
     private lateinit var staticAngleComponentMapper: ComponentMapper<StaticAngleComponent>
@@ -124,8 +126,15 @@ class ClientSystem: GameNetworkListener<GamePacket>, IteratingSystem() {
 
     override fun process(clientId: Int) {
         val client = clientComponentMapper[clientId]?: return
-        val entities = client.getEntities()
 
+        client.addEvent(
+            event = Event.Time(
+                time = serverTime.time
+            ),
+            sendType = SendType.UDP
+        )
+
+        val entities = client.getEntities()
         for (entityId in entities) {
             val entity = entityComponentMapper[entityId]?: continue
             val physics = physicsComponentMapper[entityId] ?: continue

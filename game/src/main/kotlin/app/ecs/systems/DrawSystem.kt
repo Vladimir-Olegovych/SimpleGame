@@ -3,6 +3,7 @@ package app.ecs.systems
 import app.di.GameViewport
 import app.ecs.components.*
 import app.ecs.models.GlobalAngle
+import app.ecs.models.IsometricMatrix
 import app.entity.draw.DrawableEntity
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
@@ -13,6 +14,7 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Matrix4
 import java.util.*
 
 @All(EntityComponent::class)
@@ -24,6 +26,8 @@ class DrawSystem : IteratingSystem() {
     private lateinit var camera: OrthographicCamera
     @Wire
     private lateinit var spriteBatch: SpriteBatch
+    @Wire
+    private lateinit var isometricMatrix: IsometricMatrix
     @Wire
     private lateinit var gameViewport: GameViewport
 
@@ -66,7 +70,7 @@ class DrawSystem : IteratingSystem() {
     }
 
     override fun end() {
-        spriteBatch.projectionMatrix = camera.combined
+        spriteBatch.projectionMatrix = isometricMatrix.combined
         spriteBatch.begin()
         spriteBatch.enableBlending()
 
@@ -106,6 +110,14 @@ class DrawSystem : IteratingSystem() {
         camera.position.set(0F, 0F, 0F)
         camera.update()
         drawQueue.clear()
+    }
+
+    private val cameraMatrix = Matrix4()
+    private val combinedMatrix = Matrix4()
+
+
+    fun applyToBatch(batch: SpriteBatch) {
+        batch.projectionMatrix = combinedMatrix
     }
 }
 

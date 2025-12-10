@@ -1,6 +1,8 @@
 package app.di
 
 import alexey.tools.server.level.AdvancedChunkManager
+import app.ecs.components.models.ServerTime
+import app.ecs.systems.TimeSystem
 import com.badlogic.gdx.physics.box2d.World
 import event.GamePacket
 import org.example.app.ecs.systems.*
@@ -44,6 +46,7 @@ val appModule = module {
         val moveSystem: MoveSystem = get()
         val physicsSystem: PhysicsSystem = get()
         val sendSystem: SendSystem = get()
+        val timeSystem: TimeSystem = get()
 
         ArtemisWorldBuilder().let {
             it.addSystem(sendSystem)
@@ -54,7 +57,9 @@ val appModule = module {
             it.addSystem(lookAtSystem)
             it.addSystem(collectItemsSystem)
             it.addSystem(physicsSystem)
+            it.addSystem(timeSystem)
 
+            it.addObject(ServerTime())
             it.addObject(serverPreference)
             it.addObject(chunkManager)
             it.addObject(itemsManager)

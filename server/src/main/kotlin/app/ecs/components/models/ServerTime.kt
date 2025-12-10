@@ -1,0 +1,5 @@
+package app.ecs.components.models
+
+class ServerTime {
+    var time: Float = 1200F
+}

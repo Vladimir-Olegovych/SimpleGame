@@ -3,6 +3,7 @@ package app.screens.game.screen
 import app.di.GameViewport
 import app.di.UiViewport
 import app.ecs.models.GlobalAngle
+import app.ecs.models.IsometricMatrix
 import app.ecs.models.Player
 import app.ecs.models.SendEvents
 import app.ecs.systems.*
@@ -66,6 +67,7 @@ class GameFragment(
             .addSystem(inputSystem)
             .addSystem(SendSystem())
             .addObject(Player())
+            .addObject(IsometricMatrix(camera))
             .addObject(GlobalAngle())
             .addObject(SendEvents())
             .addObject(textureStorage)

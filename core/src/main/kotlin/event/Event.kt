@@ -13,6 +13,10 @@ class GamePacket(val events: Array<Event> = emptyArray())
 
 sealed class Event {
 
+    class Time(
+        val time: Float = 0F
+    ): Event()
+
     class Entity(val entityId: Int = 0): Event()
 
     class Stats(
@@ -58,8 +62,10 @@ sealed class Event {
     class Remove(val entityId: Int = 0): Event()
 
 
-    class CurrentChunkParams(val chunkRadius: Int = 0,
-                             val chunkSize: Float = 0F): Event()
+    class ServerParams(val dayTime: Float = 0F,
+                       val eveningTime: Float = 0F,
+                       val nightTime: Float = 0F,
+                       val dawnTime: Float = 0F): Event()
 
     class CurrentPlayer(val entityId: Int = 0): Event()
 

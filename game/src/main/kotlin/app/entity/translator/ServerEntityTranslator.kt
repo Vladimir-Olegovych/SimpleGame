@@ -28,6 +28,13 @@ class ServerEntityTranslator() {
     private lateinit var clientPreference: ClientPreference
 
     val entityMap = IntMap<Int>()
+    var time = 0F
+    var maxTime = 0F
+
+    var dayTime = 0F
+    var eveningTime = 0F
+    var nightTime = 0F
+    var dawnTime = 0F
 
     private lateinit var inventoryComponentMapper: ComponentMapper<InventoryComponent>
     private lateinit var textureComponentMapper: ComponentMapper<TextureComponent>
@@ -39,6 +46,11 @@ class ServerEntityTranslator() {
     private lateinit var angleComponentMapper: ComponentMapper<AngleComponent>
     private lateinit var staticAngleComponent: ComponentMapper<StaticAngleComponent>
     private lateinit var staticPositionComponent: ComponentMapper<StaticPositionComponent>
+
+    @BusEvent
+    fun onTime(event: Event.Time){
+        time = event.time
+    }
 
     @BusEvent
     fun setEntity(event: Event.Entity){
@@ -134,8 +146,13 @@ class ServerEntityTranslator() {
     }
 
     @BusEvent
-    fun setChunkParams(event: Event.CurrentChunkParams){
+    fun setServerParams(event: Event.ServerParams){
+        dayTime = event.dayTime
+        eveningTime = event.eveningTime
+        nightTime = event.nightTime
+        dawnTime = event.dawnTime
 
+        maxTime = dayTime + eveningTime + nightTime + dawnTime
     }
 
     @BusEvent

@@ -3,6 +3,7 @@ package app.ecs.systems
 import app.ecs.components.PositionComponent
 import app.ecs.components.SizeComponent
 import app.ecs.models.GlobalAngle
+import app.ecs.models.IsometricMatrix
 import app.ecs.models.Player
 import com.artemis.BaseSystem
 import com.artemis.ComponentMapper
@@ -17,6 +18,7 @@ class CameraSystem: GlobalAngle.Listener, BaseSystem() {
     @Wire private lateinit var player: Player
     @Wire private lateinit var camera: OrthographicCamera
     @Wire private lateinit var globalAngle: GlobalAngle
+    @Wire private lateinit var isometricMatrix: IsometricMatrix
 
     private lateinit var positionComponentMapper: ComponentMapper<PositionComponent>
     private lateinit var sizeComponentMapper: ComponentMapper<SizeComponent>
@@ -45,6 +47,7 @@ class CameraSystem: GlobalAngle.Listener, BaseSystem() {
         val y = position.second
         camera.position.set(Vector3(x, y, 0f))
         camera.update()
+        isometricMatrix.updateMatrix()
     }
 
     override fun onRotationEnd(finalAngle: Float, startAngle: Float) {}
@@ -56,6 +59,7 @@ class CameraSystem: GlobalAngle.Listener, BaseSystem() {
         val y = position.second
         camera.position.lerp(Vector3(x, y, 0f), 0.5f)
         camera.update()
+        isometricMatrix.updateMatrix()
     }
 
     override fun end() {

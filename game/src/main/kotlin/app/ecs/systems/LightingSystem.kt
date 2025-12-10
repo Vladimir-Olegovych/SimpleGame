@@ -3,7 +3,9 @@ package app.ecs.systems
 import app.di.GameViewport
 import app.ecs.components.*
 import app.ecs.models.GlobalAngle
+import app.ecs.models.IsometricMatrix
 import app.ecs.models.Player
+import app.entity.translator.ServerEntityTranslator
 import app.event.UiEvent
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
@@ -18,7 +20,6 @@ import com.badlogic.gdx.math.MathUtils
 import core.textures.createShadowShape
 import models.entity.EntityType
 import tools.eventbus.annotation.BusEvent
-import kotlin.math.sqrt
 import kotlin.random.Random
 
 @All(EntityComponent::class)
@@ -29,22 +30,22 @@ class LightingSystem : IteratingSystem() {
     @Wire
     private lateinit var globalAngle: GlobalAngle
     @Wire
+    private lateinit var isometricMatrix: IsometricMatrix
+    @Wire
     private lateinit var camera: OrthographicCamera
     @Wire
     private lateinit var spriteBatch: SpriteBatch
     @Wire
     private lateinit var gameViewport: GameViewport
+    @Wire
+    private lateinit var serverEntityTranslator: ServerEntityTranslator
 
     private lateinit var lightBuffer: FrameBuffer
     private lateinit var lightTexture: Texture
 
-    private lateinit var textureComponentMapper: ComponentMapper<TextureComponent>
     private lateinit var entityTypeComponentMapper: ComponentMapper<EntityTypeComponent>
     private lateinit var positionComponentMapper: ComponentMapper<PositionComponent>
     private lateinit var sizeComponentMapper: ComponentMapper<SizeComponent>
-    private lateinit var angleComponentMapper: ComponentMapper<AngleComponent>
-    private lateinit var staticAngleComponentMapper: ComponentMapper<StaticAngleComponent>
-    private lateinit var staticPositionComponentMapper: ComponentMapper<StaticPositionComponent>
 
     @BusEvent
     fun onResize(event: UiEvent.Resize){
@@ -73,7 +74,9 @@ class LightingSystem : IteratingSystem() {
 
     override fun begin() {
         lightBuffer.begin()
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+
+        val lightPercent = calculateLightPercent()
+        Gdx.gl.glClearColor(lightPercent, lightPercent, lightPercent, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         spriteBatch.begin()
@@ -82,7 +85,31 @@ class LightingSystem : IteratingSystem() {
         spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)
     }
 
+    private fun calculateLightPercent(): Float {
+        val time = serverEntityTranslator.time
+        val dayTime = serverEntityTranslator.dayTime
+        val eveningTime = serverEntityTranslator.eveningTime
+        val nightTime = serverEntityTranslator.nightTime
+        val dawnTime = serverEntityTranslator.dawnTime
+
+        if (time < dayTime) {
+            return 1f
+        }
+        else if (time < dayTime + eveningTime) {
+            val eveningProgress = (time - dayTime) / eveningTime
+            return 1f - eveningProgress
+        }
+        else if (time < dayTime + eveningTime + nightTime) {
+            return 0f
+        }
+        else {
+            val dawnProgress = (time - (dayTime + eveningTime + nightTime)) / dawnTime
+            return dawnProgress
+        }
+    }
+
     override fun process(entityId: Int) {
+        if (entityId != player.entityId) return
         val entityTypeComponent = entityTypeComponentMapper[entityId]?: return
         if (entityTypeComponent.entityType != EntityType.ENTITY) return
 
@@ -114,23 +141,25 @@ class LightingSystem : IteratingSystem() {
         spriteBatch.end()
         lightBuffer.end()
 
-        spriteBatch.projectionMatrix = camera.combined
+        spriteBatch.projectionMatrix = isometricMatrix.combined
         spriteBatch.begin()
         spriteBatch.setBlendFunction(GL20.GL_DST_COLOR, GL20.GL_ZERO)
 
         val region = TextureRegion(lightBuffer.colorBufferTexture)
         region.flip(false, true)
 
+        spriteBatch.color = Color.WHITE
         spriteBatch.draw(
             region,
-            camera.position.x - camera.viewportWidth / 2 * camera.zoom,
-            camera.position.y - camera.viewportHeight / 2 * camera.zoom,
-            camera.viewportWidth * camera.zoom,
-            camera.viewportHeight * camera.zoom
+            camera.position.x - (camera.viewportWidth / IsometricMatrix.MATRIX_Y_SCALE) / 2 * camera.zoom,
+            camera.position.y - (camera.viewportHeight / IsometricMatrix.MATRIX_Y_SCALE) / 2 * camera.zoom,
+            (camera.viewportWidth / IsometricMatrix.MATRIX_Y_SCALE) * camera.zoom,
+            (camera.viewportHeight / IsometricMatrix.MATRIX_Y_SCALE) * camera.zoom
         )
 
         spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
         spriteBatch.end()
+
     }
 
     override fun dispose() {

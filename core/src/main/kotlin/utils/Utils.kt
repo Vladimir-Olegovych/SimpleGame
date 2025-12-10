@@ -21,6 +21,7 @@ fun Kryo.registerAllEvents(){
 
     kryo.register(EntityType::class.java)
 
+    kryo.register(Event.Time::class.java)
     kryo.register(Event.Entity::class.java)
 
     kryo.register(Event.Stats::class.java)
@@ -36,7 +37,7 @@ fun Kryo.registerAllEvents(){
     kryo.register(Event.EntityTypeEvent::class.java)
 
     kryo.register(Event.CurrentPlayer::class.java)
-    kryo.register(Event.CurrentChunkParams::class.java)
+    kryo.register(Event.ServerParams::class.java)
     kryo.register(Event.CurrentPlayerVelocity::class.java)
     kryo.register(Event.CanCollectItems::class.java)
     kryo.register(Event.LookAt::class.java)

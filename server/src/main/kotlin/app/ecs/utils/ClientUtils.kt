@@ -22,9 +22,11 @@ fun World.utCreateClient(entityId: Int, connection: Connection) {
     client.connection = connection
 
     client.addEvent(
-        Event.CurrentChunkParams(
-            chunkRadius = serverPreference.chunkRadius,
-            chunkSize = serverPreference.chunkSize
+        Event.ServerParams(
+            dayTime = serverPreference.dayTime,
+            eveningTime = serverPreference.eveningTime,
+            nightTime = serverPreference.nightTime,
+            dawnTime = serverPreference.dawnTime
         )
     )
     client.addEvent(
