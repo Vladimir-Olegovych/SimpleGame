@@ -50,22 +50,11 @@ class LightingSystem : IteratingSystem() {
     @BusEvent
     fun onResize(event: UiEvent.Resize){
         lightBuffer.dispose()
-
-        lightBuffer = FrameBuffer(
-            Pixmap.Format.RGBA8888,
-            event.width,
-            event.height,
-            false
-        )
+        lightBuffer = FrameBuffer(Pixmap.Format.RGBA8888, event.width, event.height, false)
     }
 
     override fun initialize() {
-        lightBuffer = FrameBuffer(
-            Pixmap.Format.RGBA8888,
-            Gdx.graphics.width,
-            Gdx.graphics.height,
-            false
-        )
+        lightBuffer = FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.width, Gdx.graphics.height, false)
 
         lightTexture = createShadowShape()
         lightTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
@@ -81,7 +70,7 @@ class LightingSystem : IteratingSystem() {
 
         spriteBatch.begin()
 
-        spriteBatch.projectionMatrix = camera.combined
+        spriteBatch.projectionMatrix = isometricMatrix.combined
         spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)
     }
 
@@ -109,7 +98,7 @@ class LightingSystem : IteratingSystem() {
     }
 
     override fun process(entityId: Int) {
-        if (entityId != player.entityId) return
+        //if (entityId != player.entityId) return
         val entityTypeComponent = entityTypeComponentMapper[entityId]?: return
         if (entityTypeComponent.entityType != EntityType.ENTITY) return
 
@@ -131,7 +120,7 @@ class LightingSystem : IteratingSystem() {
         spriteBatch.draw(
             lightTexture,
             (rotatedX - worldLightSize / 2),
-            (rotatedY - worldLightSize / 2) + size.halfHeight,
+            (rotatedY - worldLightSize / 2),
             worldLightSize,
             worldLightSize
         )
@@ -141,7 +130,7 @@ class LightingSystem : IteratingSystem() {
         spriteBatch.end()
         lightBuffer.end()
 
-        spriteBatch.projectionMatrix = isometricMatrix.combined
+        spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
         spriteBatch.setBlendFunction(GL20.GL_DST_COLOR, GL20.GL_ZERO)
 
@@ -151,10 +140,10 @@ class LightingSystem : IteratingSystem() {
         spriteBatch.color = Color.WHITE
         spriteBatch.draw(
             region,
-            camera.position.x - (camera.viewportWidth / IsometricMatrix.MATRIX_Y_SCALE) / 2 * camera.zoom,
-            camera.position.y - (camera.viewportHeight / IsometricMatrix.MATRIX_Y_SCALE) / 2 * camera.zoom,
-            (camera.viewportWidth / IsometricMatrix.MATRIX_Y_SCALE) * camera.zoom,
-            (camera.viewportHeight / IsometricMatrix.MATRIX_Y_SCALE) * camera.zoom
+            camera.position.x - camera.viewportWidth / 2 * camera.zoom,
+            camera.position.y - camera.viewportHeight / 2 * camera.zoom,
+            camera.viewportWidth * camera.zoom,
+            camera.viewportHeight * camera.zoom
         )
 
         spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
