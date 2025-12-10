@@ -7,6 +7,7 @@ import app.ecs.models.Player
 import app.ecs.models.SendEvents
 import app.ecs.systems.*
 import app.entity.translator.ServerEntityTranslator
+import app.event.UiEvent
 import app.navigation.Navigation
 import app.screens.game.ui.dialog.MenuDialog
 import app.screens.game.ui.inventory.InventoryUI
@@ -59,6 +60,7 @@ class GameFragment(
             .addSystem(EntitySystem())
             .addSystem(serverSystem)
             .addSystem(DrawSystem())
+            .addSystem(LightingSystem())
             .addSystem(CameraSystem())
             .addSystem(uiSystem)
             .addSystem(inputSystem)
@@ -89,7 +91,10 @@ class GameFragment(
         inputMultiplexer.addProcessor(inputSystem)
 
         eventBus.registerHandler(serverEntityTranslator)
-        eventBus.registerHandler(uiSystem)
+
+        for (system in artemisWorld.systems) {
+            eventBus.registerHandler(system)
+        }
 
         Gdx.input.inputProcessor = inputMultiplexer
         gameClient.subscribe(serverSystem)
@@ -117,6 +122,7 @@ class GameFragment(
     override fun onResize(width: Int, height: Int) {
         gameViewport.update(width, height, false)
         uiViewport.update(width, height, true)
+        eventBus.sendEvent(UiEvent.Resize(width, height))
     }
 
     override fun onDestroy() {

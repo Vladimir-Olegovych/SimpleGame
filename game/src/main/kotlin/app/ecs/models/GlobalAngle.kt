@@ -10,7 +10,7 @@ class GlobalAngle(var angle: Float = 0f) {
         const val FULL_CIRCLE = 2f * MathUtils.PI
         const val SECTORS_COUNT = 8
         const val SECTOR_ANGLE = FULL_CIRCLE / SECTORS_COUNT
-        const val ROTATION_SPEED = 1.5f
+        const val ROTATION_SPEED = 3f
     }
 
     private val listeners = ArrayList<Listener>()

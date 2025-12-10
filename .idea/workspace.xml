@@ -4,15 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="fake 3D commit">
+    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="fake 3D optimization commit">
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/LightingSystem.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/event/UiEvent.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/src/main/kotlin/core/textures/Utils.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client.json" beforeDir="false" afterPath="$PROJECT_DIR$/client.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/di/AppModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/di/AppModule.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/models/GlobalAngle.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/models/GlobalAngle.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/CameraSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/CameraSystem.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/DrawSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/DrawSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/InputSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/InputSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/LookInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/LookInputProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/entity/translator/ServerEntityTranslator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/entity/translator/ServerEntityTranslator.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/MovementInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/MovementInputProcessor.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/generator/ServerWorldGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/level/generator/ServerWorldGenerator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/screen/GameFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/screen/GameFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/core/models/settings/ClientPreference.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/core/models/settings/ClientPreference.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,35 +83,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build Game3D.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build GameJora.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GameJora [:desktop:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GameJora [:server:shadowJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GameJora:desktop [:desktop:org.example.GameKt.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.GameJora:server [:server:org.example.ServerKt.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SimpleGame:desktop [:desktop:org.example.GameKt.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SimpleGame:server [:server:ServerKt.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SimpleGame:server [:server:org.example.ServerKt.main()].executor&quot;: &quot;Run&quot;,
-    &quot;JAR Application.desktop-1.0-SNAPSHOT-all.jar.executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.GameKt.executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt (1).executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
-    &quot;Kotlin.ServerKt.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/vladimir/IdeaProjects/SimpleGame/server/src/main/kotlin/app/ecs/utils&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build Game3D.executor": "Run",
+    "Gradle.Build GameJora.executor": "Run",
+    "Gradle.Download Sources.executor": "Run",
+    "Gradle.GameJora [:desktop:shadowJar].executor": "Run",
+    "Gradle.GameJora [:server:shadowJar].executor": "Run",
+    "Gradle.GameJora:desktop [:desktop:org.example.GameKt.main()].executor": "Run",
+    "Gradle.GameJora:server [:server:org.example.ServerKt.main()].executor": "Run",
+    "Gradle.SimpleGame [:desktop:org.example.GameKt.main()].executor": "Run",
+    "Gradle.SimpleGame [:server:ServerKt.main()].executor": "Run",
+    "Gradle.SimpleGame:desktop [:desktop:org.example.GameKt.main()].executor": "Run",
+    "Gradle.SimpleGame:server [:server:ServerKt.main()].executor": "Run",
+    "Gradle.SimpleGame:server [:server:org.example.ServerKt.main()].executor": "Run",
+    "JAR Application.desktop-1.0-SNAPSHOT-all.jar.executor": "Run",
+    "Kotlin.GameKt.executor": "Run",
+    "Kotlin.MainKt (1).executor": "Run",
+    "Kotlin.MainKt.executor": "Run",
+    "Kotlin.ServerKt.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/vladimir/IdeaProjects/SimpleGame/server/src/main/kotlin/app/ecs/utils",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils" />
@@ -144,7 +151,7 @@
       <recent name="models.textures" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.GameJora [:desktop:shadowJar]">
+  <component name="RunManager" selected="Kotlin.GameKt">
     <configuration name="GameJora [:desktop:shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" nameIsGenerated="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -237,14 +244,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1739022729056</updated>
-    </task>
-    <task id="LOCAL-00011" summary="the best commit 5!">
-      <option name="closed" value="true" />
-      <created>1746603052717</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1746603052717</updated>
     </task>
     <task id="LOCAL-00012" summary="the best commit 5!">
       <option name="closed" value="true" />
@@ -630,11 +629,18 @@
       <option name="project" value="LOCAL" />
       <updated>1765274099253</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="fake 3D optimization commit">
+      <option name="closed" value="true" />
+      <created>1765302437202</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1765302437203</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="the best commit 6 with chunkZZZ!" />
     <MESSAGE value="the best commit 7 with new architecture!" />
     <MESSAGE value="the best commit 8 chunks and client!" />
     <MESSAGE value="the best commit 9 chunks!" />
@@ -659,7 +665,8 @@
     <MESSAGE value="inventory update" />
     <MESSAGE value="draw optimization commit" />
     <MESSAGE value="fake 3D commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="fake 3D commit" />
+    <MESSAGE value="fake 3D optimization commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="fake 3D optimization commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -28,7 +28,7 @@ class MovementInputProcessor: GlobalAngle.Listener, GameInputProcessor {
 
     private val inputVector = Vector2()
 
-    override fun onRotate(angle: Float) {
+    override fun onRotationEnd(finalAngle: Float, startAngle: Float) {
         setForceVector(inputVector.x, inputVector.y)
     }
 
@@ -54,10 +54,7 @@ class MovementInputProcessor: GlobalAngle.Listener, GameInputProcessor {
         forceVector.x = worldX
         forceVector.y = worldY
 
-        sendEvents.addDelayedEvent(
-            delay = SEND_DELAY,
-            event = Event.CurrentPlayerVelocity(forceVector.x, forceVector.y)
-        )
+        sendEvents.addEvent(Event.CurrentPlayerVelocity(forceVector.x, forceVector.y))
     }
 
     override fun keyDown(keycode: Int): Boolean {
@@ -81,7 +78,6 @@ class MovementInputProcessor: GlobalAngle.Listener, GameInputProcessor {
     }
 
     companion object {
-        const val SEND_DELAY = 50L
         const val VELOCITY = 1F
     }
 }

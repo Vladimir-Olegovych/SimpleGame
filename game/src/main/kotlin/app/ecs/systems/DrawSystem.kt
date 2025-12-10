@@ -44,7 +44,6 @@ class DrawSystem : IteratingSystem() {
         drawQueue.clear()
     }
 
-
     override fun process(entityId: Int) {
         val entityType = entityTypeComponentMapper[entityId]?.entityType ?: return
         val position = positionComponentMapper[entityId]?.getInterpolatedPosition()?: staticPositionComponentMapper[entityId]?.position?: return

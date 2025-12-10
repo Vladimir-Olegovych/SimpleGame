@@ -58,6 +58,8 @@ class CameraSystem: GlobalAngle.Listener, BaseSystem() {
         camera.update()
     }
 
-    override fun end() { globalAngle.process(world.delta) }
+    override fun end() {
+        globalAngle.process(world.delta)
+    }
 
 }

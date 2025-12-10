@@ -48,16 +48,13 @@ val appModule = module {
         val clientPreference: ClientPreference = get()
         val camera: OrthographicCamera = get()
         GameViewport(
-            size = 30F * clientPreference.drawScale,
+            size = 30F,
             camera = camera
         )
     }
 
     single<UiViewport> {
-        val clientPreference: ClientPreference = get()
-        UiViewport(
-            size = 16F * clientPreference.drawScale
-        )
+        UiViewport(size = 700F)
     }
 
     single<Stage> {

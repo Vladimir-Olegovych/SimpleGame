@@ -58,8 +58,8 @@ class ServerEntityTranslator() {
         val positionComponent = positionComponentMapper[entityId]?: positionComponentMapper.create(entityId)
 
         positionComponent.setPosition(
-            event.x * clientPreference.drawScale,
-            event.y * clientPreference.drawScale
+            event.x,
+            event.y
         )
     }
 
@@ -68,8 +68,8 @@ class ServerEntityTranslator() {
         val entityId = entityMap[event.entityId]?: return
         val positionComponent = staticPositionComponent[entityId]?: staticPositionComponent.create(entityId)
 
-        positionComponent.position.x = event.x * clientPreference.drawScale
-        positionComponent.position.y = event.y * clientPreference.drawScale
+        positionComponent.position.x = event.x
+        positionComponent.position.y = event.y
     }
 
     @BusEvent
@@ -93,9 +93,9 @@ class ServerEntityTranslator() {
         val entityId = entityMap[event.entityId]?: return
         val sizeComponent = sizeComponentMapper[entityId]?: sizeComponentMapper.create(entityId)
 
-        sizeComponent.radius = event.radius * clientPreference.drawScale
-        sizeComponent.width = event.width * clientPreference.drawScale
-        sizeComponent.height = event.height * clientPreference.drawScale
+        sizeComponent.radius = event.radius
+        sizeComponent.width = event.width
+        sizeComponent.height = event.height
         sizeComponent.halfWidth = sizeComponent.width / 2
         sizeComponent.halfHeight = sizeComponent.height / 2
     }
