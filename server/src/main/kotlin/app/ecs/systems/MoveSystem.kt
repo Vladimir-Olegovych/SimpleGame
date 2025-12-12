@@ -1,12 +1,13 @@
 package org.example.app.ecs.systems
 
+import app.ecs.components.ActiveComponent
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.systems.IteratingSystem
 import org.example.app.ecs.components.MoveComponent
 import org.example.app.ecs.components.PhysicsComponent
 
-@All(MoveComponent::class)
+@All(MoveComponent::class, ActiveComponent::class)
 class MoveSystem: IteratingSystem() {
 
     private lateinit var physicsComponentMapper: ComponentMapper<PhysicsComponent>

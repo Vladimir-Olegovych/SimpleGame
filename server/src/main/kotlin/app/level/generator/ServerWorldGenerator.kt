@@ -1,6 +1,8 @@
 package app.level.generator
 
 import alexey.tools.common.level.Chunk
+import app.ecs.components.EntityComponent
+import app.ecs.components.ObserverComponent
 import app.items.DiamondItem
 import app.level.biome.Biome
 import com.artemis.ComponentMapper
@@ -10,8 +12,6 @@ import com.badlogic.gdx.math.Vector2
 import core.models.components.texture.TextureContainer
 import models.entity.EntityType
 import models.textures.TextureType
-import app.ecs.components.EntityComponent
-import app.ecs.components.ObserverComponent
 import org.example.app.ecs.components.SizeComponent
 import org.example.app.ecs.utils.utCreateBody
 import org.example.app.ecs.utils.utCreateEntity
@@ -63,7 +63,7 @@ class ServerWorldGenerator(
             val observerComponent = observerComponentMapper[entityId]
             chunk.add(entityId, observerComponent != null)
 
-            if (random.nextInt(0, 50) < 3)
+            if (random.nextInt(0, 300) < 3)
                 createEntity(chunk, position)
         }
     }

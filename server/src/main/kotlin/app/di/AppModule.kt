@@ -3,6 +3,14 @@ package app.di
 import alexey.tools.server.level.AdvancedChunkManager
 import app.ecs.components.models.ServerTime
 import app.ecs.systems.TimeSystem
+import app.ecs.systems.event.EntityEventSystem
+import app.ecs.systems.event.EntityTypeEventSystem
+import app.ecs.systems.event.InventoryEventSystem
+import app.ecs.systems.event.PhysicsEventSystem
+import app.ecs.systems.event.SizeEventSystem
+import app.ecs.systems.event.StatsEventSystem
+import app.ecs.systems.event.TextureEventSystem
+import app.ecs.systems.event.TimeEventSystem
 import com.badlogic.gdx.physics.box2d.World
 import event.GamePacket
 import org.example.app.ecs.systems.*
@@ -47,17 +55,36 @@ val appModule = module {
         val physicsSystem: PhysicsSystem = get()
         val sendSystem: SendSystem = get()
         val timeSystem: TimeSystem = get()
+        val entityEventSystem: EntityEventSystem = get()
+        val entityTypeEventSystem: EntityTypeEventSystem = get()
+        val textureEventSystem: TextureEventSystem = get()
+        val sizeEventSystem: SizeEventSystem = get()
+        val physicsEventSystem: PhysicsEventSystem = get()
+        val inventoryEventSystem: InventoryEventSystem = get()
+        val statsEventSystem: StatsEventSystem = get()
+        val timeEventSystem: TimeEventSystem = get()
 
         ArtemisWorldBuilder().let {
-            it.addSystem(sendSystem)
             it.addSystem(clientSystem)
-            it.addSystem(chunkSystem)
+            it.addSystem(sendSystem)
+
+            it.addSystem(timeSystem)
             it.addSystem(entitySystem)
             it.addSystem(moveSystem)
             it.addSystem(lookAtSystem)
             it.addSystem(collectItemsSystem)
+
             it.addSystem(physicsSystem)
-            it.addSystem(timeSystem)
+            it.addSystem(chunkSystem)
+
+            it.addSystem(entityEventSystem)
+            it.addSystem(entityTypeEventSystem)
+            it.addSystem(textureEventSystem)
+            it.addSystem(sizeEventSystem)
+            it.addSystem(physicsEventSystem)
+            it.addSystem(inventoryEventSystem)
+            it.addSystem(statsEventSystem)
+            it.addSystem(timeEventSystem)
 
             it.addObject(ServerTime())
             it.addObject(serverPreference)

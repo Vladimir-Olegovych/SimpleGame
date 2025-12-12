@@ -5,6 +5,7 @@ import app.di.appModule
 import app.di.itemModule
 import app.di.physicsModule
 import app.di.systemModule
+import app.ecs.systems.event.EntityEventSystem
 import app.items.register.ItemsRegister
 import app.listeners.contact.ItemContactListener
 import com.artemis.World
@@ -13,7 +14,6 @@ import event.GamePacket
 import kotlinx.coroutines.Dispatchers
 import org.example.app.ecs.systems.ChunkSystem
 import org.example.app.ecs.systems.ClientSystem
-import org.example.app.ecs.systems.EntitySystem
 import org.example.core.models.settings.ServerPreference
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -36,7 +36,6 @@ class ServerApplication(
     private val gameServer: GameServer<GamePacket> by inject()
 
     private val clientSystem: ClientSystem by inject()
-    private val entitySystem: EntitySystem by inject()
     private val chunkSystem: ChunkSystem by inject()
     private val itemContactListener: ItemContactListener by inject()
 
@@ -48,7 +47,8 @@ class ServerApplication(
         ItemsRegister.initialize()
 
         gameServer.subscribe(clientSystem)
-        eventBus.registerHandler(entitySystem)
+        eventBus.registerHandler(artemisWorld.getSystem(EntityEventSystem::class.java))
+        artemisWorld.systems.forEach { if (it !is EntityEventSystem) eventBus.registerHandler(it) }
 
         chunkManager.putListener(chunkSystem)
         contactManager.addListener(itemContactListener)
@@ -68,9 +68,9 @@ class ServerApplication(
 
     override fun update(deltaTime: Float) {
         try {
-            eventBus.process()
             artemisWorld.delta = deltaTime
             artemisWorld.process()
+            eventBus.process()
         } catch (e: Throwable) {
             e.printStackTrace()
         }

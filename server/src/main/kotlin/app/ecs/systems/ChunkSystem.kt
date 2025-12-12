@@ -5,23 +5,24 @@ import alexey.tools.common.level.Chunk
 import alexey.tools.common.level.ChunkManager
 import alexey.tools.server.level.AdvancedChunkManager
 import app.ecs.components.ActiveComponent
+import app.ecs.components.EntityComponent
 import app.ecs.components.VisibleComponent
-import app.ecs.utils.utProcessCreationEvents
+import app.event.ChunkEvent
 import app.level.generator.ServerWorldGenerator
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import ecs.components.ClientComponent
-import event.Event
-import app.ecs.components.EntityComponent
 import org.example.app.ecs.components.PhysicsComponent
 import org.example.core.models.settings.ServerPreference
 import tools.chunk.WorldGenerator
+import tools.eventbus.EventBus
 
-@All(EntityComponent::class)
+@All(PhysicsComponent::class)
 class ChunkSystem: ChunkManager.Listener, IteratingSystem() {
 
+    @Wire private lateinit var eventBus: EventBus
     @Wire private lateinit var chunkManager: AdvancedChunkManager
     @Wire private lateinit var serverPreference: ServerPreference
 
@@ -57,14 +58,10 @@ class ChunkSystem: ChunkManager.Listener, IteratingSystem() {
     }
 
     override fun onShow(entities: IntCollection, activators: IntCollection, chunk: Chunk, first: Boolean) {
-        for (activatorId in activators) {
-            val client = clientComponentMapper[activatorId]?: continue
-            client.addEntities(entities)
-
-            for (entityId in entities) {
-                world.utProcessCreationEvents(activatorId, entityId)
-            }
-        }
+        eventBus.sendEventNow(ChunkEvent.Show(
+            entities = entities,
+            activators = activators
+        ))
         if(!first) return
         for (entityId in entities) {
             visibleComponentMapper.create(entityId)
@@ -72,13 +69,14 @@ class ChunkSystem: ChunkManager.Listener, IteratingSystem() {
     }
 
     override fun onHide(entities: IntCollection, activators: IntCollection, chunk: Chunk, last: Boolean) {
-        for (activatorId in activators){
-            val client = clientComponentMapper[activatorId] ?: continue
-            client.removeEntities(entities)
-            entities.forEach { entityId -> client.addEvent(Event.Remove(entityId)) }
-        }
+        eventBus.sendEventNow(ChunkEvent.Hide(
+            entities = entities,
+            activators = activators
+        ))
         if(!last) return
-        for (entityId in entities) { visibleComponentMapper.remove(entityId) }
+        for (entityId in entities) {
+            visibleComponentMapper.remove(entityId)
+        }
     }
 
     override fun process(entityId: Int) {

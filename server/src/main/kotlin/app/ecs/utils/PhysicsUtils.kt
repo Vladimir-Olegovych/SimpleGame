@@ -1,5 +1,6 @@
 package org.example.app.ecs.utils
 
+import app.ecs.components.ActiveComponent
 import app.ecs.components.EntityComponent
 import app.ecs.components.InventoryComponent
 import com.artemis.World
@@ -26,6 +27,7 @@ fun World.utCreateBody(entityId: Int,
     val textureComponentMapper = world.getMapper(TextureComponent::class.java)
     val entityTypeComponentMapper = world.getMapper(EntityTypeComponent::class.java)
     val itemComponentMapper = world.getMapper(ItemComponent::class.java)
+    val activeComponentMapper = world.getMapper(ActiveComponent::class.java)
     val staticPositionComponentMapper = world.getMapper(StaticPositionComponent::class.java)
     val entityComponentMapper = world.getMapper(EntityComponent::class.java)
     val statsComponentMapper = world.getMapper(StatsComponent::class.java)
@@ -37,6 +39,8 @@ fun World.utCreateBody(entityId: Int,
     val staticPosition = staticPositionComponentMapper[entityId]
     val physics = physicsComponentMapper.get(entityId)?: return
     val size = sizeComponentMapper.get(entityId)?: return
+
+    if (isEnabled) activeComponentMapper.create(entityId)
 
     fun getShape(): Shape {
         return when(bodyType){

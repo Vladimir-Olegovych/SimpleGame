@@ -37,6 +37,7 @@ fun World.utCreateEntity(entityId: Int,
     val sizeComponentMapper = this.getMapper(SizeComponent::class.java)
     val inventoryComponentMapper = this.getMapper(InventoryComponent::class.java)
     val contactItemsComponentMapper = this.getMapper(ContactItemsComponent::class.java)
+    val moveComponentMapper = this.getMapper(MoveComponent::class.java)
 
     val entity = entityComponentMapper.create(entityId)
 

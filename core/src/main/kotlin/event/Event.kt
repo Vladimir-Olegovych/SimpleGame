@@ -39,6 +39,10 @@ sealed class Event {
         val inventory: Array<Array<ItemContainer>?> = emptyArray()
     ): Event()
 
+    class CreateLight(val entityId: Int = 0): Event()
+
+    class RemoveLight(val entityId: Int = 0): Event()
+
     class Size(val entityId: Int = 0,
                val radius: Float = 0F,
                val width: Float = 0F,
