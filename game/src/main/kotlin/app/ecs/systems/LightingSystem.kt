@@ -93,7 +93,6 @@ class LightingSystem : IteratingSystem() {
         if (entityTypeComponent.entityType != EntityType.ENTITY) return
 
         val position = positionComponentMapper[entityId]?.getInterpolatedPosition() ?: return
-        val size = sizeComponentMapper[entityId]?: return
 
         val worldLightSize = 7.9F + Random.nextFloat() * (8F - 7.9F)
 
@@ -101,7 +100,7 @@ class LightingSystem : IteratingSystem() {
         spriteBatch.draw(
             lightTexture,
             (position.x - worldLightSize / 2),
-            (position.y - worldLightSize / 2) + size.halfHeight,
+            (position.y - worldLightSize / 2),
             worldLightSize,
             worldLightSize
         )

@@ -20,11 +20,10 @@ class CameraSystem: BaseSystem() {
 
     override fun processSystem() {
         val position = positionComponentMapper[player.entityId]?.getInterpolatedPosition() ?: return
-        val size = sizeComponentMapper[player.entityId]?: return
         camera.position.lerp(
             Vector3(
                 position.x,
-                position.y + size.halfHeight,
+                position.y,
                 0f
             ), 0.1f
         )

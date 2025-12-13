@@ -79,7 +79,7 @@ class DrawSystem : IteratingSystem() {
         spriteBatch.draw(
             texture,
             drawable.xPosition - size.halfWidth,
-            drawable.yPosition,
+            drawable.yPosition - size.halfHeight,
             size.halfWidth,
             size.halfHeight,
             size.width + epsilon,

@@ -5,7 +5,6 @@ import alexey.tools.common.level.Chunk
 import alexey.tools.common.level.ChunkManager
 import alexey.tools.server.level.AdvancedChunkManager
 import app.ecs.components.ActiveComponent
-import app.ecs.components.EntityComponent
 import app.ecs.components.VisibleComponent
 import app.event.ChunkEvent
 import app.level.generator.ServerWorldGenerator

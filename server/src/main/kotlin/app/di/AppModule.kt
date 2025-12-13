@@ -3,14 +3,7 @@ package app.di
 import alexey.tools.server.level.AdvancedChunkManager
 import app.ecs.components.models.ServerTime
 import app.ecs.systems.TimeSystem
-import app.ecs.systems.event.EntityEventSystem
-import app.ecs.systems.event.EntityTypeEventSystem
-import app.ecs.systems.event.InventoryEventSystem
-import app.ecs.systems.event.PhysicsEventSystem
-import app.ecs.systems.event.SizeEventSystem
-import app.ecs.systems.event.StatsEventSystem
-import app.ecs.systems.event.TextureEventSystem
-import app.ecs.systems.event.TimeEventSystem
+import app.ecs.systems.event.*
 import com.badlogic.gdx.physics.box2d.World
 import event.GamePacket
 import org.example.app.ecs.systems.*
