@@ -2,8 +2,6 @@ package app.screens.game.screen
 
 import app.di.GameViewport
 import app.di.UiViewport
-import app.ecs.models.GlobalAngle
-import app.ecs.models.IsometricMatrix
 import app.ecs.models.Player
 import app.ecs.models.SendEvents
 import app.ecs.systems.*
@@ -67,8 +65,6 @@ class GameFragment(
             .addSystem(inputSystem)
             .addSystem(SendSystem())
             .addObject(Player())
-            .addObject(IsometricMatrix(camera))
-            .addObject(GlobalAngle())
             .addObject(SendEvents())
             .addObject(textureStorage)
             .addObject(dialogManager)
@@ -124,7 +120,7 @@ class GameFragment(
     override fun onResize(width: Int, height: Int) {
         gameViewport.update(width, height, false)
         uiViewport.update(width, height, true)
-        eventBus.sendEvent(UiEvent.Resize(width, height))
+        eventBus.sendEventNow(UiEvent.Resize(width, height))
     }
 
     override fun onDestroy() {

@@ -2,8 +2,6 @@ package app.ecs.systems
 
 import app.di.GameViewport
 import app.ecs.components.*
-import app.ecs.models.GlobalAngle
-import app.ecs.models.IsometricMatrix
 import app.entity.draw.DrawableEntity
 import com.artemis.ComponentMapper
 import com.artemis.annotations.All
@@ -14,20 +12,15 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Matrix4
 import java.util.*
 
 @All(EntityComponent::class)
 class DrawSystem : IteratingSystem() {
 
     @Wire
-    private lateinit var globalAngle: GlobalAngle
-    @Wire
     private lateinit var camera: OrthographicCamera
     @Wire
     private lateinit var spriteBatch: SpriteBatch
-    @Wire
-    private lateinit var isometricMatrix: IsometricMatrix
     @Wire
     private lateinit var gameViewport: GameViewport
 
@@ -52,25 +45,16 @@ class DrawSystem : IteratingSystem() {
         val entityType = entityTypeComponentMapper[entityId]?.entityType ?: return
         val position = positionComponentMapper[entityId]?.getInterpolatedPosition()?: staticPositionComponentMapper[entityId]?.position?: return
 
-        val dx = position.x
-        val dy = position.y
-
-        val cosAngle = MathUtils.cos(globalAngle.angle)
-        val sinAngle = MathUtils.sin(globalAngle.angle)
-
-        val rotatedX = dx * cosAngle - dy * sinAngle
-        val rotatedY = dx * sinAngle + dy * cosAngle
-
         drawQueue.add(DrawableEntity(
             entityId = entityId,
-            xPosition = rotatedX,
-            yPosition = rotatedY,
+            xPosition = position.x,
+            yPosition = position.y,
             entityType = entityType
         ))
     }
 
     override fun end() {
-        spriteBatch.projectionMatrix = isometricMatrix.combined
+        spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
         spriteBatch.enableBlending()
 
@@ -90,7 +74,7 @@ class DrawSystem : IteratingSystem() {
         val texture = textureComponentMapper[entityId]?.textureRegion ?: return
 
         val epsilon = 0.01f
-        val totalAngle = if (!isStaticAngle) angle + globalAngle.angle else angle
+        val totalAngle = if (isStaticAngle) 0F else angle
 
         spriteBatch.draw(
             texture,
@@ -110,14 +94,6 @@ class DrawSystem : IteratingSystem() {
         camera.position.set(0F, 0F, 0F)
         camera.update()
         drawQueue.clear()
-    }
-
-    private val cameraMatrix = Matrix4()
-    private val combinedMatrix = Matrix4()
-
-
-    fun applyToBatch(batch: SpriteBatch) {
-        batch.projectionMatrix = combinedMatrix
     }
 }
 

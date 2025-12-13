@@ -1,10 +1,9 @@
 package app.ecs.systems
 
-import app.di.GameViewport
-import app.ecs.components.*
-import app.ecs.models.GlobalAngle
-import app.ecs.models.IsometricMatrix
-import app.ecs.models.Player
+import app.ecs.components.EntityComponent
+import app.ecs.components.EntityTypeComponent
+import app.ecs.components.PositionComponent
+import app.ecs.components.SizeComponent
 import app.entity.translator.ServerEntityTranslator
 import app.event.UiEvent
 import com.artemis.ComponentMapper
@@ -16,7 +15,6 @@ import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.FrameBuffer
-import com.badlogic.gdx.math.MathUtils
 import core.textures.createShadowShape
 import models.entity.EntityType
 import tools.eventbus.annotation.BusEvent
@@ -26,17 +24,9 @@ import kotlin.random.Random
 class LightingSystem : IteratingSystem() {
 
     @Wire
-    private lateinit var player: Player
-    @Wire
-    private lateinit var globalAngle: GlobalAngle
-    @Wire
-    private lateinit var isometricMatrix: IsometricMatrix
-    @Wire
     private lateinit var camera: OrthographicCamera
     @Wire
     private lateinit var spriteBatch: SpriteBatch
-    @Wire
-    private lateinit var gameViewport: GameViewport
     @Wire
     private lateinit var serverEntityTranslator: ServerEntityTranslator
 
@@ -70,7 +60,7 @@ class LightingSystem : IteratingSystem() {
 
         spriteBatch.begin()
 
-        spriteBatch.projectionMatrix = isometricMatrix.combined
+        spriteBatch.projectionMatrix = camera.combined
         spriteBatch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE)
     }
 
@@ -107,20 +97,11 @@ class LightingSystem : IteratingSystem() {
 
         val worldLightSize = 7.9F + Random.nextFloat() * (8F - 7.9F)
 
-        val dx = position.x
-        val dy = position.y
-
-        val cosAngle = MathUtils.cos(globalAngle.angle)
-        val sinAngle = MathUtils.sin(globalAngle.angle)
-
-        val rotatedX = dx * cosAngle - dy * sinAngle
-        val rotatedY = dx * sinAngle + dy * cosAngle
-
         spriteBatch.color = Color.WHITE
         spriteBatch.draw(
             lightTexture,
-            (rotatedX - worldLightSize / 2),
-            (rotatedY - worldLightSize / 2),
+            (position.x - worldLightSize / 2),
+            (position.y - worldLightSize / 2) + size.halfHeight,
             worldLightSize,
             worldLightSize
         )

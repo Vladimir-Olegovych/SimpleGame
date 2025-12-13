@@ -1,6 +1,5 @@
 package app.ecs.systems
 
-import app.ecs.models.GlobalAngle
 import app.processors.HotKeysInputProcessor
 import app.processors.LookInputProcessor
 import app.processors.MovementInputProcessor
@@ -14,16 +13,14 @@ class InputSystem(private val onQuit: () -> Unit): InputProcessor, BaseSystem() 
 
     @Wire
     private lateinit var menuDialog: MenuDialog
-    @Wire
-    private lateinit var globalAngle: GlobalAngle
 
     private lateinit var inputProcessors: Array<GameInputProcessor>
 
 
     override fun initialize() {
         inputProcessors = arrayOf(
-            MovementInputProcessor().apply { globalAngle.addListener(this@apply) },
-            LookInputProcessor().apply { globalAngle.addListener(this@apply) },
+            MovementInputProcessor(),
+            LookInputProcessor(),
             HotKeysInputProcessor()
         )
         inputProcessors.forEach { world.inject(it) }

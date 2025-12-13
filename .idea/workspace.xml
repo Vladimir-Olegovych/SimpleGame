@@ -4,31 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="IsometricMatrix + day and night commit">
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/event/EntityEventSystem.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/event/EntityTypeEventSystem.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/event/InventoryEventSystem.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/event/PhysicsEventSystem.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/event/SizeEventSystem.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/event/StatsEventSystem.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/event/TextureEventSystem.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/event/TimeEventSystem.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/event/ChunkEvent.kt" afterDir="false" />
+    <list default="true" id="364d0dba-797c-4a6d-bf79-c33094778eb8" name="Changes" comment="chunk system bugfix commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/kotlin/event/Event.kt" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/main/kotlin/event/Event.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ServerApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ServerApplication.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/di/AppModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/di/AppModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/di/SystemModule.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/di/SystemModule.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/MoveComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/MoveComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/StaticAngleComponent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/StaticAngleComponent.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/models/ServerTime.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/components/models/ServerTime.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ChunkSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ChunkSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ClientSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/ClientSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/MoveSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/systems/MoveSystem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EntityUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EntityUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/EventUtils.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/PhysicsUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/ecs/utils/PhysicsUtils.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/kotlin/app/level/generator/ServerWorldGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/kotlin/app/level/generator/ServerWorldGenerator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/models/GlobalAngle.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/models/IsometricMatrix.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/CameraSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/CameraSystem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/DrawSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/DrawSystem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/InputSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/InputSystem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/LightingSystem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/ecs/systems/LightingSystem.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/HotKeysInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/HotKeysInputProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/LookInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/LookInputProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/MovementInputProcessor.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/processors/MovementInputProcessor.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/screen/GameFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/game/src/main/kotlin/app/screens/game/screen/GameFragment.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,14 +242,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1739022729056</updated>
-    </task>
-    <task id="LOCAL-00015" summary="the best commit 5!">
-      <option name="closed" value="true" />
-      <created>1746607638502</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1746607638502</updated>
     </task>
     <task id="LOCAL-00016" summary="the best commit 6 with chunkZZZ!">
       <option name="closed" value="true" />
@@ -648,11 +627,18 @@
       <option name="project" value="LOCAL" />
       <updated>1765382605112</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="chunk system bugfix commit">
+      <option name="closed" value="true" />
+      <created>1765564347229</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1765564347229</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="the best commit 9 chunks!" />
     <MESSAGE value="the new architecture" />
     <MESSAGE value="the new architecture chunks" />
     <MESSAGE value="the new architecture fixed chunks" />
@@ -677,7 +663,8 @@
     <MESSAGE value="fake 3D optimization commit" />
     <MESSAGE value="light and shadows commit" />
     <MESSAGE value="IsometricMatrix + day and night commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="IsometricMatrix + day and night commit" />
+    <MESSAGE value="chunk system bugfix commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="chunk system bugfix commit" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
